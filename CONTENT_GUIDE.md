@@ -26,6 +26,8 @@ Use `section` to group the post into a top-level content area:
 Use `subcategory` to match the folder and landing page where the post should appear. Examples:
 
 - `tensorrt`
+- `algorithm`
+- `gpu-acceleration`
 - `language-c`
 - `language-cpp`
 - `robotic-foundation-model`

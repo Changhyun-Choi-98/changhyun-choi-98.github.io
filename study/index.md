@@ -16,3 +16,5 @@ Structured study notes for inference tooling and programming languages.
 
 - [TensorRT](/study/tensorrt/)
 - [Language](/study/language/)
+- [Algorithm](/study/algorithm/)
+- [GPU Acceleration](/study/gpu-acceleration/)

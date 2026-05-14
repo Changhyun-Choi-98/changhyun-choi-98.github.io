@@ -9,5 +9,5 @@ This site is a technical portfolio and notes archive for building my career in p
 
 <div class="home-brand">
   <img class="home-brand-logo" src="{{ '/assets/images/C_Logo.png' | relative_url }}" alt="C language logo">
-  <p class="home-brand-caption">C for "C"hanghyun "C"hoi . "c"om.</p>
+  <p class="home-brand-caption">(C for "C"hanghyun "C"hoi . "c"om)</p>
 </div>

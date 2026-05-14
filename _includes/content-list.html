@@ -1,8 +1,9 @@
 {% assign content_pages = site.pages
-  | where: "section", include.section
-  | where: "subcategory", include.subcategory
-  | sort: "date"
-  | reverse %}
+  | where: "section", include.section %}
+{% if include.subcategory %}
+  {% assign content_pages = content_pages | where: "subcategory", include.subcategory %}
+{% endif %}
+{% assign content_pages = content_pages | sort: "date" | reverse %}
 
 {% assign content_count = 0 %}
 {% for content_page in content_pages %}

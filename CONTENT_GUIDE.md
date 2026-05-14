@@ -5,8 +5,8 @@ This site is a public technical portfolio for notes on robotics AI, AI systems p
 ## Adding a New Post
 
 1. Copy one file from `_templates/`.
-2. Place the copied file under the matching public section:
-   - Work log: `work-log/public/YYYY-MM-DD-slug.md`
+2. Place the copied file under the matching section:
+   - Work log: `work-log/YYYY-MM-DD-slug.md`
    - Study note: `study/<subcategory>/YYYY-MM-DD-slug.md`
    - Paper note: `paper/<subcategory>/YYYY-MM-DD-slug.md`
    - Project note: `project/<subcategory>/YYYY-MM-DD-slug.md`
@@ -25,7 +25,6 @@ Use `section` to group the post into a top-level content area:
 
 Use `subcategory` to match the folder and landing page where the post should appear. Examples:
 
-- `public`
 - `ai-systems-performance`
 - `cuda-triton`
 - `robotics-control`
@@ -34,16 +33,16 @@ Use `subcategory` to match the folder and landing page where the post should app
 - `cuda-kernels`
 - `paper-reproduction`
 
-Use `parent` and `grand_parent` to preserve the Just the Docs page hierarchy:
+Use `parent` and `grand_parent` to preserve the Just the Docs page hierarchy for nested sections:
 
-- Work log post: `parent: Public`, `grand_parent: Work Log`
+- Work log post: no `parent` or `grand_parent`; it appears from the Work Log landing page list.
 - Study post: `parent: <Study Subcategory>`, `grand_parent: Study`
 - Paper post: `parent: <Paper Subcategory>`, `grand_parent: Paper`
 - Project post: `parent: <Project Subcategory>`, `grand_parent: Project`
 
 Use a section-specific permalink:
 
-- `/work-log/public/SLUG_HERE/`
+- `/work-log/SLUG_HERE/`
 - `/study/<subcategory>/SLUG_HERE/`
 - `/paper/<subcategory>/SLUG_HERE/`
 - `/project/<subcategory>/SLUG_HERE/`
@@ -52,7 +51,7 @@ Use a section-specific permalink:
 
 Individual posts should use `nav_exclude: true` by default. This keeps the Just the Docs sidebar focused on top-level sections and subcategory landing pages.
 
-Subcategory landing pages use `_includes/content-list.html` to show posts with matching `section` and `subcategory` values. Posts excluded from the sidebar still appear in these lists and on the Tags page.
+Work Log uses `_includes/content-list.html` to show posts with `section: work-log`. Subcategory landing pages for Study, Paper, and Project use the same include with matching `section` and `subcategory` values. Posts excluded from the sidebar still appear in these lists and on the Tags page.
 
 The `_templates/` directory is not a Jekyll collection. Template files are copy sources for authors and should not be rendered as public pages.
 

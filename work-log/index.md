@@ -2,16 +2,12 @@
 layout: default
 title: Work Log
 nav_order: 3
-has_children: true
+has_toc: false
 permalink: /work-log/
 ---
 
 # Work Log
 
-This section is only for public-safe work logs.
+Notes on learning, engineering practice, and technical progress.
 
-Do not publish company-internal information, internal benchmarks, internal architecture, internal screenshots, logs, traces, dashboards, or private implementation details.
-
-## Sections
-
-- [Public Work Log](/work-log/public/)
+{% include content-list.html section="work-log" %}

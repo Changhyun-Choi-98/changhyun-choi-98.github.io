@@ -3,6 +3,7 @@ layout: default
 title: Study
 nav_order: 4
 has_children: true
+has_toc: false
 permalink: /study/
 ---
 
@@ -11,6 +12,7 @@ permalink: /study/
 Structured study notes for systems, GPU programming, and robotics.
 
 ## Topics
+{: .text-delta }
 
 - [AI Systems Performance](/study/ai-systems-performance/)
 - [CUDA/Triton](/study/cuda-triton/)

@@ -1,11 +1,8 @@
 ---
 layout: default
 title: "Why I Built This Technical Notes Site"
-parent: Public
-grand_parent: Work Log
 nav_exclude: true
 section: work-log
-subcategory: public
 date: 2026-05-14
 tags:
   - work-log
@@ -17,7 +14,7 @@ tags:
 language: ko-en
 summary: "A bilingual note on why I built this public technical notes site as a long-term record of learning, research, and engineering practice."
 math: false
-permalink: /work-log/public/why-i-built-this-technical-notes-site/
+permalink: /work-log/why-i-built-this-technical-notes-site/
 ---
 
 ## One-line takeaway
@@ -49,7 +46,7 @@ I plan to use this site for four main types of notes.
 
 | Section | Purpose |
 | --- | --- |
-| Work Log | Public-safe reflections on learning and engineering practice |
+| Work Log | Reflections on learning and engineering practice |
 | Study | Technical notes on systems, GPU optimization, robotics, and math |
 | Paper | Research paper summaries and implementation-oriented reading notes |
 | Project | Reproduction logs, toy implementations, benchmarks, and tools |
@@ -91,54 +88,6 @@ This structure is especially important for AI systems performance work. It is ea
 5. 내가 배운 점은 무엇인가?
 
 이 구조는 특히 AI systems performance 작업에서 중요하다. 커널, counter, tool, 구현 세부사항으로 바로 들어가는 것은 쉽다. 하지만 명확한 시스템 수준의 질문이 없으면 low-level optimization은 방향을 잃기 쉽다.
-
-## Public-safe boundary
-
-**EN.**<br>
-This is a public website. Therefore, I will keep a strict boundary between public technical notes and private work logs.
-
-I may write about:
-
-- Public papers
-- Public documentation
-- Open-source code
-- Personal toy examples
-- General engineering lessons
-- Reproduction experiments using public resources
-
-I will not write about:
-
-- Internal code
-- Non-public benchmarks
-- Private system architecture
-- Internal logs, traces, screenshots, or profiler outputs
-- Confidential project names
-- Details that should belong only to a private work log
-
-This boundary is not a formality. It is part of responsible engineering practice.
-
-**KO.**<br>
-이 사이트는 공개 웹사이트다. 따라서 공개 기술 노트와 비공개 work log 사이의 경계를 엄격하게 유지할 것이다.
-
-쓸 수 있는 내용은 다음과 같다.
-
-- 공개 논문
-- 공개 문서
-- 오픈소스 코드
-- 개인 toy example
-- 일반화된 엔지니어링 lesson
-- 공개 자원 기반 reproduction experiment
-
-쓰지 않을 내용은 다음과 같다.
-
-- 내부 코드
-- 비공개 benchmark
-- 내부 시스템 구조
-- 내부 log, trace, screenshot, profiler output
-- 비공개 프로젝트명
-- private work log에만 남겨야 하는 세부사항
-
-이 경계는 형식적인 규칙이 아니다. 책임 있는 엔지니어링 실천의 일부다.
 
 ## Long-term direction
 

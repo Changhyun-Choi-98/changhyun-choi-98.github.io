@@ -4,6 +4,7 @@ title: Robotics Control
 parent: Study
 nav_order: 3
 has_children: true
+has_toc: false
 permalink: /study/robotics-control/
 ---
 

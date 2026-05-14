@@ -3,14 +3,16 @@ layout: default
 title: Project
 nav_order: 6
 has_children: true
+has_toc: false
 permalink: /project/
 ---
 
 # Project
 
-Public project notes and implementation writeups.
+Project notes and implementation writeups.
 
 ## Topics
+{: .text-delta }
 
 - [CUDA Kernels](/project/cuda-kernels/)
 - [Paper Reproduction](/project/paper-reproduction/)

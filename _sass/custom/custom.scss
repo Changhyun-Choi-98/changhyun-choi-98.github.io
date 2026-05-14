@@ -13,3 +13,50 @@
     overflow-x: auto;
   }
 }
+
+.theme-switcher {
+  display: flex;
+  height: 100%;
+  padding: $sp-2 $sp-3;
+  align-items: center;
+}
+
+.theme-switcher-button {
+  min-width: 3.25rem;
+  padding: $sp-1 $sp-2;
+  color: $body-text-color;
+  font: inherit;
+  font-size: $font-size-2;
+  line-height: 1.4;
+  background-color: transparent;
+  border: $border $border-color;
+  border-right-width: 0;
+  cursor: pointer;
+
+  &:first-child {
+    border-top-left-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+  }
+
+  &:last-child {
+    border-right-width: 1px;
+    border-top-right-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+  }
+
+  &:hover {
+    background-color: $feedback-color;
+  }
+
+  &:focus {
+    position: relative;
+    outline: 2px solid $link-color;
+    outline-offset: -2px;
+  }
+
+  &[aria-pressed="true"] {
+    color: $white;
+    background-color: $link-color;
+    border-color: $link-color;
+  }
+}

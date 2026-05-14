@@ -1,8 +1,15 @@
 # changhyun-choi-98.github.io
 
-This repository is for the public GitHub Pages site at <https://changhyun-choi-98.github.io>.
+This repository is for the public GitHub Pages site at <https://changhyunchoi.com>.
 
 It is a Jekyll site based on the [Just the Docs] theme and is deployed with GitHub Pages and GitHub Actions.
+
+## Site URLs
+
+- Primary site URL: <https://changhyunchoi.com>
+- GitHub Pages fallback URL: <https://changhyun-choi-98.github.io>
+- DNS is managed by Cloudflare.
+- The custom domain is configured in GitHub Pages settings.
 
 ## Public content only
 

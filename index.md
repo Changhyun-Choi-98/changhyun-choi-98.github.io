@@ -7,4 +7,4 @@ permalink: /
 
 # Changhyun Choi
 
-This site is a technical portfolio and notes archive for physical AI systems.
+This site is a technical portfolio and notes archive for building my career in physical AI systems.

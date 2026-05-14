@@ -9,11 +9,10 @@ permalink: /study/
 
 # Study
 
-Structured study notes for systems, GPU programming, and robotics.
+Structured study notes for inference tooling and programming languages.
 
 ## Topics
 {: .text-delta }
 
-- [AI Systems Performance](/study/ai-systems-performance/)
-- [CUDA/Triton](/study/cuda-triton/)
-- [Robotics Control](/study/robotics-control/)
+- [TensorRT](/study/tensorrt/)
+- [Language](/study/language/)

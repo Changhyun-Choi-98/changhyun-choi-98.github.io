@@ -1,11 +1,9 @@
 ---
 layout: default
 title: "TITLE_HERE"
-parent: Robotics Foundation Models
-grand_parent: Paper
 nav_exclude: true
 section: paper
-subcategory: robotics-foundation-models
+subcategory: robotic-foundation-model
 date: YYYY-MM-DD
 tags:
   - tag-one
@@ -18,7 +16,7 @@ paper:
   authors: "AUTHORS_HERE"
   venue: "VENUE_OR_ARXIV_HERE"
   url: "PAPER_URL_HERE"
-permalink: /paper/robotics-foundation-models/SLUG_HERE/
+permalink: /paper/robotic-foundation-model/SLUG_HERE/
 ---
 
 # TITLE_HERE

@@ -9,10 +9,10 @@ permalink: /project/
 
 # Project
 
-Project notes and implementation writeups.
+Project notes for paper reproduction and inference optimization work.
 
 ## Topics
 {: .text-delta }
 
-- [CUDA Kernels](/project/cuda-kernels/)
 - [Paper Reproduction](/project/paper-reproduction/)
+- [Inference Optimization](/project/inference-optimization/)

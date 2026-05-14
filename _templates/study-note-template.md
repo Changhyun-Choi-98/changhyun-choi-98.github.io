@@ -1,11 +1,9 @@
 ---
 layout: default
 title: "TITLE_HERE"
-parent: AI Systems Performance
-grand_parent: Study
 nav_exclude: true
 section: study
-subcategory: ai-systems-performance
+subcategory: tensorrt
 date: YYYY-MM-DD
 tags:
   - tag-one
@@ -13,7 +11,7 @@ tags:
 language: ko
 summary: "One-sentence summary."
 math: false
-permalink: /study/ai-systems-performance/SLUG_HERE/
+permalink: /study/tensorrt/SLUG_HERE/
 ---
 
 # TITLE_HERE

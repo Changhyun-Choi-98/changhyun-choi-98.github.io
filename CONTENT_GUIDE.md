@@ -25,20 +25,18 @@ Use `section` to group the post into a top-level content area:
 
 Use `subcategory` to match the folder and landing page where the post should appear. Examples:
 
-- `ai-systems-performance`
-- `cuda-triton`
-- `robotics-control`
-- `robotics-foundation-models`
-- `ai-systems`
-- `cuda-kernels`
+- `tensorrt`
+- `language-c`
+- `language-cpp`
+- `robotic-foundation-model`
+- `real-time-inference`
 - `paper-reproduction`
+- `inference-optimization`
 
-Use `parent` and `grand_parent` to preserve the Just the Docs page hierarchy for nested sections:
+Use category landing pages to preserve the Just the Docs sidebar hierarchy. Individual posts should usually omit `parent` and `grand_parent` so they appear in landing-page lists without creating sidebar children:
 
 - Work log post: no `parent` or `grand_parent`; it appears from the Work Log landing page list.
-- Study post: `parent: <Study Subcategory>`, `grand_parent: Study`
-- Paper post: `parent: <Paper Subcategory>`, `grand_parent: Paper`
-- Project post: `parent: <Project Subcategory>`, `grand_parent: Project`
+- Study, Paper, and Project posts: use `section` and `subcategory` to choose the landing-page list.
 
 Use a section-specific permalink:
 

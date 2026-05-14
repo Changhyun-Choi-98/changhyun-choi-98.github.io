@@ -1,11 +1,9 @@
 ---
 layout: default
 title: "TITLE_HERE"
-parent: CUDA Kernels
-grand_parent: Project
 nav_exclude: true
 section: project
-subcategory: cuda-kernels
+subcategory: paper-reproduction
 date: YYYY-MM-DD
 tags:
   - tag-one
@@ -17,7 +15,7 @@ project:
   status: "planned | in-progress | completed"
   repo: "GITHUB_REPO_URL_HERE"
   demo: "DEMO_URL_HERE"
-permalink: /project/cuda-kernels/SLUG_HERE/
+permalink: /project/paper-reproduction/SLUG_HERE/
 ---
 
 # TITLE_HERE

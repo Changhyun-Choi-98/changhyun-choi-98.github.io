@@ -9,10 +9,10 @@ permalink: /paper/
 
 # Paper
 
-Reading notes for papers in robotics foundation models and AI systems.
+Reading notes for papers in robotic foundation models and real-time inference.
 
 ## Topics
 {: .text-delta }
 
-- [Robotics Foundation Models](/paper/robotics-foundation-models/)
-- [AI Systems](/paper/ai-systems/)
+- [Robotic Foundation Model](/paper/robotic-foundation-model/)
+- [Real-Time Inference](/paper/real-time-inference/)

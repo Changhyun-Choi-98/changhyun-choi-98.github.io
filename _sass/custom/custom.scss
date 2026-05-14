@@ -1,0 +1,15 @@
+.main-content {
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  pre.highlight {
+    overflow-x: auto;
+  }
+}

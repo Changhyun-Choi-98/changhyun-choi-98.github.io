@@ -1,3 +1,29 @@
+:root {
+  --profile-background-color: #ffffff;
+  --profile-text-color: #27262b;
+  --profile-link-color: #1772d0;
+  --profile-link-hover-color: #f09228;
+  --profile-highlight-color: #ffffd0;
+  --profile-strong-highlight-color: #e3f4fc;
+  --profile-paper-color: red;
+  --profile-project-color: blue;
+  --profile-award-color: green;
+  --profile-other-color: gray;
+}
+
+html[data-theme="dark"] {
+  --profile-background-color: #1c1f24;
+  --profile-text-color: #f5f6f7;
+  --profile-link-color: #79b8ff;
+  --profile-link-hover-color: #ffb454;
+  --profile-highlight-color: #4c4314;
+  --profile-strong-highlight-color: #123b4c;
+  --profile-paper-color: #ff7b72;
+  --profile-project-color: #79b8ff;
+  --profile-award-color: #7ee787;
+  --profile-other-color: #c9d1d9;
+}
+
 /* latin-ext */
 @font-face {
   font-family: 'Lato';
@@ -64,14 +90,19 @@
 }
 
 a {
-  color: #1772d0;
+  color: var(--profile-link-color);
   text-decoration: none;
 }
 
 a:focus,
 a:hover {
-  color: #f09228;
+  color: var(--profile-link-hover-color);
   text-decoration: none;
+}
+
+body {
+  color: var(--profile-text-color);
+  background-color: var(--profile-background-color);
 }
 
 body,
@@ -127,28 +158,28 @@ name {
 }
 
 span.highlight {
-  background-color: #ffffd0;
+  background-color: var(--profile-highlight-color);
 }
 
 span.strong-highlight {
   font-weight: bold;
-  background-color: #e3f4fc;
+  background-color: var(--profile-strong-highlight-color);
 }
 
 .paper {
-  color: red;
+  color: var(--profile-paper-color);
   font-weight: bold;
 }
 .project {
-  color: blue;
+  color: var(--profile-project-color);
   font-weight: bold;
 }
 .award {
-  color: green;
+  color: var(--profile-award-color);
   font-weight: bold;
 }
 .other {
-  color: gray;
+  color: var(--profile-other-color);
   font-weight: bold;
 }
 

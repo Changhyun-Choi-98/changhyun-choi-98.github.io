@@ -11,6 +11,42 @@ layout: null
   
   <meta name="author" content="Changhyun Choi">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (function () {
+      var storageKey = "jtd-color-mode";
+      var modes = ["system", "light", "dark"];
+      var mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+      function storedMode() {
+        try {
+          var mode = window.localStorage.getItem(storageKey);
+          return modes.indexOf(mode) === -1 ? "system" : mode;
+        } catch (error) {
+          return "system";
+        }
+      }
+
+      function resolvedTheme(mode) {
+        return mode === "system" ? (mediaQuery.matches ? "dark" : "light") : mode;
+      }
+
+      function applyMode() {
+        var mode = storedMode();
+        document.documentElement.setAttribute("data-theme-mode", mode);
+        document.documentElement.setAttribute("data-theme", resolvedTheme(mode));
+      }
+
+      applyMode();
+
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener("change", function () {
+          if (storedMode() === "system") {
+            applyMode();
+          }
+        });
+      }
+    })();
+  </script>
   
   <link rel="stylesheet" type="text/css" href="stylesheet.css">
   <link rel="icon" href="images/cch.jpg" type="image/x-icon">

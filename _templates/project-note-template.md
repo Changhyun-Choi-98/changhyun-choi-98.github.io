@@ -1,0 +1,39 @@
+---
+layout: default
+title: "TITLE_HERE"
+parent: CUDA Kernels
+grand_parent: Project
+nav_exclude: true
+section: project
+subcategory: cuda-kernels
+date: YYYY-MM-DD
+tags:
+  - tag-one
+  - tag-two
+language: ko
+summary: "One-sentence project summary."
+math: false
+project:
+  status: "planned | in-progress | completed"
+  repo: "GITHUB_REPO_URL_HERE"
+  demo: "DEMO_URL_HERE"
+permalink: /project/cuda-kernels/SLUG_HERE/
+---
+
+# TITLE_HERE
+
+## Goal
+
+State the public project goal.
+
+## Status
+
+- Status: {{ page.project.status }}
+- Repository: {{ page.project.repo }}
+- Demo: {{ page.project.demo }}
+
+## Implementation notes
+
+- Baseline:
+- Measurement:
+- Next step:

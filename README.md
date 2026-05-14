@@ -15,6 +15,8 @@ It is a Jekyll site based on the [Just the Docs] theme and is deployed with GitH
 
 Only public-safe content should be committed to this repository.
 
+See [CONTENT_GUIDE.md](CONTENT_GUIDE.md) before adding Work Log, Study, Paper, or Project posts.
+
 `/profile/` contains the imported legacy public academic homepage. The imported profile assets are scoped under `profile/`; do not move `profile/stylesheet.css` into the global Just the Docs theme stylesheet.
 
 Before publishing profile updates, manually review future dates, affiliation text, and company or project-related text.

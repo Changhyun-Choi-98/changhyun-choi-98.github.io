@@ -1,13 +1,13 @@
 ---
 layout: default
-title: GPU Acceleration
+title: Acceleration Skills
 parent: Study
-nav_order: 4
+nav_order: 3
 has_toc: false
 permalink: /study/gpu-acceleration/
 ---
 
-# GPU Acceleration
+# Acceleration Skills
 
 Notes on GPU programming, acceleration techniques, profiling, and performance tuning.
 

@@ -2,7 +2,7 @@
 layout: default
 title: Inference Optimization
 parent: Project
-nav_order: 2
+nav_order: 1
 has_toc: false
 permalink: /project/inference-optimization/
 ---

@@ -14,5 +14,5 @@ Project notes for paper reproduction and inference optimization work.
 ## Topics
 {: .text-delta }
 
-- [Paper Reproduction](/project/paper-reproduction/)
 - [Inference Optimization](/project/inference-optimization/)
+- [Paper Reproduction](/project/paper-reproduction/)

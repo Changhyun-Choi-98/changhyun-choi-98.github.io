@@ -14,7 +14,7 @@ Structured study notes for inference tooling and programming languages.
 ## Topics
 {: .text-delta }
 
-- [TensorRT](/study/tensorrt/)
 - [Language](/study/language/)
 - [Algorithm](/study/algorithm/)
-- [GPU Acceleration](/study/gpu-acceleration/)
+- [Acceleration Skills](/study/gpu-acceleration/)
+- [TensorRT/ONNX Runtime](/study/tensorrt/)

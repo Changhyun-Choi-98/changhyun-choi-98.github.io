@@ -9,7 +9,7 @@ permalink: /study/
 
 # Study
 
-Structured study notes for inference tooling and programming languages.
+A personal record of what I study and learn.
 
 ## Topics
 {: .text-delta }

@@ -8,6 +8,6 @@ permalink: /work-log/
 
 # Work Log
 
-Notes on learning, engineering practice, and technical progress.
+Public-safe notes on engineering practices and technical progress I learn through work.
 
 {% include content-list.html section="work-log" %}

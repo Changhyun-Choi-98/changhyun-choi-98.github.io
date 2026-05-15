@@ -4,6 +4,10 @@ url: "https://changhyunchoi.com"
 baseurl: ""
 theme: just-the-docs
 
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
 search_enabled: true
 heading_anchors: true
 color_scheme: light

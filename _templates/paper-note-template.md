@@ -16,6 +16,8 @@ paper:
   authors: "AUTHORS_HERE"
   venue: "VENUE_OR_ARXIV_HERE"
   url: "PAPER_URL_HERE"
+comments: true
+comment_id: "paper-robotic-foundation-model-SLUG_HERE"
 permalink: /paper/robotic-foundation-model/SLUG_HERE/
 ---
 
@@ -41,3 +43,5 @@ Describe the method using only public information.
 - Useful assumption:
 - Reproduction idea:
 - Open question:
+
+{% include comments.html %}

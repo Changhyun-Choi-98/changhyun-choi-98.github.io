@@ -133,3 +133,13 @@ html[data-theme="dark"] .sidebar-social-link-x img {
 .sidebar-theme-credit {
   margin-bottom: 0;
 }
+
+.comments {
+  margin-top: $sp-8;
+  padding-top: $sp-6;
+  border-top: $border $border-color;
+}
+
+.comments-warning {
+  margin-bottom: 0;
+}

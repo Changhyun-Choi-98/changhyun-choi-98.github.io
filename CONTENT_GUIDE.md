@@ -47,6 +47,19 @@ Use a section-specific permalink:
 - `/paper/<subcategory>/SLUG_HERE/`
 - `/project/<subcategory>/SLUG_HERE/`
 
+## Comments
+
+Real public articles may use Disqus comments:
+
+```yaml
+comments: true
+comment_id: "section-subcategory-stable-slug"
+```
+
+Do not use comments on category landing pages, subcategory index pages, tag pages, the home page, or the imported legacy profile page.
+
+Set `comment_id` once and do not change it. Disqus uses this value as the stable thread identifier, so changing a page URL can split comment threads unless the original `comment_id` is preserved.
+
 ## Navigation and Lists
 
 Individual posts should use `nav_exclude: true` by default. This keeps the Just the Docs sidebar focused on top-level sections and subcategory landing pages.

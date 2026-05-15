@@ -1,0 +1,33 @@
+{% if page.comments == true and site.comments.enabled == true and site.comments.provider == "disqus" %}
+  {% assign disqus_shortname = site.comments.disqus.shortname | default: "" | strip %}
+  {% assign disqus_identifier = page.comment_id | default: page.url %}
+
+  <section class="comments" aria-labelledby="comments-title">
+    <h2 id="comments-title">Comments</h2>
+
+    {% if disqus_shortname == "" or disqus_shortname == "CHANGE_ME_DISQUS_SHORTNAME" %}
+      <p class="comments-warning">
+        Disqus comments are enabled for this post, but the Disqus shortname is not configured.
+        Replace <code>CHANGE_ME_DISQUS_SHORTNAME</code> in <code>_config.yml</code> before publishing comments.
+      </p>
+    {% else %}
+      <div id="disqus_thread"></div>
+      <script>
+        var disqus_config = function () {
+          this.page.url = {{ page.url | absolute_url | jsonify }};
+          this.page.identifier = {{ disqus_identifier | jsonify }};
+          this.page.title = {{ page.title | jsonify }};
+        };
+
+        (function () {
+          var d = document;
+          var s = d.createElement('script');
+          s.src = 'https://{{ disqus_shortname }}.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    {% endif %}
+  </section>
+{% endif %}

@@ -11,6 +11,8 @@ tags:
 language: ko
 summary: "One-sentence summary."
 math: false
+comments: true
+comment_id: "study-tensorrt-SLUG_HERE"
 permalink: /study/tensorrt/SLUG_HERE/
 ---
 
@@ -29,3 +31,5 @@ State the concept, system behavior, or technique being studied.
 ## References
 
 - Public documentation or paper:
+
+{% include comments.html %}

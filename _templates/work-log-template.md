@@ -10,6 +10,8 @@ tags:
 language: ko
 summary: "One-sentence summary."
 math: false
+comments: true
+comment_id: "work-log-SLUG_HERE"
 permalink: /work-log/SLUG_HERE/
 ---
 
@@ -24,3 +26,5 @@ Write a short summary of the work and why it mattered.
 - General engineering lesson:
 - Reference:
 - Follow-up:
+
+{% include comments.html %}

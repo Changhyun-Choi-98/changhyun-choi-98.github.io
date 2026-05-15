@@ -10,3 +10,9 @@ color_scheme: light
 
 aux_links:
   GitHub Repository: https://github.com/Changhyun-Choi-98/changhyun-choi-98.github.io
+
+comments:
+  provider: "disqus"
+  enabled: true
+  disqus:
+    shortname: "changhyun-choi"

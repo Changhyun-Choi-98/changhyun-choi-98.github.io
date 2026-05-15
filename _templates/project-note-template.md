@@ -15,6 +15,8 @@ project:
   status: "planned | in-progress | completed"
   repo: "GITHUB_REPO_URL_HERE"
   demo: "DEMO_URL_HERE"
+comments: true
+comment_id: "project-paper-reproduction-SLUG_HERE"
 permalink: /project/paper-reproduction/SLUG_HERE/
 ---
 
@@ -35,3 +37,5 @@ State the public project goal.
 - Baseline:
 - Measurement:
 - Next step:
+
+{% include comments.html %}

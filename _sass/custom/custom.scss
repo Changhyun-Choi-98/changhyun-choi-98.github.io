@@ -130,6 +130,15 @@ html[data-theme="dark"] .sidebar-social-link-x img {
   filter: none;
 }
 
+.sidebar-social-link-github img {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+html[data-theme="dark"] .sidebar-social-link-github img {
+  filter: invert(1);
+}
+
 .sidebar-theme-credit {
   margin-bottom: 0;
 }

@@ -27,7 +27,7 @@ Use `subcategory` to match the folder and landing page where the post should app
 
 - `tensorrt`
 - `algorithm`
-- `gpu-acceleration`
+- `acceleration-skills`
 - `language-c`
 - `language-cpp`
 - `robotic-foundation-model`

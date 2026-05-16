@@ -16,5 +16,5 @@ A personal record of what I study and learn.
 
 - [Language](/study/language/)
 - [Algorithm](/study/algorithm/)
-- [Acceleration Skills](/study/gpu-acceleration/)
+- [Acceleration Skills](/study/acceleration-skills/)
 - [TensorRT/ONNX Runtime](/study/tensorrt/)

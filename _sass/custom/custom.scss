@@ -12,6 +12,19 @@
   pre.highlight {
     overflow-x: auto;
   }
+
+  .series-preface {
+    margin: $sp-4 0 $sp-6;
+    padding: $sp-4 $sp-5;
+    color: $body-text-color;
+    background-color: mix($body-background-color, $feedback-color, 42%);
+    border-left: 0.25rem solid $link-color;
+    border-radius: $border-radius;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 .home-brand {

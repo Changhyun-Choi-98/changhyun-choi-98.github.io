@@ -14,6 +14,7 @@ A personal record of what I study and learn.
 ## Topics
 {: .text-delta }
 
+- [Diffusion Tutorial](/study/diffusion-tutorial/)
 - [Language](/study/language/)
 - [Algorithm](/study/algorithm/)
 - [Acceleration Skills](/study/acceleration-skills/)

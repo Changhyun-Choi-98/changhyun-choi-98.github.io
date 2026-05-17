@@ -9,6 +9,6 @@ permalink: /study/diffusion-tutorial/
 
 # Diffusion Tutorial
 
-Notes on diffusion models, latent generative modeling, and related implementation details.
+This diffusion model tutorial is based on [Tutorial on Diffusion Models for Imaging and Vision](https://arxiv.org/abs/2403.18103) and [The Principles of Diffusion Models](https://arxiv.org/abs/2510.21890).
 
 {% include content-list.html section="study" subcategory="diffusion-tutorial" %}

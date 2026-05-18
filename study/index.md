@@ -17,5 +17,5 @@ A personal record of what I study and learn.
 - [Diffusion Tutorial](/study/diffusion-tutorial/)
 - [Language](/study/language/)
 - [Algorithm](/study/algorithm/)
-- [Acceleration Skills](/study/acceleration-skills/)
+- [System Optimization](/study/system-optimization/)
 - [TensorRT/ONNX Runtime](/study/tensorrt/)

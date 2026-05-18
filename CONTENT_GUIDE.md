@@ -34,6 +34,7 @@ Use `subcategory` to match the folder and landing page where the post should app
 - `real-time-inference`
 - `paper-reproduction`
 - `inference-optimization`
+- `further-optimizing-shallow-pi`
 
 Use category landing pages to preserve the Just the Docs sidebar hierarchy. Individual posts should usually omit `parent` and `grand_parent` so they appear in landing-page lists without creating sidebar children:
 

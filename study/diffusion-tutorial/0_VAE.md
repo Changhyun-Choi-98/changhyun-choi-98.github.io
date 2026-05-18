@@ -7,6 +7,7 @@ subcategory: diffusion-tutorial
 date: 2026-05-17
 tags:
   - Korean
+  - In progress
 language: ko
 summary: "DDPM의 variational perspective를 이해하는 데 필요한 VAE의 핵심 개념을 정리"
 math: true

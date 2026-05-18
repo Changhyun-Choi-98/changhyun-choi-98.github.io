@@ -10,6 +10,6 @@ permalink: /study/language/c/
 
 # C
 
-Notes on C programming and low-level language behavior.
+Notes on C programming.
 
 {% include content-list.html section="study" subcategory="language-c" %}

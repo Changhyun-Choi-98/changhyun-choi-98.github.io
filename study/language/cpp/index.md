@@ -10,6 +10,6 @@ permalink: /study/language/cpp/
 
 # C++
 
-Notes on C++ programming, systems abstractions, and performance-oriented implementation.
+Notes on C++ programming.
 
 {% include content-list.html section="study" subcategory="language-cpp" %}

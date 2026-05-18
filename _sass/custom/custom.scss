@@ -9,6 +9,13 @@
     height: auto;
   }
 
+  .figure-caption {
+    margin-top: -$sp-3;
+    color: mix($body-text-color, $body-background-color, 70%);
+    font-size: $font-size-2;
+    line-height: 1.35;
+  }
+
   pre.highlight {
     overflow-x: auto;
   }

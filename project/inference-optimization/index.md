@@ -16,8 +16,3 @@ Project notes on inference optimization experiments, benchmarks, and implementat
 {: .text-delta }
 
 - [Further Optimizing Shallow-π](/project/inference-optimization/further-optimizing-shallow-pi/)
-
-## Notes
-{: .text-delta }
-
-{% include content-list.html section="project" subcategory="inference-optimization" %}

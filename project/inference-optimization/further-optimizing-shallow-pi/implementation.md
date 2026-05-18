@@ -43,7 +43,7 @@ permalink: /project/inference-optimization/further-optimizing-shallow-pi/shallow
 *Figure source: [Shallow-π: Knowledge Distillation for Flow-based VLAs](https://arxiv.org/abs/2601.20262){:target="_blank" rel="noopener noreferrer"}.*
 {: .figure-caption}
 
-GPU VRAM을 효율적으로 사용하기 위해서 BF16 데이터 타입을 사용했고, 하나의 GPU에 batch size가 64까지 올라가는 것을 확인하여 5개의 GPU로 batch size 320으로 distillation을 진행했다(총 30,000 step). Distillation 동안 수집한 metric 정보는 다음과 같다:
+GPU VRAM을 효율적으로 사용하기 위해서 BF16 데이터 타입을 사용했고, 하나의 GPU에 batch size가 64까지 올라가는 것을 확인하여 5개의 GPU로 batch size 320으로 distillation을 진행했다(총 30,000 step). Distillation 동안 수집한 metric 정보는 다음과 같다(다른 연구실 인원들과 같이 쓰는 서버이기 때문에, 학습 도중에 다른 workload들이 생겼다가 없어졌다가 했을 것이다):
 
 ![distillation_metric](/project/inference-optimization/further-optimizing-shallow-pi/images/distillation_metrics.png)
 *pi0_libero_l06 → pi0_libero teacher를 distillation해서 만든 Gemma depth 6짜리 shallow student*

@@ -9,7 +9,7 @@ permalink: /project/
 
 # Project
 
-Project notes for paper reproduction and inference optimization work.
+Personal project notes.
 
 ## Topics
 {: .text-delta }

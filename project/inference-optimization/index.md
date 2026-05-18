@@ -10,7 +10,7 @@ permalink: /project/inference-optimization/
 
 # Inference Optimization
 
-Project notes on inference optimization experiments, benchmarks, and implementation work.
+Project notes for inference optimization techniques.
 
 ## Topics
 {: .text-delta }

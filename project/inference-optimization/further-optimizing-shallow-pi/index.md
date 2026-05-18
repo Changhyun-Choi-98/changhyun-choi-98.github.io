@@ -10,6 +10,6 @@ permalink: /project/inference-optimization/further-optimizing-shallow-pi/
 
 # Further Optimizing Shallow-π
 
-Project notes for further optimizing Shallow-π.
+Project notes for further optimizing [Shallow-π](https://icsl-jeon.github.io/shallow-pi/){:target="_blank" rel="noopener noreferrer"}.
 
 {% include content-list.html section="project" subcategory="further-optimizing-shallow-pi" %}

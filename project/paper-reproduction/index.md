@@ -9,6 +9,6 @@ permalink: /project/paper-reproduction/
 
 # Paper Reproduction
 
-Project notes for public paper reproduction attempts, experiment plans, and implementation summaries.
+Project notes for public paper reproduction attempts.
 
 {% include content-list.html section="project" subcategory="paper-reproduction" %}

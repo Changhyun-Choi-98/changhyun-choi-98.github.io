@@ -9,6 +9,6 @@ permalink: /paper/robotic-foundation-model/
 
 # Robotic Foundation Model
 
-Paper notes on generalist robot policies, vision-language-action models, embodied AI, and scalable robot learning.
+Paper notes on robotic foundation models.
 
 {% include content-list.html section="paper" subcategory="robotic-foundation-model" %}

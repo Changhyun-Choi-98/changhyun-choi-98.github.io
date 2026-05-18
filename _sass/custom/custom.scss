@@ -57,6 +57,10 @@
   line-height: 1.35;
 }
 
+.home-post-label + .home-post-label {
+  margin-left: -$sp-1;
+}
+
 .theme-switcher {
   display: flex;
   height: 100%;

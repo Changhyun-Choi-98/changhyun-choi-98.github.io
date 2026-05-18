@@ -2,6 +2,7 @@
 layout: default
 title: Tags
 nav_order: 7
+nav_exclude: true
 permalink: /tags/
 ---
 

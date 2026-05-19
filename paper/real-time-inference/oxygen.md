@@ -82,7 +82,7 @@ t 시점의 frame에서
 - 중복 weight memory access
 - action path에 끼어드는 불필요한 latency
 
-시스템 관점에서 보면 이는 **shared computation reuse**다.
+시스템 관점에서 보면 이는 shared computation reuse다.
 
 ### 2nd Key Optimization: Cross-frame Continuous Batching
 

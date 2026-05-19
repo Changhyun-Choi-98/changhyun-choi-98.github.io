@@ -4,6 +4,7 @@
   {% assign content_pages = content_pages | where: "subcategory", include.subcategory %}
 {% endif %}
 {% assign content_pages = content_pages | sort: "date" | reverse %}
+{% assign page_size = 10 %}
 
 {% assign content_count = 0 %}
 {% for content_page in content_pages %}
@@ -11,12 +12,16 @@
     {% assign content_count = content_count | plus: 1 %}
   {% endunless %}
 {% endfor %}
+{% assign total_pages = content_count | plus: page_size | minus: 1 | divided_by: page_size %}
 
 {% if content_count > 0 %}
+<div class="content-list" data-content-list data-content-page-count="{{ total_pages }}">
 <ul>
+  {% assign content_index = 0 %}
   {% for content_page in content_pages %}
     {% unless content_page.path contains "_templates/" %}
-      <li>
+      {% assign content_page_number = content_index | divided_by: page_size | plus: 1 %}
+      <li data-content-list-item data-content-page="{{ content_page_number }}"{% if content_page_number > 1 %} hidden{% endif %}>
         <a href="{{ content_page.url | relative_url }}">{{ content_page.title }}</a>
         {% if content_page.date %}
           <span class="text-grey-dk-000">{{ content_page.date | date: "%Y-%m-%d" }}</span>
@@ -31,9 +36,132 @@
           {% endfor %}
         {% endif %}
       </li>
+      {% assign content_index = content_index | plus: 1 %}
     {% endunless %}
   {% endfor %}
 </ul>
+{% if total_pages > 1 %}
+<nav class="content-pagination" data-content-pagination aria-label="Post list pages">
+  <button class="content-pagination-button" type="button" data-content-page-target="first">First</button>
+  <button class="content-pagination-button" type="button" data-content-page-target="prev">Previous</button>
+  <span class="content-pagination-pages" data-content-page-links></span>
+  <button class="content-pagination-button" type="button" data-content-page-target="next">Next</button>
+  <button class="content-pagination-button" type="button" data-content-page-target="last">Last</button>
+  <span class="content-pagination-status text-grey-dk-000" data-content-pagination-status aria-live="polite"></span>
+</nav>
+<script>
+  (function () {
+    function validPage(value, totalPages) {
+      var page = parseInt(value, 10);
+      if (Number.isNaN(page)) {
+        return 1;
+      }
+      return Math.min(Math.max(page, 1), totalPages);
+    }
+
+    function syncUrl(page) {
+      var url = new URL(window.location.href);
+      if (page === 1) {
+        url.searchParams.delete("page");
+      } else {
+        url.searchParams.set("page", String(page));
+      }
+      window.history.replaceState(null, "", url.toString());
+    }
+
+    function targetPage(target, currentPage, totalPages) {
+      if (target === "first") {
+        return 1;
+      }
+      if (target === "prev") {
+        return currentPage - 1;
+      }
+      if (target === "next") {
+        return currentPage + 1;
+      }
+      if (target === "last") {
+        return totalPages;
+      }
+      return validPage(target, totalPages);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll("[data-content-list]").forEach(function (list) {
+        var totalPages = parseInt(list.getAttribute("data-content-page-count"), 10);
+        var links = list.querySelector("[data-content-page-links]");
+        var status = list.querySelector("[data-content-pagination-status]");
+
+        function addPageButton(page, currentPage) {
+          var button = document.createElement("button");
+          button.className = "content-pagination-button";
+          button.type = "button";
+          button.textContent = String(page);
+          button.setAttribute("data-content-page-target", String(page));
+          if (page === currentPage) {
+            button.setAttribute("aria-current", "page");
+          }
+          links.appendChild(button);
+        }
+
+        function addEllipsis() {
+          var ellipsis = document.createElement("span");
+          ellipsis.className = "content-pagination-ellipsis text-grey-dk-000";
+          ellipsis.textContent = "...";
+          links.appendChild(ellipsis);
+        }
+
+        function render(page, updateHistory) {
+          var currentPage = validPage(page, totalPages);
+          var startPage = Math.max(1, currentPage - 2);
+          var endPage = Math.min(totalPages, currentPage + 2);
+
+          list.setAttribute("data-content-current-page", String(currentPage));
+          list.querySelectorAll("[data-content-list-item]").forEach(function (item) {
+            item.hidden = validPage(item.getAttribute("data-content-page"), totalPages) !== currentPage;
+          });
+          links.textContent = "";
+          if (startPage > 1) {
+            addPageButton(1, currentPage);
+            if (startPage > 2) {
+              addEllipsis();
+            }
+          }
+          for (var pageNumber = startPage; pageNumber <= endPage; pageNumber += 1) {
+            addPageButton(pageNumber, currentPage);
+          }
+          if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+              addEllipsis();
+            }
+            addPageButton(totalPages, currentPage);
+          }
+          list.querySelectorAll("[data-content-page-target]").forEach(function (button) {
+            var nextPage = validPage(targetPage(button.getAttribute("data-content-page-target"), currentPage, totalPages), totalPages);
+            button.disabled = nextPage === currentPage;
+          });
+          status.textContent = "Page " + currentPage + " of " + totalPages;
+          if (updateHistory) {
+            syncUrl(currentPage);
+          }
+        }
+
+        if (Number.isNaN(totalPages) || totalPages <= 1) {
+          return;
+        }
+        render(new URLSearchParams(window.location.search).get("page"), false);
+        list.addEventListener("click", function (event) {
+          var button = event.target.closest("[data-content-page-target]");
+          if (!button || button.disabled) {
+            return;
+          }
+          render(targetPage(button.getAttribute("data-content-page-target"), validPage(list.getAttribute("data-content-current-page"), totalPages), totalPages), true);
+        });
+      });
+    });
+  })();
+</script>
+{% endif %}
+</div>
 {% else %}
 No posts yet.
 {% endif %}

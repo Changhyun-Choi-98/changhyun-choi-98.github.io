@@ -1,0 +1,75 @@
+{%- if page.nav_exclude == true and page.section -%}
+  {%- assign post_pages = site.pages | where: "section", page.section -%}
+  {%- if page.subcategory -%}
+    {%- assign post_pages = post_pages | where: "subcategory", page.subcategory -%}
+  {%- endif -%}
+  {%- assign post_pages = post_pages | sort: "date" | reverse -%}
+
+  {%- assign filtered_posts = "" | split: "" -%}
+  {%- for post_page in post_pages -%}
+    {%- unless post_page.path contains "_templates/" -%}
+      {%- assign filtered_posts = filtered_posts | push: post_page -%}
+    {%- endunless -%}
+  {%- endfor -%}
+
+  {%- assign current_index = "" -%}
+  {%- for post_page in filtered_posts -%}
+    {%- if post_page.url == page.url -%}
+      {%- assign current_index = forloop.index0 -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if current_index != "" -%}
+    {%- assign previous_index = current_index | minus: 1 -%}
+    {%- assign next_index = current_index | plus: 1 -%}
+    {%- assign previous_post = nil -%}
+    {%- assign next_post = nil -%}
+
+    {%- for post_page in filtered_posts -%}
+      {%- if forloop.index0 == previous_index -%}
+        {%- assign previous_post = post_page -%}
+      {%- elsif forloop.index0 == next_index -%}
+        {%- assign next_post = post_page -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- assign page_size = site.content_list_page_size | default: 10 -%}
+    {%- assign list_page_number = current_index | divided_by: page_size | plus: 1 -%}
+    {%- assign list_url_parts = page.url | split: "/" | pop -%}
+    {%- assign list_url = list_url_parts | join: "/" | append: "/" -%}
+    {%- assign list_href = list_url | relative_url -%}
+    {%- if list_page_number > 1 -%}
+      {%- assign list_href = list_href | append: "?page=" | append: list_page_number -%}
+    {%- endif -%}
+
+<nav class="post-navigation" aria-label="Post navigation">
+  <div class="post-navigation-grid">
+    {%- if previous_post -%}
+      <a class="post-navigation-link post-navigation-prev" href="{{ previous_post.url | relative_url }}">
+        <span class="post-navigation-label">Previous</span>
+        <span class="post-navigation-title">{{ previous_post.title }}</span>
+      </a>
+    {%- else -%}
+      <span class="post-navigation-link post-navigation-link-disabled post-navigation-prev" aria-disabled="true">
+        <span class="post-navigation-label">Previous</span>
+        <span class="post-navigation-title">No newer post</span>
+      </span>
+    {%- endif -%}
+
+    <a class="post-navigation-list" href="{{ list_href }}">Back to list</a>
+
+    {%- if next_post -%}
+      <a class="post-navigation-link post-navigation-next" href="{{ next_post.url | relative_url }}">
+        <span class="post-navigation-label">Next</span>
+        <span class="post-navigation-title">{{ next_post.title }}</span>
+      </a>
+    {%- else -%}
+      <span class="post-navigation-link post-navigation-link-disabled post-navigation-next" aria-disabled="true">
+        <span class="post-navigation-label">Next</span>
+        <span class="post-navigation-title">No older post</span>
+      </span>
+    {%- endif -%}
+  </div>
+</nav>
+  {%- endif -%}
+{%- endif -%}

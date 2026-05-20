@@ -4,7 +4,7 @@
   {% assign content_pages = content_pages | where: "subcategory", include.subcategory %}
 {% endif %}
 {% assign content_pages = content_pages | sort: "date" | reverse %}
-{% assign page_size = 10 %}
+{% assign page_size = site.content_list_page_size | default: 10 %}
 
 {% assign content_count = 0 %}
 {% for content_page in content_pages %}

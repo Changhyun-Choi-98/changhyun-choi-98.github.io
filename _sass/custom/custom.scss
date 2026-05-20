@@ -73,6 +73,7 @@
 .home-post-meta {
   display: inline-flex;
   max-width: 100%;
+  margin-left: $sp-2;
   flex-wrap: wrap;
   gap: $sp-1;
   align-items: baseline;
@@ -90,6 +91,10 @@
   overflow-wrap: normal;
   white-space: nowrap;
   word-break: normal;
+}
+
+.home-post-date {
+  margin-left: $sp-2;
 }
 
 .theme-switcher {

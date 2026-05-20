@@ -70,13 +70,26 @@
   line-height: 1.35;
 }
 
-.home-post-label + .home-post-label {
-  margin-left: -$sp-1;
+.home-post-meta {
+  display: inline-flex;
+  max-width: 100%;
+  flex-wrap: wrap;
+  gap: $sp-1;
+  align-items: baseline;
+  vertical-align: baseline;
+  white-space: normal;
 }
 
-.home-post-meta {
-  display: inline-block;
+.home-post-meta .home-post-label {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.home-post-label,
+.home-post-date {
+  overflow-wrap: normal;
   white-space: nowrap;
+  word-break: normal;
 }
 
 .theme-switcher {

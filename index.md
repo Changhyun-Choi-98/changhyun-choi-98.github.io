@@ -29,7 +29,7 @@ This site is a technical portfolio and notes archive for building my career in p
     {% assign recent_status = "Complete" %}
     {% assign recent_status_class = "label-green" %}
   {% endif %}
-- [{{ recent_page.title }}]({{ recent_page.url | relative_url }}) <span class="home-post-meta">{% if recent_page.tags contains "Korean" %}<span class="label label-blue home-post-label">Korean</span>{% endif %}{% if recent_page.tags contains "English" %} <span class="label label-purple home-post-label">English</span>{% endif %} <span class="label {{ recent_status_class }} home-post-label">{{ recent_status }}</span> <span class="text-grey-dk-000">{{ recent_page.date | date: "%Y-%m-%d" }}</span></span>{% if recent_page.summary %}<br>{{ recent_page.summary }}{% endif %}
+- [{{ recent_page.title }}]({{ recent_page.url | relative_url }}) <span class="home-post-meta">{% if recent_page.tags contains "Korean" %}<span class="label label-blue home-post-label">Korean</span>{% endif %}{% if recent_page.tags contains "English" %} <span class="label label-purple home-post-label">English</span>{% endif %} <span class="label {{ recent_status_class }} home-post-label">{{ recent_status }}</span> <span class="text-grey-dk-000 home-post-date">{{ recent_page.date | date: "%Y-%m-%d" }}</span></span>{% if recent_page.summary %}<br>{{ recent_page.summary }}{% endif %}
   {% if recent_count == 5 %}
     {% break %}
   {% endif %}

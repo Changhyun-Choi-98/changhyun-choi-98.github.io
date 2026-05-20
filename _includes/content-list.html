@@ -24,7 +24,7 @@
       <li data-content-list-item data-content-page="{{ content_page_number }}"{% if content_page_number > 1 %} hidden{% endif %}>
         <a href="{{ content_page.url | relative_url }}">{{ content_page.title }}</a>
         {% if content_page.date %}
-          <span class="text-grey-dk-000">{{ content_page.date | date: "%Y-%m-%d" }}</span>
+          <span class="text-grey-dk-000 content-list-date">{{ content_page.date | date: "%Y-%m-%d" }}</span>
         {% endif %}
         {% if content_page.summary %}
           <br>{{ content_page.summary }}

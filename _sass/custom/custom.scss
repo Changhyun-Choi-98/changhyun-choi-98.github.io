@@ -4,6 +4,19 @@
     overflow-x: auto;
   }
 
+  main > .table-wrapper {
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+    vertical-align: top;
+
+    > table {
+      display: table;
+      width: max-content;
+      min-width: 0;
+    }
+  }
+
   img {
     max-width: 100%;
     height: auto;

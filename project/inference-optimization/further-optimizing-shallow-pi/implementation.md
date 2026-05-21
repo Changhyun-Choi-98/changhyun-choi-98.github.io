@@ -15,7 +15,7 @@ comment_id: "project-further-optimizing-shallow-pi-shallow-pi-implementation"
 permalink: /project/inference-optimization/further-optimizing-shallow-pi/shallow-pi-implementation/
 ---
 
-# Shallow-π implementation
+# **Shallow-π implementation**
 
 <aside class="series-preface" markdown="1">
 

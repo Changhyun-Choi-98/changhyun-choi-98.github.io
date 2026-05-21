@@ -16,7 +16,7 @@ comment_id: "study-diffusion-tutorial-vae"
 permalink: /study/diffusion-tutorial/vae/
 ---
 
-# 0. VAE(Variational AutoEncoder)
+# **0. VAE(Variational AutoEncoder)**
 
 <aside class="series-preface" markdown="1">
 

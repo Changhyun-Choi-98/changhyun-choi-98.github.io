@@ -31,6 +31,10 @@ permalink: /project/inference-optimization/further-optimizing-shallow-pi/shallow
 - **Storage:**
   - 2 TB NVMe SSD for the system drive
   - ~10.4 TB ext4 workspace/data storage
+- **Usage context:** Shared multi-user research server
+  - This machine is not a dedicated benchmark node.
+  - Training used 5 out of 7 NVIDIA L40S GPUs, as listed above.
+  - CPU, system memory, storage I/O, and OS-level background load may still be affected by other users.
 
 </aside>
 

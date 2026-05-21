@@ -116,7 +116,7 @@ FLASH의 verification은 accepted draft가 full-path rollout과 동일한 trajec
 
 ## **Personal Idea**
 
-1. 여기서 사용하는 KV cache 부분에 [OxyGen](/paper/real-time-inference/oxygen/){:target="_blank" rel="noopener noreferrer"}을 결합할 수 있을까? 할 수 있다면 그렇게 해서 얻는 이득은?
+1. 여기서 사용하는 KV cache 부분에 [OxyGen](/paper/real-time-inference/oxygen/)을 결합할 수 있을까? 할 수 있다면 그렇게 해서 얻는 이득은?
 2. Flow matching이 아니라 diffusion model인 action expert라면, reparametrization이나 clean action estimate를 쓰면 되나?
 
 

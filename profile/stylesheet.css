@@ -165,8 +165,18 @@ span.highlight {
   line-height: 1.45;
 }
 
+.news-list > li {
+  list-style-type: none;
+  line-height: 1.35;
+}
+
 .news-list > li:not(:first-child) {
-  margin-top: 0.65em !important;
+  margin-top: 0.75em !important;
+}
+
+.news-list > li > strong {
+  color: var(--profile-text-color);
+  font-size: 15px;
 }
 
 .news-list > ul > li {

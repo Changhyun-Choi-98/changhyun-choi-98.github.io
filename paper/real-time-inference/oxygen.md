@@ -15,7 +15,7 @@ comment_id: "paper-oxygen"
 permalink: /paper/real-time-inference/oxygen/
 ---
 
-# OxyGen: Unified KV Cache Management for VLA Inference under Multi-Task Parallelism
+# **OxyGen: Unified KV Cache Management for VLA Inference under Multi-Task Parallelism**
 
 <aside class="series-preface" markdown="1">
 

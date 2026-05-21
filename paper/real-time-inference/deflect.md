@@ -16,7 +16,7 @@ comment_id: "paper-deflect"
 permalink: /paper/real-time-inference/deflect/
 ---
 
-# DEFLECT: Delay-Robust Execution via Flow-matching Likelihood-Estimated Counterfactual Tuning for VLA Policies
+# **DEFLECT: Delay-Robust Execution via Flow-matching Likelihood-Estimated Counterfactual Tuning for VLA Policies**
 
 <aside class="series-preface" markdown="1">
 

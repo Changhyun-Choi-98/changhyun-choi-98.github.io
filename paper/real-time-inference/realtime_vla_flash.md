@@ -28,5 +28,8 @@ permalink: /paper/real-time-inference/realtime-vla-flash/
 
 이 논문은 Diffusion-based Vision-Language-Action 모델(dVLAs)이 high latency로 인해 real-time deployment에서 제한된다는 문제를 **speculative inference framework**로 해결한다. 이 개념은 LLM의 speculative decoding과 컨셉을 공유하는데, 가벼운 draft model이 후보 action들을 만들어주면 기존의 무거운 모델이 이것을 parallel하게 verify하는 것이다. 하지만 dVLA는 continuous action chunk를 생성하고 explicit likelihood가 없기 때문에, draft token을 큰 모델이 확률적으로 accept/reject하는 것이 아니라 *draft action chunk가 main action expert의 flow field와 locally consistent한지* 검사한다는 점이 다르다.
 
+![realtime_vla_flash_overview](/paper/real-time-inference/images/realtime_vla_flash_overview.png)
+*Overall Figure*
+{: .figure-caption}
 
 {% include comments.html %}

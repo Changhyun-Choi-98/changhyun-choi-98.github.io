@@ -32,7 +32,7 @@ VAE 자체에 대한 설명은 Stanley Chan의 [Tutorial on Diffusion Models for
 
 </aside>
 
-## 1. Building Blocks of VAE
+## **1. Building Blocks of VAE**
 
 
 {% include comments.html %}

@@ -1,0 +1,18 @@
+$color-scheme: dark;
+$body-background-color: #000000;
+$body-heading-color: $grey-lt-000;
+$body-text-color: $grey-lt-300;
+$link-color: #58a6ff;
+$nav-child-link-color: #bfdbfe;
+$sidebar-color: #000000;
+$base-button-color: #0d1117;
+$btn-primary-color: #1f6feb;
+$code-background-color: #0d1117;
+$code-linenumber-color: #e6edf3;
+$feedback-color: #0d1117;
+$table-background-color: #0d1117;
+$search-background-color: #0d1117;
+$search-result-preview-color: $grey-lt-300;
+$border-color: #30363d;
+
+@import "./vendor/accessible-pygments/github-dark";

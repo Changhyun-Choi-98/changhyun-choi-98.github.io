@@ -21,7 +21,7 @@ permalink: /paper/real-time-inference/oxygen/
 
 - **Authors:** Xiangyu Li¹, Huaizhi Tang²*, Xin Ding³*, Weijun Wang¹, Ting Cao¹†, Yunxin Liu¹
 - **Affiliations:** ¹Institute for AI Industry Research (AIR), Tsinghua University, ²Department of Electronic Engineering, Tsinghua University, ³University of Science and Technology of China, *Work done during internships at AIR, Tsinghua University, †Corresponding author
-- **Pages:** [arXiv](https://arxiv.org/abs/2603.14371){:target="_blank" rel="noopener noreferrer"}, [GitHub](https://github.com/air-embodied-brain/OxyGen){:target="_blank" rel="noopener noreferrer"}
+- **Links:** [arXiv](https://arxiv.org/abs/2603.14371){:target="_blank" rel="noopener noreferrer"}, [GitHub](https://github.com/air-embodied-brain/OxyGen){:target="_blank" rel="noopener noreferrer"}
 - **Submitted:** 2026-03-15
 - **Updated:** 2026-05-18 (v2)
 

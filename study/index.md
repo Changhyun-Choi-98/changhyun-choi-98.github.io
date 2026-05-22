@@ -15,7 +15,6 @@ A personal record of what I study and learn.
 {: .text-delta }
 
 - [Diffusion Tutorial](/study/diffusion-tutorial/)
-- [Language](/study/language/)
 - [Algorithm](/study/algorithm/)
 - [System Optimization](/study/system-optimization/)
 - [TensorRT/ONNX Runtime](/study/tensorrt/)

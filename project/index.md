@@ -15,4 +15,3 @@ Personal project notes.
 {: .text-delta }
 
 - [Inference Optimization](/project/inference-optimization/)
-- [Paper Reproduction](/project/paper-reproduction/)

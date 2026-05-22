@@ -28,11 +28,7 @@ Use `subcategory` to match the folder and landing page where the post should app
 - `tensorrt`
 - `algorithm`
 - `system-optimization`
-- `language-c`
-- `language-cpp`
-- `robotic-foundation-model`
 - `real-time-inference`
-- `paper-reproduction`
 - `inference-optimization`
 - `further-optimizing-shallow-pi`
 

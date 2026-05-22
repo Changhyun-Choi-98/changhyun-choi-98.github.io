@@ -3,7 +3,7 @@ layout: default
 title: "TITLE_HERE"
 nav_exclude: true
 section: paper
-subcategory: robotic-foundation-model
+subcategory: real-time-inference
 date: YYYY-MM-DD
 tags:
   - tag-one
@@ -17,8 +17,8 @@ paper:
   venue: "VENUE_OR_ARXIV_HERE"
   url: "PAPER_URL_HERE"
 comments: true
-comment_id: "paper-robotic-foundation-model-SLUG_HERE"
-permalink: /paper/robotic-foundation-model/SLUG_HERE/
+comment_id: "paper-real-time-inference-SLUG_HERE"
+permalink: /paper/real-time-inference/SLUG_HERE/
 ---
 
 # TITLE_HERE

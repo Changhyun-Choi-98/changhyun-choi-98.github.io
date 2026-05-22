@@ -3,7 +3,7 @@ layout: default
 title: "TITLE_HERE"
 nav_exclude: true
 section: project
-subcategory: paper-reproduction
+subcategory: inference-optimization
 date: YYYY-MM-DD
 tags:
   - tag-one
@@ -16,8 +16,8 @@ project:
   repo: "GITHUB_REPO_URL_HERE"
   demo: "DEMO_URL_HERE"
 comments: true
-comment_id: "project-paper-reproduction-SLUG_HERE"
-permalink: /project/paper-reproduction/SLUG_HERE/
+comment_id: "project-inference-optimization-SLUG_HERE"
+permalink: /project/inference-optimization/SLUG_HERE/
 ---
 
 # TITLE_HERE

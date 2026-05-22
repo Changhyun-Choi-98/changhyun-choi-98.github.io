@@ -7,6 +7,7 @@ subcategory: further-optimizing-shallow-pi
 date: 2026-05-21
 tags:
   - Korean
+  - Python
   - Writing
 language: ko
 summary: "기존의 Shallow-π의 inference를 profiling해서 주요 병목지점 찾기"

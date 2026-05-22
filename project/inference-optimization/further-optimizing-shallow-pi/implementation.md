@@ -7,6 +7,7 @@ subcategory: further-optimizing-shallow-pi
 date: 2026-05-20
 tags:
   - Korean
+  - Python
 language: ko
 summary: "π0 distillation을 통해 Shallow-π 구현 완료"
 math: true

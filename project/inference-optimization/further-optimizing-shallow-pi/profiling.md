@@ -441,7 +441,42 @@ uv run python scripts/profiling/profile_shallow_pi_latency.py \
 {: style="margin-left: 1rem;" }
 
 </details>
+`cuda_event`와 `sync_wall`이 거의 같기 때문에, 이 smoke test 구간에서는 Python overhead나 CPU-GPU synchronization overhead가 크게 보이지 않는다. 즉 현재 측정 대상인 model-only / fixed-noise / sample_actions()는 preliminary하게 GPU compute 중심으로 보인다. 하지만 sample 수가 5회로 아직 작고 지금은 smoke test, 즉 "실행 가능성 확인"을 위한 것이었고 이제 정식으로 fixed-noise baseline 100회를 실행시킨다:
 
+<details markdown="1">
+<summary>shell prompt & result json</summary>
+
+```shell
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+export CUDA_VISIBLE_DEVICES=6
+export CUDA_LAUNCH_BLOCKING=0
+export UV_LINK_MODE=copy
+
+RUN_NAME=distill_l06_bf16_gb320_20260514_184612
+STEP=30000
+CKPT=./checkpoints/pi0_libero_l06/${RUN_NAME}/${STEP}
+
+mkdir -p profiles/latency
+
+uv run python scripts/profiling/profile_shallow_pi_latency.py \
+  --config pi0_libero_l06 \
+  --ckpt "${CKPT}" \
+  --device cuda:0 \
+  --num-steps 10 \
+  --mode model \
+  --fixed-noise \
+  --warmup 30 \
+  --iters 100 \
+  --out-json profiles/latency/model_fixed_noise_numsteps10_100iters.json
+```
+{: style="margin-left: 1rem;" }
+
+```json
+
+```
+{: style="margin-left: 1rem;" }
+
+</details>
 
 
 {% include comments.html %}

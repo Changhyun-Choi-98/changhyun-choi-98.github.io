@@ -4,7 +4,7 @@ title: "Shallow-π Profiling"
 nav_exclude: true
 section: project
 subcategory: further-optimizing-shallow-pi
-date: 2026-05-21
+date: 2026-05-22
 tags:
   - Korean
   - Python
@@ -294,7 +294,153 @@ if __name__ == "__main__":
 
 </details>
 
-위 코드는 [실제 LIBERO observation 대신 shape만 같은 랜덤한 observation과 "do something"이라는 prompt를 줘서](https://github.com/icsl-Jeon/openpi/blob/a5940ac510c7f5d94918f238cfc3722be1a2c5c8/src/openpi/policies/libero_policy.py#L10){:target="_blank" rel="noopener noreferrer"} inference path에만 집중한다. 두 가지 `mode`로 돌아가는데
+위 코드는 [실제 LIBERO observation 대신 shape만 같은 랜덤한 observation과 "do something"이라는 prompt를 줘서](https://github.com/icsl-Jeon/openpi/blob/a5940ac510c7f5d94918f238cfc3722be1a2c5c8/src/openpi/policies/libero_policy.py#L10){:target="_blank" rel="noopener noreferrer"} inference path에만 집중한다. 핵심 작동 원리는 아래와 같다:
+
+```text
+1. argument parsing
+2. policy / model checkpoint load
+3. dummy LIBERO observation 생성
+4. mode에 따라 측정 함수 fn() 구성
+
+   mode=model:
+     - input transform 1회
+     - GPU tensor 변환 1회
+     - Observation 생성 1회
+     - 반복 측정에서는 sample_actions()만 실행
+     - model-only latency baseline
+
+   mode=policy:
+     - 반복 측정마다 policy.infer(example) 전체 실행
+     - input transform, H2D copy, sample_actions, D2H copy, output transform 포함
+
+5. warmup 수행
+   - CUDA context initialization 제거
+   - torch.compile 첫 compile overhead 제거
+   - allocator/autotune overhead 제거
+
+6. output shape sanity check
+7. CUDA event latency 측정
+8. synchronized wall-clock latency 측정
+9. mean / median / p90 / p95 / p99 저장
+10. JSON으로 결과 저장
+```
+{: style="margin-left: 1rem;" }
+
+argument 중에서 유의해야 하는 것들 중 하나로 `fixed-noise`가 있다. 이 flag가 있으면 denoising을 시작하는 noise를 매번 새로 만들지 않고, 같은 noise를 반복해서 사용한다. 만약 매 iteration마다 noise를 새로 만들면 latency 안에 random number generation 비용이 포함된다. 첫 profiling에서는 denoising compute 자체를 보는 것이 목적이므로 `fixed-noise`를 주는 것을 고려해볼 수 있다. 이 flag가 없는 것이 실제 inference에 더 가깝긴 하다. 두 상황의 결과 차이가 작으면 무시해도 되고 (RNG 비용이 작음) 크면 이것도 profiling 대상으로 봐야 한다.
+
+또한 `warmup`이라는 argument가 있다. 처음 inference를 하면 다음 overhead가 섞이게 된다:
+```text
+CUDA context initialization
+model first run overhead
+torch.compile compilation
+Inductor / Triton autotuning
+memory allocator warmup
+kernel cache warmup
+```
+{: style="margin-left: 1rem;" }
+위와 같은 overhead를 measurement에 포함시키지 않기 위해 `warmup` 횟수만큼 먼저 실행시킨다.
+
+`prepare_model_only_observation` 함수는 `mode`가 `model` 일때 작동하는데, `Policy.infer()`는 원래 아래와 같은 매번 한다:
+```text
+raw observation
+→ input transform
+→ torch tensor 변환
+→ GPU로 이동
+→ Observation.from_dict
+→ sample_actions()
+→ CPU로 가져오기
+→ output transform
+```
+{: style="margin-left: 1rem;" }
+model-only profiling의 경우 `sample_actions()`만 measure한다.
+
+`measure_cuda_event_ms()`를 이용해서 CUDA event 기반 latency 측정을 수행한다. GPU inference timing에서 가장 자주 쓰는 방식 중 하나이다. `measure_sync_wall_ms()`를 이용해서 CPU wall-clock 기준 latency를 측정한다. 두 latency의 의미는 아래와 같다:
+
+| 측정 방식 | 의미 |
+|---|---|
+| CUDA event | CUDA stream 기준 elapsed time |
+| synchronized wall | CPU 입장에서 `fn()` 전체가 끝날 때까지 걸린 시간 |
+
+두 값을 비교해서 아래와 같은 insight를 얻을 수 있다:
+
+```text
+cuda_event ≈ sync_wall
+  → GPU compute 중심, CPU overhead 작음
+
+sync_wall >> cuda_event
+  → CPU preprocessing, Python overhead, launch overhead, synchronization 문제 가능성
+
+cuda_event가 심하게 흔들림
+  → GPU clock, 다른 process, dynamic compilation, memory allocator 영향 가능성
+```
+{: style="margin-left: 1rem;" }
+
+
+실행시킨 shell prompt(model-only / fixed-noise smoke test)와 결과는 아래와 같다:
+
+<details markdown="1">
+<summary>shell prompt & result json</summary>
+
+```shell
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+export CUDA_VISIBLE_DEVICES=6
+export CUDA_LAUNCH_BLOCKING=0
+export UV_LINK_MODE=copy
+
+RUN_NAME=distill_l06_bf16_gb320_20260514_184612
+STEP=30000
+CKPT=./checkpoints/pi0_libero_l06/${RUN_NAME}/${STEP}
+
+mkdir -p profiles/latency
+
+uv run python scripts/profiling/profile_shallow_pi_latency.py \
+  --config pi0_libero_l06 \
+  --ckpt "${CKPT}" \
+  --device cuda:0 \
+  --num-steps 10 \
+  --mode model \
+  --fixed-noise \
+  --warmup 5 \
+  --iters 5 \
+  --out-json profiles/latency/smoke_model_fixed_noise_numsteps10.json
+```
+{: style="margin-left: 1rem;" }
+
+```json
+{
+  "config": "pi0_libero_l06",
+  "ckpt": "./checkpoints/pi0_libero_l06/distill_l06_bf16_gb320_20260514_184612/30000",
+  "device": "cuda:0",
+  "num_steps": 10,
+  "mode": "model",
+  "fixed_noise": true,
+  "warmup": 5,
+  "iters": 5,
+  "cuda_event": {
+    "count": 5,
+    "mean_ms": 20.894195556640625,
+    "median_ms": 20.858688354492188,
+    "p90_ms": 21.053152084350586,
+    "p95_ms": 21.053152084350586,
+    "p99_ms": 21.053152084350586,
+    "min_ms": 20.847936630249023,
+    "max_ms": 21.053152084350586
+  },
+  "sync_wall": {
+    "count": 5,
+    "mean_ms": 20.95017380779609,
+    "median_ms": 20.850844972301275,
+    "p90_ms": 21.413158043287694,
+    "p95_ms": 21.413158043287694,
+    "p99_ms": 21.413158043287694,
+    "min_ms": 20.776993012987077,
+    "max_ms": 21.413158043287694
+  }
+}
+```
+{: style="margin-left: 1rem;" }
+
+</details>
 
 
 

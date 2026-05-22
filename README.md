@@ -13,10 +13,6 @@ It is a Jekyll site based on the [Just the Docs] theme and is deployed with GitH
 
 ## Content workflow
 
-See [CONTENT_GUIDE.md](CONTENT_GUIDE.md) before adding Work Log, Study, Paper, or Project posts.
-
-See [COMMENTS_GUIDE.md](COMMENTS_GUIDE.md) before enabling comments or changing the Disqus configuration.
-
 The site is page-based, not `_posts`-based. Public articles are normal Markdown pages with `section`, `subcategory`, `date`, `tags`, `summary`, `comments`, and a stable `comment_id`.
 
 `/profile/` contains the imported legacy public academic homepage. The imported profile assets are scoped under `profile/`; do not move `profile/stylesheet.css` into the global Just the Docs theme stylesheet.

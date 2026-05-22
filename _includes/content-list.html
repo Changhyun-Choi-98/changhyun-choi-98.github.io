@@ -8,9 +8,7 @@
 
 {% assign content_count = 0 %}
 {% for content_page in content_pages %}
-  {% unless content_page.path contains "_templates/" %}
-    {% assign content_count = content_count | plus: 1 %}
-  {% endunless %}
+  {% assign content_count = content_count | plus: 1 %}
 {% endfor %}
 {% assign total_pages = content_count | plus: page_size | minus: 1 | divided_by: page_size %}
 
@@ -19,25 +17,23 @@
 <ul>
   {% assign content_index = 0 %}
   {% for content_page in content_pages %}
-    {% unless content_page.path contains "_templates/" %}
-      {% assign content_page_number = content_index | divided_by: page_size | plus: 1 %}
-      <li data-content-list-item data-content-page="{{ content_page_number }}"{% if content_page_number > 1 %} hidden{% endif %}>
-        <a href="{{ content_page.url | relative_url }}">{{ content_page.title }}</a>
-        {% if content_page.date %}
-          <span class="text-grey-dk-000 content-list-date">{{ content_page.date | date: "%Y-%m-%d" }}</span>
-        {% endif %}
-        {% if content_page.summary %}
-          <br>{{ content_page.summary }}
-        {% endif %}
-        {% if content_page.tags %}
-          <br>
-          {% for tag in content_page.tags %}
-            <code>{{ tag }}</code>{% unless forloop.last %} {% endunless %}
-          {% endfor %}
-        {% endif %}
-      </li>
-      {% assign content_index = content_index | plus: 1 %}
-    {% endunless %}
+    {% assign content_page_number = content_index | divided_by: page_size | plus: 1 %}
+    <li data-content-list-item data-content-page="{{ content_page_number }}"{% if content_page_number > 1 %} hidden{% endif %}>
+      <a href="{{ content_page.url | relative_url }}">{{ content_page.title }}</a>
+      {% if content_page.date %}
+        <span class="text-grey-dk-000 content-list-date">{{ content_page.date | date: "%Y-%m-%d" }}</span>
+      {% endif %}
+      {% if content_page.summary %}
+        <br>{{ content_page.summary }}
+      {% endif %}
+      {% if content_page.tags %}
+        <br>
+        {% for tag in content_page.tags %}
+          <code>{{ tag }}</code>{% unless forloop.last %} {% endunless %}
+        {% endfor %}
+      {% endif %}
+    </li>
+    {% assign content_index = content_index | plus: 1 %}
   {% endfor %}
 </ul>
 {% if total_pages > 1 %}

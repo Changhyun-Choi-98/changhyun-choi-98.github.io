@@ -23,9 +23,6 @@ This site is a technical portfolio and notes archive for building my career in p
 {% assign recent_count = 0 %}
 
 {% for recent_page in recent_pages %}
-  {% if recent_page.path contains "_templates/" %}
-    {% continue %}
-  {% endif %}
   {% assign recent_count = recent_count | plus: 1 %}
   {% if recent_page.tags contains "Writing" %}
     {% assign recent_status = "Writing" %}

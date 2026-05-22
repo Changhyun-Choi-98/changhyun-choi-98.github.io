@@ -7,9 +7,7 @@
 
   {%- assign filtered_posts = "" | split: "" -%}
   {%- for post_page in post_pages -%}
-    {%- unless post_page.path contains "_templates/" -%}
-      {%- assign filtered_posts = filtered_posts | push: post_page -%}
-    {%- endunless -%}
+    {%- assign filtered_posts = filtered_posts | push: post_page -%}
   {%- endfor -%}
 
   {%- assign current_index = "" -%}

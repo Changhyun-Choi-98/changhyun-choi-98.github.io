@@ -3,22 +3,30 @@ layout: default
 title: "TITLE_HERE"
 nav_exclude: true
 section: study
-subcategory: tensorrt
+subcategory: SUBCATEGORY_HERE
 date: YYYY-MM-DD
 tags:
-  - tag-one
-  - tag-two
+  - Korean
+  - Writing
 language: ko
-summary: "One-sentence summary."
-math: false
+summary: "PUBLIC_SAFE_SUMMARY_HERE"
+math: true
 comments: true
-comment_id: "study-tensorrt-SLUG_HERE"
-permalink: /study/tensorrt/SLUG_HERE/
+comment_id: "study-SUBCATEGORY_HERE-SLUG_HERE"
+permalink: /study/SUBCATEGORY_HERE/SLUG_HERE/
 ---
 
 # TITLE_HERE
 
-## Topic
+<aside class="series-preface" markdown="1">
+
+This note belongs to the **SERIES_OR_TOPIC_HERE** study track.
+
+Goal: STATE_THE_LEARNING_GOAL_HERE.
+
+</aside>
+
+## Context
 
 State the concept, system behavior, or technique being studied.
 
@@ -27,6 +35,11 @@ State the concept, system behavior, or technique being studied.
 - Point one:
 - Point two:
 - Point three:
+
+## Notes
+
+- Implementation detail:
+- Open question:
 
 ## References
 

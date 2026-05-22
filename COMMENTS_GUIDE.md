@@ -4,7 +4,7 @@ This site uses Disqus for public page comments.
 
 ## Site Configuration
 
-The Disqus shortname is configured in `_config.yml`:
+The Disqus shortname is already configured in `_config.yml`:
 
 ```yaml
 comments:
@@ -14,7 +14,7 @@ comments:
     shortname: "changhyun-choi"
 ```
 
-Use the real Disqus shortname after creating the site in Disqus. If `_config.yml` still contains `CHANGE_ME_DISQUS_SHORTNAME`, replace it before publishing comments. While the placeholder is present, the site shows a setup warning on posts with comments enabled and does not load the Disqus embed script.
+Keep the production shortname as `changhyun-choi` unless the Disqus site itself is migrated. `_includes/comments.html` still contains a `CHANGE_ME_DISQUS_SHORTNAME` guard so a copied or reset config fails visibly instead of loading a broken embed script.
 
 Do not commit JavaScript secrets, private keys, or private credentials. Disqus comments use the public shortname only.
 
@@ -37,7 +37,9 @@ Add the comments include at the bottom of the article body:
 
 Do not enable comments on private or sensitive pages. Do not enable comments on category landing pages, tag pages, the home page, or the imported legacy profile page.
 
-## Disqus Admin Setup
+## Disqus Admin Setup Checklist
+
+This checklist is only needed when recreating, migrating, or auditing the Disqus site.
 
 1. Create a site in the Disqus admin console.
 2. Confirm the site's shortname.

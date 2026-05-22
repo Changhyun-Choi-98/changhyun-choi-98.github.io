@@ -6,16 +6,11 @@ section: paper
 subcategory: real-time-inference
 date: YYYY-MM-DD
 tags:
-  - tag-one
-  - tag-two
+  - Korean
+  - Writing
 language: ko
-summary: "One-sentence paper note summary."
-math: false
-paper:
-  title: "PAPER_TITLE_HERE"
-  authors: "AUTHORS_HERE"
-  venue: "VENUE_OR_ARXIV_HERE"
-  url: "PAPER_URL_HERE"
+summary: "PUBLIC_SAFE_SUMMARY_HERE"
+math: true
 comments: true
 comment_id: "paper-real-time-inference-SLUG_HERE"
 permalink: /paper/real-time-inference/SLUG_HERE/
@@ -23,12 +18,15 @@ permalink: /paper/real-time-inference/SLUG_HERE/
 
 # TITLE_HERE
 
-## Citation
+<aside class="series-preface" markdown="1">
 
-- Title: {{ page.paper.title }}
-- Authors: {{ page.paper.authors }}
-- Venue: {{ page.paper.venue }}
-- URL: {{ page.paper.url }}
+- **Authors:** AUTHORS_HERE
+- **Affiliations:** AFFILIATIONS_HERE
+- **Links:** [arXiv](PAPER_URL_HERE){:target="_blank" rel="noopener noreferrer"}
+- **Submitted:** YYYY-MM-DD
+- **Updated:** YYYY-MM-DD_OR_REMOVE_THIS_LINE
+
+</aside>
 
 ## Core idea
 
@@ -37,6 +35,14 @@ Summarize the main contribution.
 ## Method
 
 Describe the method using only public information.
+
+## Experiments
+
+Summarize public experimental setup and results.
+
+## Limitations
+
+State limitations, assumptions, or caveats from the paper.
 
 ## Notes
 

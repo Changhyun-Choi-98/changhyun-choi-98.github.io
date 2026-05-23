@@ -192,7 +192,7 @@ B300은 [Blackwell Ultra](https://developer.nvidia.com/blog/inside-nvidia-blackw
 | **GB300 NVL72** | Blackwell Ultra | 36 Grace CPU + 72 Blackwell Ultra GPU rack | 20TB GPU memory, reasoning/test-time scaling 지향 |
 
 
-## **Mainstream Data Center / Inference / Visualization GPU(PCIe Data Center GPU): T4, L4, A10, L40S**
+## **Mainstream(PCIe) Data Center / Inference / Visualization GPU: T4, L4, A10, L40S**
 
 데이터센터라고 해서 항상 H100/B200만 쓰는 것은 아니다. inference, video, cloud graphics, light AI serving에는 더 작은 GPU가 자주 쓰인다.
 

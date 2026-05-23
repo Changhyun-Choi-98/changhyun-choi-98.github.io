@@ -243,7 +243,10 @@ html[data-theme="dark"] {
     border-bottom-color: rgba(147, 197, 253, 0.28);
   }
 
-  .site-title,
+  .site-title {
+    color: #ffffff;
+  }
+
   .site-button,
   .nav-list .nav-list-item .nav-list-link,
   .nav-list .nav-list-item .nav-list-expander,
@@ -260,17 +263,27 @@ html[data-theme="dark"] {
   }
 
   .site-title:hover,
-  .site-button:hover,
-  .nav-list .nav-list-item .nav-list-link:hover,
-  .nav-list .nav-list-item .nav-list-expander:hover,
-  .nav-list .nav-list-item .nav-list-link.active {
+  .site-button:hover {
     color: #ffffff;
     background-color: rgba(59, 130, 246, 0.22);
     background-image: none;
   }
 
+  .nav-list .nav-list-item .nav-list-link:hover,
+  .nav-list .nav-list-item .nav-list-expander:hover,
   .nav-list .nav-list-item .nav-list-link.active {
-    box-shadow: inset 4px 0 0 #60a5fa;
+    color: #ffffff;
+    background-color: transparent;
+    background-image: linear-gradient(
+      -90deg,
+      rgba(59, 130, 246, 0.22) 0%,
+      rgba(59, 130, 246, 0.16) 80%,
+      rgba(59, 130, 246, 0) 100%
+    );
+  }
+
+  .nav-list .nav-list-item .nav-list-link.active {
+    box-shadow: none;
   }
 }
 

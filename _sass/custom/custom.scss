@@ -51,6 +51,35 @@
       margin-bottom: 0;
     }
   }
+
+  .profiling-summary {
+    margin: $sp-4 0 $sp-6 1rem;
+    padding: $sp-4 $sp-5;
+    color: $body-text-color;
+    background-color: mix($body-background-color, $green-000, 82%);
+    border-left: 0.25rem solid $green-200;
+    border-radius: $border-radius;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .series-preface,
+  .profiling-summary {
+    > .table-wrapper {
+      display: inline-block;
+      width: auto;
+      max-width: 100%;
+      vertical-align: top;
+
+      > table {
+        display: table;
+        width: max-content;
+        min-width: 0;
+      }
+    }
+  }
 }
 
 .home-brand {

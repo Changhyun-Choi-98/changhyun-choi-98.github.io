@@ -33,7 +33,7 @@ Before publishing profile updates, manually review future dates, affiliation tex
   - Real-Time Inference: `/paper/real-time-inference/`
 - Project: `/project/`
   - Inference Optimization: `/project/inference-optimization/`
-    - Further Optimizing Shallow-π: `/project/inference-optimization/further-optimizing-shallow-pi/`
+    - Shallow-π: `/project/inference-optimization/shallow-pi/`
 - Tags: `/tags/` is generated from page tags and hidden from the sidebar.
 
 ## Local development

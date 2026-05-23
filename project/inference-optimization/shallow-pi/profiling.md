@@ -1,23 +1,23 @@
 ---
 layout: default
-title: "Shallow-π Profiling"
+title: "Shallow-π Baseline Latency Check"
 nav_exclude: true
 section: project
-subcategory: further-optimizing-shallow-pi
-date: 2026-05-22
+subcategory: shallow-pi
+date: 2026-05-23
 tags:
   - Korean
   - Python
   - Writing
 language: ko
-summary: "기존의 Shallow-π의 inference를 profiling해서 주요 병목지점 찾기"
+summary: "Profiling tool들을 사용하기 전에 profiler 없는 순수 latency를 먼저 확인"
 math: true
 comments: true
-comment_id: "project-further-optimizing-shallow-pi-profiling"
-permalink: /project/inference-optimization/further-optimizing-shallow-pi/profiling/
+comment_id: "project-shallow-pi-baseline-latency"
+permalink: /project/inference-optimization/shallow-pi/baseline-latency/
 ---
 
-# **Shallow-π Profiling**
+# **Shallow-π Baseline Latency Check**
 
 <aside class="series-preface" markdown="1">
 
@@ -39,11 +39,11 @@ permalink: /project/inference-optimization/further-optimizing-shallow-pi/profili
 
 </aside>
 
-[Shallow-$\pi$가 잘 구현되었다는 것은 확인했으니](/project/inference-optimization/further-optimizing-shallow-pi/shallow-pi-implementation/), 다음으로 이 모델의 inference 과정에서 주요 bottleneck이 어디인지를 알아보기 위해 profiling을 수행한다. 이 서버는 여러 사용자가 함께 쓰는 공용 GPU 서버이므로, 전체 시스템을 독점한 dedicated benchmark 환경은 아니다. 따라서 이번 profiling에서는 실행 GPU를 1개의 L40S로 고정하고, 해당 GPU는 실험 중 단독으로 사용하기로 합의했다. 다만 CPU, memory, storage I/O, OS background load는 다른 사용자의 작업 영향을 받을 수 있으므로, 이후 latency 수치는 절대적인 서버 최대 성능이라기보다 shared-server 환경에서의 병목 분석용 측정값으로 해석한다.
+이 서버는 여러 사용자가 함께 쓰는 공용 GPU 서버이므로, 전체 시스템을 독점한 dedicated benchmark 환경은 아니다. 따라서 이번 profiling에서는 실행 GPU를 1개의 L40S로 고정하고, 해당 GPU는 실험 중 단독으로 사용하기로 합의했다. 다만 CPU, memory, storage I/O, OS background load는 다른 사용자의 작업 영향을 받을 수 있으므로, 이후 latency 수치는 절대적인 서버 최대 성능이라기보다 shared-server 환경에서의 병목 분석용 측정값으로 해석한다.
 
-## 1. **baseline latency script**
+[Shallow-$\pi$가 잘 구현되었다는 것은 확인했으니](/project/inference-optimization/shallow-pi/shallow-pi-implementation/), 다음으로 이 모델의 inference 과정에서 주요 bottleneck이 어디인지를 알아보기 위해 profiling을 수행해야 한다. 하지만 Profiler를 켜면 overhead가 추가적으로 생기므로, 먼저 profiler 없는 순수 latency, 즉 model-only latency baseline를 알아야 나중에 profiler 결과를 해석하기에 유리하다.
 
-Profiler를 켜면 overhead가 추가적으로 생기므로, 먼저 profiler 없는 순수 latency, 즉 model-only latency baseline를 알아야 나중에 profiler 결과를 해석하기에 유리하다. 따라서 아래와 같은 파이썬 코드를 만들었다:
+## **code**
 
 <details markdown="1">
 <summary><code>profile_shallow_pi_latency.py</code></summary>
@@ -375,8 +375,7 @@ cuda_event가 심하게 흔들림
 ```
 {: style="margin-left: 1rem;" }
 
-
-실행시킨 shell prompt(model-only / fixed-noise smoke test)와 결과는 아래와 같다:
+## **model-only / fixed-noise smoke test**
 
 <details markdown="1">
 <summary>shell prompt & result json</summary>
@@ -441,7 +440,9 @@ uv run python scripts/profiling/profile_shallow_pi_latency.py \
 {: style="margin-left: 1rem;" }
 
 </details>
-`cuda_event`와 `sync_wall`이 거의 같기 때문에, 이 smoke test 구간에서는 Python overhead나 CPU-GPU synchronization overhead가 크게 보이지 않는다. 즉 현재 측정 대상인 model-only / fixed-noise / sample_actions()는 preliminary하게 GPU compute 중심으로 보인다. 하지만 sample 수가 5회로 아직 작고 지금은 smoke test, 즉 "실행 가능성 확인"을 위한 것이었고 이제 정식으로 fixed-noise baseline 100회를 실행시킨다:
+`cuda_event`와 `sync_wall`이 거의 같기 때문에, 이 smoke test 구간에서는 Python overhead나 CPU-GPU synchronization overhead가 크게 보이지 않는다. 즉 현재 측정 대상인 model-only / fixed-noise / sample_actions()는 preliminary하게 GPU compute 중심으로 보인다. 하지만 sample 수가 5회로 아직 작고 지금은 smoke test, 즉 "실행 가능성 확인"을 위한 것이었고 다음에 정식으로 fixed-noise baseline 100회를 실행시킨다.
+
+## **model-only / fixed-noise**
 
 <details markdown="1">
 <summary>shell prompt & result json</summary>
@@ -468,6 +469,196 @@ uv run python scripts/profiling/profile_shallow_pi_latency.py \
   --warmup 30 \
   --iters 100 \
   --out-json profiles/latency/model_fixed_noise_numsteps10_100iters.json
+```
+{: style="margin-left: 1rem;" }
+
+```json
+{
+  "config": "pi0_libero_l06",
+  "ckpt": "./checkpoints/pi0_libero_l06/distill_l06_bf16_gb320_20260514_184612/30000",
+  "device": "cuda:0",
+  "num_steps": 10,
+  "mode": "model",
+  "fixed_noise": true,
+  "warmup": 30,
+  "iters": 100,
+  "cuda_event": {
+    "count": 100,
+    "mean_ms": 21.493796825408936,
+    "median_ms": 21.271471977233887,
+    "p90_ms": 22.424543380737305,
+    "p95_ms": 22.73289680480957,
+    "p99_ms": 23.950016021728516,
+    "min_ms": 20.864831924438477,
+    "max_ms": 24.368127822875977
+  },
+  "sync_wall": {
+    "count": 100,
+    "mean_ms": 21.45980772911571,
+    "median_ms": 21.263867005473003,
+    "p90_ms": 22.26925897412002,
+    "p95_ms": 22.52989000407979,
+    "p99_ms": 24.125280033331364,
+    "min_ms": 20.887919003143907,
+    "max_ms": 24.429485958535224
+  }
+}
+```
+{: style="margin-left: 1rem;" }
+
+</details>
+
+`pi0_libero_l06 / model-only / fixed-noise / num_steps=10`의 baseline은 아래와 같이 결론짓는다:
+
+```text
+model-only fixed-noise median latency ≈ 21.27 ms
+p95 ≈ 22.73 ms
+p99 ≈ 23.95 ms
+```
+
+Smoke test때와 마찬가지로, `cuda_event`와 `sync_wall`이 거의 동일하므로 현재 `sample_actions()` 측정 구간은 host-side overhead보다 GPU execution 중심이라는 것을 알 수 있다. 지금까지의 내용을 정리하면 아래와 같다:
+
+<aside class="profiling-summary" markdown="1">
+
+- Model: `pi0_libero_l06`
+- Checkpoint: `distill_l06_bf16_gb320_20260514_184612` / step 30000
+- GPU: NVIDIA L40S, physical GPU 6 exposed as cuda:0
+- Mode: model-only
+- Noise: fixed
+- num_steps: 10
+- Warmup: 30
+- Iterations: 100
+- Output shape: (1, 50, 32)
+
+| Metric | CUDA event | Sync wall |
+|---|---:|---:|
+| mean | 21.494 ms | 21.460 ms |
+| median | 21.271 ms | 21.264 ms |
+| p95 | 22.733 ms | 22.530 ms |
+| p99 | 23.950 ms | 24.125 ms |
+| min | 20.865 ms | 20.888 ms |
+| max | 24.368 ms | 24.429 ms |
+
+- Interpretation
+  - CUDA event latency and synchronized wall-clock latency are nearly identical, so the model-only fixed-noise path is dominated by GPU execution rather than host-side overhead.
+
+</aside>
+
+## **model-only / random-noise**
+
+다음으로 model-only random-noise baseline을 측정한다. 즉 fixed noise를 제거해서 `sample_actions()` 내부의 random noise generation(`torch.randn`)까지 포함했을 때 latency가 얼마나 증가하는지 확인해야 한다.
+
+<details markdown="1">
+<summary>shell prompt & result json</summary>
+
+```shell
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+export CUDA_VISIBLE_DEVICES=6
+export CUDA_LAUNCH_BLOCKING=0
+export UV_LINK_MODE=copy
+
+RUN_NAME=distill_l06_bf16_gb320_20260514_184612
+STEP=30000
+CKPT=./checkpoints/pi0_libero_l06/${RUN_NAME}/${STEP}
+
+mkdir -p profiles/latency
+
+uv run python scripts/profiling/profile_shallow_pi_latency.py \
+  --config pi0_libero_l06 \
+  --ckpt "${CKPT}" \
+  --device cuda:0 \
+  --num-steps 10 \
+  --mode model \
+  --warmup 30 \
+  --iters 100 \
+  --out-json profiles/latency/model_random_noise_numsteps10_100iters.json
+```
+{: style="margin-left: 1rem;" }
+
+```json
+{
+  "config": "pi0_libero_l06",
+  "ckpt": "./checkpoints/pi0_libero_l06/distill_l06_bf16_gb320_20260514_184612/30000",
+  "device": "cuda:0",
+  "num_steps": 10,
+  "mode": "model",
+  "fixed_noise": false,
+  "warmup": 30,
+  "iters": 100,
+  "cuda_event": {
+    "count": 100,
+    "mean_ms": 21.373190784454344,
+    "median_ms": 21.259360313415527,
+    "p90_ms": 21.956031799316406,
+    "p95_ms": 22.308992385864258,
+    "p99_ms": 22.99951934814453,
+    "min_ms": 20.86854362487793,
+    "max_ms": 23.820735931396484
+  },
+  "sync_wall": {
+    "count": 100,
+    "mean_ms": 21.40404676378239,
+    "median_ms": 21.179622504860163,
+    "p90_ms": 22.070512000937015,
+    "p95_ms": 22.383352043107152,
+    "p99_ms": 23.382120009046048,
+    "min_ms": 20.842222031205893,
+    "max_ms": 24.246756045613438
+  }
+}
+```
+{: style="margin-left: 1rem;" }
+
+</details>
+
+fixed-noise와 random-noise 결과가 거의 같으므로 (오히여 random-noise run이 약간 더 빠르게 나왔는데, 이정도는 측정 noise / 공유 서버 상태 등의 범위로 보는 것이 합리적임) random noise generation overhead는 neligible하다는 것읕 확인할 수 있다. 즉 `torch.randn` / RNG path는 지금 단계에서 optimization target이 아니다.
+
+<aside class="profiling-summary" markdown="1">
+
+- Model: `pi0_libero_l06`
+- Checkpoint: `distill_l06_bf16_gb320_20260514_184612` / step 30000
+- GPU: NVIDIA L40S, physical GPU 6 exposed as cuda:0
+- num_steps: 10
+- Warmup: 30
+- Iterations: 100
+- Output shape: (1, 50, 32)
+
+| Mode | CUDA event median | Sync wall median | 해석 |
+|---|---:|---:|---|
+| fixed-noise | 21.271 ms | 21.264 ms | denoising compute 중심 |
+| random-noise | 21.259 ms | 21.180 ms | RNG overhead negligible |
+
+Conclusion:
+The model-only inference latency is approximately 21.2–21.3 ms for num_steps=10. Random noise generation does not measurably contribute to latency.
+
+</aside>
+
+## **policy-level**
+
+<details markdown="1">
+<summary>shell prompt & result json</summary>
+
+```shell
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+export CUDA_VISIBLE_DEVICES=6
+export CUDA_LAUNCH_BLOCKING=0
+export UV_LINK_MODE=copy
+
+RUN_NAME=distill_l06_bf16_gb320_20260514_184612
+STEP=30000
+CKPT=./checkpoints/pi0_libero_l06/${RUN_NAME}/${STEP}
+
+mkdir -p profiles/latency
+
+uv run python scripts/profiling/profile_shallow_pi_latency.py \
+  --config pi0_libero_l06 \
+  --ckpt "${CKPT}" \
+  --device cuda:0 \
+  --num-steps 10 \
+  --mode policy \
+  --warmup 30 \
+  --iters 100 \
+  --out-json profiles/latency/policy_numsteps10_100iters.json
 ```
 {: style="margin-left: 1rem;" }
 

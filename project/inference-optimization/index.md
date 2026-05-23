@@ -15,4 +15,4 @@ Project notes for inference optimization techniques.
 ## Topics
 {: .text-delta }
 
-- [Further Optimizing Shallow-π](/project/inference-optimization/further-optimizing-shallow-pi/)
+- [Shallow-π](/project/inference-optimization/shallow-pi/)

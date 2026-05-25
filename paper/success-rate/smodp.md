@@ -21,7 +21,7 @@ permalink: /paper/success-rate/smodp/
 
 <aside class="series-preface" markdown="1">
 
-- **Authors:** Chengyu Deng¹*, Guanqi Chen¹²*, Yizhou Chen¹, Zejia Liu¹, Zhiwen Ruan², Guanhua Chen², Jia Pan¹
+- **Authors:** Chengyu Deng¹\*, Guanqi Chen¹²\*, Yizhou Chen¹, Zejia Liu¹, Zhiwen Ruan², Guanhua Chen², Jia Pan¹
 - **Affiliations:** ¹The University of Hong Kong, ²Southern University of Science and Technology, \*Equal contribution
 - **Pages:** [arXiv](https://arxiv.org/abs/2605.23477){:target="_blank" rel="noopener noreferrer"}, [Project Page](https://deng-cy20.github.io/SMoDP/){:target="_blank" rel="noopener noreferrer"}
 - **arXiv Submitted:** 2026-05-22

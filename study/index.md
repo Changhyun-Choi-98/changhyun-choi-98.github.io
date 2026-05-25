@@ -17,4 +17,4 @@ Study Notes
 - [Diffusion Tutorial](/study/diffusion-tutorial/)
 - [Algorithm](/study/algorithm/)
 - [System Optimization](/study/system-optimization/)
-- [TensorRT/ONNX Runtime](/study/tensorrt/)
+- [Inference Systems](/study/inference-systems/)

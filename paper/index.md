@@ -15,3 +15,4 @@ Reading notes for papers in robotic foundation models and real-time inference.
 {: .text-delta }
 
 - [Real-Time Inference](/paper/real-time-inference/)
+- [Success Rate](/paper/success-rate/)

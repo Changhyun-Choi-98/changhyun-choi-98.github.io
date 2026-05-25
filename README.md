@@ -19,23 +19,6 @@ The site is page-based, not `_posts`-based. Public articles are normal Markdown 
 
 Before publishing profile updates, manually review future dates, affiliation text, and company or project-related text.
 
-## Site structure
-
-- Home: `/`
-- Profile: `/profile/`
-- Work Log: `/work-log/`
-- Study: `/study/`
-  - Diffusion Tutorial: `/study/diffusion-tutorial/`
-  - Algorithm: `/study/algorithm/`
-  - System Optimization: `/study/system-optimization/`
-  - TensorRT/ONNX Runtime: `/study/tensorrt/`
-- Paper: `/paper/`
-  - Real-Time Inference: `/paper/real-time-inference/`
-- Project: `/project/`
-  - Inference Optimization: `/project/inference-optimization/`
-    - Shallow-π: `/project/inference-optimization/shallow-pi/`
-- Tags: `/tags/` is generated from page tags and hidden from the sidebar.
-
 ## Local development
 
 1. Run `bundle install`.

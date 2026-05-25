@@ -9,7 +9,7 @@ permalink: /paper/
 
 # Paper
 
-Notes on Papers I Have Read
+Notes on papers I have read
 
 ## Topics
 {: .text-delta }

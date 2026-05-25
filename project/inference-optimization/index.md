@@ -10,7 +10,7 @@ permalink: /project/inference-optimization/
 
 # Inference Optimization
 
-Projects on Optimizing Inference for Existing Models
+Projects on optimizing inference for existing models
 
 ## Topics
 {: .text-delta }

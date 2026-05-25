@@ -3,7 +3,7 @@ layout: default
 title: "OxyGen: Unified KV Cache Management for VLA Inference under Multi-Task Parallelism"
 nav_exclude: true
 section: paper
-subcategory: real-time-inference
+subcategory: inference
 date: 2026-05-19
 tags:
   - Korean
@@ -12,7 +12,7 @@ summary: "MoT VLA에서 action과 language task가 공유하는 observation KV c
 math: true
 comments: true
 comment_id: "paper-oxygen"
-permalink: /paper/real-time-inference/oxygen/
+permalink: /paper/inference/oxygen/
 ---
 
 # **OxyGen: Unified KV Cache Management for VLA Inference under Multi-Task Parallelism**
@@ -33,7 +33,7 @@ permalink: /paper/real-time-inference/oxygen/
 
 저자들은 이 알고리즘을 [$\pi_{0.5}$](https://arxiv.org/abs/2504.16054){:target="_blank" rel="noopener noreferrer"} 위에 구현하여 NVIDIA GeForce RTX 4090, Jetson AGX Thor에서 실험을 돌렸다. 실험 configuration은 LIBERO, DROID, ALOHA에서 가져온 observation specification과 action dimensionality를 사용했다.
 
-![oxygen_overall](/paper/real-time-inference/images/oxygen_overall.png)
+![oxygen_overall](/paper/inference/images/oxygen_overall.png)
 *Overall Figure*
 {: .figure-caption}
 
@@ -52,7 +52,7 @@ Manager의 역할은 크게 세 가지다.
 2. action expert와 language expert가 같은 prefill KV를 각자의 방식으로 소비하게 한다.
 3. 이전 frame들에서 시작된 language request들을 유지하고, batch로 묶어 decoding한다.
 
-![oxygen_dataflow](/paper/real-time-inference/images/oxygen_dataflow.png)
+![oxygen_dataflow](/paper/inference/images/oxygen_dataflow.png)
 *KV-centric dataflow*
 {: .figure-caption}
 

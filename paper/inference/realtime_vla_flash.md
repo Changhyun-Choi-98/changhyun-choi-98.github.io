@@ -3,7 +3,7 @@ layout: default
 title: "Realtime-VLA FLASH: Speculative Inference Framework for Diffusion-based VLAs"
 nav_exclude: true
 section: paper
-subcategory: real-time-inference
+subcategory: inference
 date: 2026-05-21
 tags:
   - Korean
@@ -12,7 +12,7 @@ summary: "π0-style flow-matching dVLA의 replanning latency를 lightweight draf
 math: true
 comments: true
 comment_id: "paper-realtime-vla-flash"
-permalink: /paper/real-time-inference/realtime-vla-flash/
+permalink: /paper/inference/realtime-vla-flash/
 ---
 
 # **Realtime-VLA FLASH: Speculative Inference Framework for Diffusion-based VLAs**
@@ -28,7 +28,7 @@ permalink: /paper/real-time-inference/realtime-vla-flash/
 
 이 논문은 Diffusion-based Vision-Language-Action 모델(dVLAs)이 high latency로 인해 real-time deployment에서 제한된다는 문제를 **speculative inference framework**로 완화한다. 이 개념은 LLM의 speculative decoding과 컨셉을 공유하는데, 가벼운 draft model이 후보 action들을 만들어주면 기존의 무거운 모델이 이것을 parallel하게 verify하는 것이다. 하지만 dVLA는 continuous action chunk를 생성하고 explicit likelihood가 없기 때문에, draft token을 큰 모델이 확률적으로 accept/reject하는 것이 아니라 *draft action chunk가 main action expert의 flow field와 locally consistent한지* 검사한다는 점이 다르다.
 
-![realtime_vla_flash_overview](/paper/real-time-inference/images/realtime_vla_flash_overview.png)
+![realtime_vla_flash_overview](/paper/inference/images/realtime_vla_flash_overview.png)
 *Overall Figure*
 {: .figure-caption}
 
@@ -51,7 +51,7 @@ Flow matching은 Gaussian noise와 target action endpoint 사이의 linear inter
 ### **Latency Analysis**
 $\pi_0$-style dVLA의 full inference는 크게 *Image Encoder* / *VLM Prefill* / *Action Denoise* 세 단계로 나눌 수 있다. 저자들은 NVIDIA RTX 4090D에서 각 단계를 [profiling](https://arxiv.org/abs/2602.18397){:target="_blank" rel="noopener noreferrer"}했는데, 각각 11.3ms, 26.7ms, 20.0ms의 latency를 보였다고 한다. 이를 이용해서 roofline analysis를 한 결과는 아래와 같다. 즉 Image Encoder와 VLM Prefill 단계는 주로 compute-bound이고, Action Denoise는 memory-bound이다. Action Denoise는 매 denoising step마다 cache를 반복적으로 읽지만 denoising 자체가 sequential하기 때문에 병렬화가 어렵기 때문이다. 이는 [다른 논문들](https://arxiv.org/abs/2510.26742){:target="_blank" rel="noopener noreferrer"}에서도 일관되게 발견할 수 있는 결론이다.
 
-![realtime_vla_flash_roofline](/paper/real-time-inference/images/realtime_vla_flash_roofline.png){: width="50%" }
+![realtime_vla_flash_roofline](/paper/inference/images/realtime_vla_flash_roofline.png){: width="50%" }
 *Roofline analysis*
 {: .figure-caption}
 
@@ -60,7 +60,7 @@ $\pi_0$-style dVLA의 full inference는 크게 *Image Encoder* / *VLM Prefill* /
 본 논문에서 제안하는 전체 Framework 및 Draft Model은 다음 그림과 같다:
 
 
-![realtime_vla_flash_framework](/paper/real-time-inference/images/realtime_vla_flash_framework.png)
+![realtime_vla_flash_framework](/paper/inference/images/realtime_vla_flash_framework.png)
 *Realtime-VLA FLASH Framework*
 {: .figure-caption}
 
@@ -116,7 +116,7 @@ FLASH의 verification은 accepted draft가 full-path rollout과 동일한 trajec
 
 ## **Personal Idea**
 
-1. 여기서 사용하는 KV cache 부분에 [OxyGen](/paper/real-time-inference/oxygen/)을 결합할 수 있을까? 할 수 있다면 그렇게 해서 얻는 이득은?
+1. 여기서 사용하는 KV cache 부분에 [OxyGen](/paper/inference/oxygen/)을 결합할 수 있을까? 할 수 있다면 그렇게 해서 얻는 이득은?
 2. Flow matching이 아니라 diffusion model인 action expert라면, reparametrization이나 clean action estimate를 쓰면 되나?
 
 

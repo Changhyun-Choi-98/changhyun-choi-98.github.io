@@ -3,7 +3,7 @@ layout: default
 title: "DEFLECT: Delay-Robust Execution via Flow-matching Likelihood-Estimated Counterfactual Tuning for VLA Policies"
 nav_exclude: true
 section: paper
-subcategory: real-time-inference
+subcategory: inference
 date: 2026-05-20
 tags:
   - Korean
@@ -13,7 +13,7 @@ summary: "fresh observation에서 나온 action이 stale observation에서 나�
 math: true
 comments: true
 comment_id: "paper-deflect"
-permalink: /paper/real-time-inference/deflect/
+permalink: /paper/inference/deflect/
 ---
 
 # **DEFLECT: Delay-Robust Execution via Flow-matching Likelihood-Estimated Counterfactual Tuning for VLA Policies**
@@ -33,7 +33,7 @@ permalink: /paper/real-time-inference/deflect/
 2. VLA가 계산하는 동안 robot은 이전에 계산된 action chunk를 계속 실행한다.
 3. VLA 계산이 끝나면 새 chunk를 받아서 실행한다.
 
-![deflect_problem_example](/paper/real-time-inference/images/deflect_problem_example.png)
+![deflect_problem_example](/paper/inference/images/deflect_problem_example.png)
 *Problem Example*
 {: .figure-caption}
 

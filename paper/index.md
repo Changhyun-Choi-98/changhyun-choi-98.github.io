@@ -14,5 +14,5 @@ Notes on papers I have read
 ## Topics
 {: .text-delta }
 
-- [Real-Time Inference](/paper/real-time-inference/)
+- [Inference](/paper/inference/)
 - [Success Rate](/paper/success-rate/)

@@ -1,0 +1,65 @@
+{%- comment -%}
+  Override of Just the Docs' nav link renderer to add category post counts.
+{%- endcomment -%}
+
+<ul class="nav-list">
+  {%- for node in include.pages -%}
+  {%- if include.all == true or node.nav_exclude != true -%}
+
+  {%- if include.ancestors contains node.title -%}
+
+    <li class="nav-list-item">
+      <a href="{{ node.url | relative_url }}" class="nav-list-link"> ∞ </a>
+    </li>
+    {%- capture nav_error_report -%}
+      <blockquote class="warning">
+        A page has the same title as its parent page or one of its ancestral pages!<br>
+        This causes an incorrect link in the main navigation panel.<br>
+        Page title: <code>{{ node.title }}</code>, location: <code>{{ node.path }}</code>.
+      </blockquote>
+    {%- endcapture -%}
+
+  {%- else -%}
+
+    {%- include components/nav/children.html node=node ancestors=include.ancestors all=include.all -%}
+
+    {%- assign show_post_count = true -%}
+    {%- if node.title == "Home" or node.title == "Profile" -%}
+      {%- assign show_post_count = false -%}
+    {%- endif -%}
+    {%- assign post_count = 0 -%}
+    {%- if show_post_count -%}
+      {%- for content_page in site.pages -%}
+        {%- if content_page.section and content_page.url contains node.url -%}
+          {%- assign post_count = post_count | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    <li class="nav-list-item">
+      {%- if nav_children.size >= 1 -%}
+      <button class="nav-list-expander btn-reset" aria-label="{{ node.title }} submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button>
+      {%- endif -%}
+      <a href="{{ node.url | relative_url }}" class="nav-list-link">
+        <span class="nav-link-title">{{ node.title }}</span>
+        {%- if show_post_count -%}
+          <span class="nav-post-count" aria-label="{{ post_count }} post{% unless post_count == 1 %}s{% endunless %}">{{ post_count }}</span>
+        {%- endif -%}
+      </a>
+      {%- if nav_children.size >= 1 -%}
+        {%- if node.child_nav_order == 'desc' or node.child_nav_order == 'reversed' -%}
+          {%- assign nav_children = nav_children | reverse -%}
+        {%- endif -%}
+        {%- assign nav_ancestors = include.ancestors | push: node.title -%}
+        {%- include components/nav/links.html pages=nav_children ancestors=nav_ancestors all=include.all -%}
+      {%- endif -%}
+    </li>
+
+  {%- endif -%}
+
+  {%- endif -%}
+  {%- endfor -%}
+</ul>
+{%- comment -%}{%- endcomment -%}

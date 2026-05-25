@@ -234,6 +234,14 @@ html[data-theme="dark"] .sidebar-social-link-github img {
   filter: invert(1);
 }
 
+.nav-post-count {
+  margin-left: $sp-1;
+  color: #b45309;
+  font-size: $font-size-2;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 html[data-theme="dark"] {
   .side-bar {
     background-color: #000000;
@@ -284,6 +292,10 @@ html[data-theme="dark"] {
 
   .nav-list .nav-list-item .nav-list-link.active {
     box-shadow: none;
+  }
+
+  .nav-post-count {
+    color: #fbbf24;
   }
 }
 

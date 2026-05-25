@@ -9,6 +9,6 @@ permalink: /paper/success-rate/
 
 # Success Rate
 
-Paper notes on improving success rates in robotic physical AI tasks.
+Paper notes on improving success rates in robotic physical AI tasks
 
 {% include content-list.html section="paper" subcategory="success-rate" %}

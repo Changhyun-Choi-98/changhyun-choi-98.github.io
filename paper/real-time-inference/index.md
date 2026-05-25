@@ -9,6 +9,6 @@ permalink: /paper/real-time-inference/
 
 # Real-Time Inference
 
-Paper notes on real-time inference systems.
+Paper notes on real-time inference systems
 
 {% include content-list.html section="paper" subcategory="real-time-inference" %}

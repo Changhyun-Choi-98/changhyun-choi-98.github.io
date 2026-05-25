@@ -9,7 +9,7 @@ permalink: /project/
 
 # Project
 
-Personal project notes.
+Personal project notes
 
 ## Topics
 {: .text-delta }

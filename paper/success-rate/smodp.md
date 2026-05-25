@@ -7,6 +7,7 @@ subcategory: success-rate
 date: 2026-05-25
 tags:
   - Korean
+  - MoE
   - multi-task
 language: ko
 summary: "Diffusion policy의 MoE router를 skill-aware하게 만들어 multi-task manipulation에서 expert를 의미 있는 skill 단위로 재사용하게 만든다"

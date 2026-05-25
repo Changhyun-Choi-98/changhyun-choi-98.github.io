@@ -9,6 +9,6 @@ permalink: /study/tensorrt/
 
 # TensorRT/ONNX Runtime
 
-Notes on TensorRT, ONNX Runtime and profiling tools.
+Notes on TensorRT, ONNX Runtime and profiling tools
 
 {% include content-list.html section="study" subcategory="tensorrt" %}

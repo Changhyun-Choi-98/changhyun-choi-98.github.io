@@ -9,7 +9,7 @@ permalink: /study/
 
 # Study
 
-A personal record of what I study and learn.
+Study Notes
 
 ## Topics
 {: .text-delta }

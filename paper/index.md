@@ -9,7 +9,7 @@ permalink: /paper/
 
 # Paper
 
-Reading notes for papers in robotic foundation models and real-time inference.
+Notes on Papers I Have Read
 
 ## Topics
 {: .text-delta }

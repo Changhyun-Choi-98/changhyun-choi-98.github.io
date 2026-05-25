@@ -518,7 +518,7 @@ p99 ≈ 23.95 ms
 
 Smoke test때와 마찬가지로, `cuda_event`와 `sync_wall`이 거의 동일하므로 현재 `sample_actions()` 측정 구간은 host-side overhead보다 GPU execution 중심이라는 것을 알 수 있다. 지금까지의 내용을 정리하면 아래와 같다:
 
-<aside class="profiling-summary" markdown="1">
+<aside class="content-summary" markdown="1">
 
 - Model: `pi0_libero_l06`
 - Checkpoint: `distill_l06_bf16_gb320_20260514_184612` / step 30000
@@ -613,7 +613,7 @@ uv run python scripts/profiling/profile_shallow_pi_latency.py \
 
 fixed-noise와 random-noise 결과가 거의 같으므로 (오히여 random-noise run이 약간 더 빠르게 나왔는데, 이정도는 측정 noise / 공유 서버 상태 등의 범위로 보는 것이 합리적임) random noise generation overhead는 neligible하다는 것읕 확인할 수 있다. 즉 `torch.randn` / RNG path는 지금 단계에서 optimization target이 아니다.
 
-<aside class="profiling-summary" markdown="1">
+<aside class="content-summary" markdown="1">
 
 - Model: `pi0_libero_l06`
 - Checkpoint: `distill_l06_bf16_gb320_20260514_184612` / step 30000

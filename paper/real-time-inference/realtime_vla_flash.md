@@ -22,7 +22,7 @@ permalink: /paper/real-time-inference/realtime-vla-flash/
 - **Authors:** Jiahui Niu¹²*, Kefan Gu³⁴, Yucheng Zhao⁴†, Shengwen Liang¹‡, Tiancai Wang⁴‡, Xing Hu¹, Ying Wang¹, Huawei Li¹
 - **Affiliations:** ¹State Key Lab of Processors, Institute of Computing Technology, CAS, ²University of Chinese Academy of Sciences, ³Nanjing University, ⁴Dexmal, \*This work was done during the internship at Dexmal, †Project lead, ‡Corresponding author
 - **Pages:** [arXiv](https://arxiv.org/abs/2605.13778){:target="_blank" rel="noopener noreferrer"}, [Project Page](https://dexmal.github.io/realtime-vla-flash/){:target="_blank" rel="noopener noreferrer"}, [GitHub](https://github.com/dexmal/realtime-vla-flash){:target="_blank" rel="noopener noreferrer"}, [Hugging Face](https://huggingface.co/Dexmal/RealtimeVLA-Flash){:target="_blank" rel="noopener noreferrer"}
-- **Submitted:** 2026-05-13
+- **arXiv Submitted:** 2026-05-13
 
 </aside>
 

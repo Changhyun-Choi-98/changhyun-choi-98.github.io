@@ -23,7 +23,7 @@ permalink: /paper/real-time-inference/deflect/
 - **Authors:** Yixiang Zhu¹, Yonghao Chen¹, Rui Meng¹, Jingyu Guo¹, Jiaxiang Zou¹, Zijie Yang², Taowen Wang¹, Xinyu Chen¹†
 - **Affiliations:** ¹The Hong Kong University of Science and Technology (Guangzhou), ²Sun Yat-sen University, †Corresponding author
 - **Links:** [arXiv](https://arxiv.org/abs/2605.19294){:target="_blank" rel="noopener noreferrer"}, [GitHub](https://anonymous.4open.science/r/deflect-release-7388){:target="_blank" rel="noopener noreferrer"}
-- **Submitted:** 2026-05-19
+- **arXiv Submitted:** 2026-05-19
 
 </aside>
 

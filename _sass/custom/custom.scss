@@ -52,7 +52,7 @@
     }
   }
 
-  .profiling-summary {
+  .content-summary {
     margin: $sp-4 0 $sp-6 1rem;
     padding: $sp-4 $sp-5;
     color: $body-text-color;
@@ -66,7 +66,7 @@
   }
 
   .series-preface,
-  .profiling-summary {
+  .content-summary {
     > .table-wrapper {
       display: inline-block;
       width: auto;

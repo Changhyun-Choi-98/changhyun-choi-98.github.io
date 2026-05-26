@@ -722,8 +722,8 @@ extra policy wrapper overhead   ≈  2.56 ms
 
 <aside class="content-summary" markdown="1">
 
-- Model: pi0_libero_l06
-- Checkpoint: distill_l06_bf16_gb320_20260514_184612 / step 30000
+- Model: `pi0_libero_l06`
+- Checkpoint: `distill_l06_bf16_gb320_20260514_184612` / step 30000
 - GPU: NVIDIA L40S, physical GPU 6 exposed as cuda:0
 - num_steps: 10
 - warmup: 30

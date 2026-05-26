@@ -4,7 +4,7 @@ title: "Shallow-π Baseline Latency Check"
 nav_exclude: true
 section: project
 subcategory: shallow-pi
-date: 2026-05-23
+date: 2026-05-26
 tags:
   - Korean
   - Python
@@ -663,7 +663,36 @@ uv run python scripts/profiling/profile_shallow_pi_latency.py \
 {: style="margin-left: 1rem;" }
 
 ```json
-
+{
+  "config": "pi0_libero_l06",
+  "ckpt": "./checkpoints/pi0_libero_l06/distill_l06_bf16_gb320_20260514_184612/30000",
+  "device": "cuda:0",
+  "num_steps": 10,
+  "mode": "policy",
+  "fixed_noise": false,
+  "warmup": 30,
+  "iters": 100,
+  "cuda_event": {
+    "count": 100,
+    "mean_ms": 23.97035972595215,
+    "median_ms": 23.76371192932129,
+    "p90_ms": 24.5696964263916,
+    "p95_ms": 25.10211181640625,
+    "p99_ms": 25.959232330322266,
+    "min_ms": 23.543039321899414,
+    "max_ms": 26.087392807006836
+  },
+  "sync_wall": {
+    "count": 100,
+    "mean_ms": 23.963603607262485,
+    "median_ms": 23.740898992400616,
+    "p90_ms": 24.71128397155553,
+    "p95_ms": 25.037412997335196,
+    "p99_ms": 26.103081996552646,
+    "min_ms": 23.56435399269685,
+    "max_ms": 26.144322007894516
+  }
+}
 ```
 {: style="margin-left: 1rem;" }
 

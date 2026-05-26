@@ -698,5 +698,295 @@ uv run python scripts/profiling/profile_shallow_pi_latency.py \
 
 </details>
 
+| Metric            | Model-only random-noise | Policy-level |       증가량 |
+| ----------------- | ----------------------: | -----------: | --------: |
+| CUDA event mean   |               21.373 ms |    23.970 ms | +2.597 ms |
+| CUDA event median |               21.259 ms |    23.764 ms | +2.504 ms |
+| CUDA event p95    |               22.309 ms |    25.102 ms | +2.793 ms |
+| CUDA event p99    |               23.000 ms |    25.959 ms | +2.960 ms |
+| Sync wall mean    |               21.404 ms |    23.964 ms | +2.560 ms |
+| Sync wall median  |               21.180 ms |    23.741 ms | +2.561 ms |
+| Sync wall p95     |               22.383 ms |    25.037 ms | +2.654 ms |
+| Sync wall p99     |               23.382 ms |    26.103 ms | +2.721 ms |
+
+
+Policy-level overhead는 약 `+2.56ms`이다. 즉 현재 inference latency는 다음과 같이 분해된다:
+
+```text
+model-only random-noise median  ≈ 21.18 ms
+policy-level median             ≈ 23.74 ms
+extra policy wrapper overhead   ≈  2.56 ms
+```
+
+즉 전체 latency의 약 89%는 `sample_actions()` 내부 model inference이고, 나머지 11%는 `policy.infer()` wrapper 경로의 preprocessing / tensorization / H2D / D2H / output transform overhead이다.
+
+<aside class="content-summary" markdown="1">
+
+- Model: pi0_libero_l06
+- Checkpoint: distill_l06_bf16_gb320_20260514_184612 / step 30000
+- GPU: NVIDIA L40S, physical GPU 6 exposed as cuda:0
+- num_steps: 10
+- warmup: 30
+- iterations: 100
+
+| Mode | Noise | Sync wall median | Sync wall p95 | Sync wall p99 |
+|---|---|---:|---:|---:|
+| model-only | fixed | 21.264 ms | 22.530 ms | 24.125 ms |
+| model-only | random | 21.180 ms | 22.383 ms | 23.382 ms |
+| policy-level | random | 23.741 ms | 25.037 ms | 26.103 ms |
+
+Interpretation:
+Random noise generation is negligible. The policy-level path adds approximately 2.56 ms over model-only inference, but about 89% of end-to-end policy latency still comes from the model sampling path.
+
+</aside>
+
+이번 policy-level 세팅에서도 `cuda_event`와 `sync_wall`이 거의 같았다. 하지만 이것을 곧바로 "policy 전체가 GPU compute-bound이다"라고 해석하면 안된다. 이유는 지금 timing 함수가 `policy.infer()` 전체를 감싼 상태에서 CUDA event를 찍기 때문이다. `policy.infer()` 내부는 다음과 같다:
+
+```text
+input transform
+numpy → torch tensor 변환 및 device 이동
+Observation.from_dict()
+sample_actions()
+torch tensor → CPU numpy 변환
+output transform
+```
+
+CUDA event를 함수 바깥에 걸면, CPU preprocessing 때문에 GPU stream이 idle인 시간도 event interval 안에 들어갈 수 있다. 따라서 policy-level에서 event와 wall이 같다는 것은 end-to-end bracket이 일관되게 측정됐다는 뜻이지, preprocessing overhead가 없다는 뜻은 아니다. 따라서 다음으로 stage breakdown이 필요하다.
+
+## **policy stage breakdown**
+
+<details markdown="1">
+<summary><code>profile_shallow_pi_policy_stages.py</code></summary>
+
+```python
+#!/usr/bin/env python3
+
+import argparse
+import json
+import pathlib
+import statistics
+import time
+from collections import defaultdict
+from typing import Any, Callable
+
+import jax
+import numpy as np
+import torch
+
+from openpi.models import model as _model
+from openpi.policies import libero_policy
+from openpi.policies import policy_config
+from openpi.training import config as _config
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--config", type=str, default="pi0_libero_l06")
+    parser.add_argument("--ckpt", type=str, required=True)
+    parser.add_argument("--device", type=str, default="cuda:0")
+
+    parser.add_argument("--num-steps", type=int, default=10)
+    parser.add_argument("--warmup", type=int, default=30)
+    parser.add_argument("--iters", type=int, default=100)
+    parser.add_argument("--seed", type=int, default=0)
+
+    parser.add_argument(
+        "--out-json",
+        type=str,
+        default="profiles/latency/policy_stage_breakdown.json",
+    )
+
+    return parser.parse_args()
+
+
+def summarize(values: list[float]) -> dict[str, float]:
+    values = sorted(values)
+    n = len(values)
+
+    def percentile(p: float) -> float:
+        idx = min(n - 1, int(round((p / 100.0) * (n - 1))))
+        return values[idx]
+
+    return {
+        "count": n,
+        "mean_ms": statistics.mean(values),
+        "median_ms": statistics.median(values),
+        "p90_ms": percentile(90),
+        "p95_ms": percentile(95),
+        "p99_ms": percentile(99),
+        "min_ms": min(values),
+        "max_ms": max(values),
+    }
+
+
+def make_policy(args: argparse.Namespace):
+    train_config = _config.get_config(args.config)
+
+    policy = policy_config.create_trained_policy(
+        train_config,
+        args.ckpt,
+        pytorch_device=args.device,
+        sample_kwargs={"num_steps": args.num_steps},
+    )
+
+    return policy
+
+
+def make_example() -> dict[str, Any]:
+    return libero_policy.make_libero_example()
+
+
+def sync_wall_ms(fn: Callable[[], Any]) -> tuple[Any, float]:
+    torch.cuda.synchronize()
+    t0 = time.perf_counter()
+
+    out = fn()
+
+    torch.cuda.synchronize()
+    t1 = time.perf_counter()
+
+    return out, (t1 - t0) * 1000.0
+
+
+@torch.inference_mode()
+def run_policy_full(policy, example: dict[str, Any]):
+    return policy.infer(example)
+
+
+@torch.inference_mode()
+def run_policy_staged(policy, example: dict[str, Any], device: str):
+    """
+    This manually follows Policy.infer() for PyTorch models and times each stage.
+
+    The per-stage timing uses synchronize-before/after wall timing.
+    This is intentionally intrusive, but useful for attribution.
+    Do not treat the sum of stages as production latency.
+    """
+
+    times: dict[str, float] = {}
+
+    inputs, times["copy_obs"] = sync_wall_ms(
+        lambda: jax.tree.map(lambda x: x, example)
+    )
+
+    inputs, times["input_transform"] = sync_wall_ms(
+        lambda: policy._input_transform(inputs)
+    )
+
+    inputs_torch, times["tensorize_h2d"] = sync_wall_ms(
+        lambda: jax.tree.map(
+            lambda x: torch.from_numpy(np.array(x)).to(device)[None, ...],
+            inputs,
+        )
+    )
+
+    observation, times["observation_from_dict"] = sync_wall_ms(
+        lambda: _model.Observation.from_dict(inputs_torch)
+    )
+
+    sample_kwargs = dict(policy._sample_kwargs)
+
+    actions, times["sample_actions"] = sync_wall_ms(
+        lambda: policy._sample_actions(device, observation, **sample_kwargs)
+    )
+
+    outputs = {
+        "state": inputs_torch["state"],
+        "actions": actions,
+    }
+
+    outputs_np, times["to_cpu_numpy"] = sync_wall_ms(
+        lambda: jax.tree.map(
+            lambda x: np.asarray(x[0, ...].detach().cpu()),
+            outputs,
+        )
+    )
+
+    outputs_final, times["output_transform"] = sync_wall_ms(
+        lambda: policy._output_transform(outputs_np)
+    )
+
+    times["stage_sum"] = sum(times.values())
+
+    return outputs_final, times
+
+
+def main() -> None:
+    args = parse_args()
+
+    pathlib.Path(args.out_json).parent.mkdir(parents=True, exist_ok=True)
+
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
+
+    if not torch.cuda.is_available():
+        raise RuntimeError("CUDA is not available.")
+
+    print("[INFO] config:", args.config)
+    print("[INFO] ckpt:", args.ckpt)
+    print("[INFO] device:", args.device)
+    print("[INFO] num_steps:", args.num_steps)
+    print("[INFO] warmup:", args.warmup)
+    print("[INFO] iters:", args.iters)
+    print("[INFO] torch:", torch.__version__)
+    print("[INFO] torch cuda:", torch.version.cuda)
+    print("[INFO] device name:", torch.cuda.get_device_name(0))
+
+    policy = make_policy(args)
+    example = make_example()
+
+    print("[INFO] warmup start")
+    for _ in range(args.warmup):
+        _ = run_policy_full(policy, example)
+    torch.cuda.synchronize()
+    print("[INFO] warmup done")
+
+    full_policy_total_ms: list[float] = []
+    stage_values: dict[str, list[float]] = defaultdict(list)
+
+    print("[INFO] measurement start")
+
+    for _ in range(args.iters):
+        _, full_ms = sync_wall_ms(lambda: run_policy_full(policy, example))
+        full_policy_total_ms.append(full_ms)
+
+        out, times = run_policy_staged(policy, example, args.device)
+        for k, v in times.items():
+            stage_values[k].append(v)
+
+    result = {
+        "config": args.config,
+        "ckpt": args.ckpt,
+        "device": args.device,
+        "num_steps": args.num_steps,
+        "warmup": args.warmup,
+        "iters": args.iters,
+        "full_policy_total": summarize(full_policy_total_ms),
+        "stages": {
+            k: summarize(v)
+            for k, v in sorted(stage_values.items())
+        },
+    }
+
+    # Add percentage of full policy total based on medians.
+    full_median = result["full_policy_total"]["median_ms"]
+    result["stage_median_percent_of_full"] = {
+        k: 100.0 * summary["median_ms"] / full_median
+        for k, summary in result["stages"].items()
+    }
+
+    print(json.dumps(result, indent=2))
+
+    with open(args.out_json, "w", encoding="utf-8") as f:
+        json.dump(result, f, indent=2)
+
+
+if __name__ == "__main__":
+    main()
+```
+
+</details>
+
 
 {% include comments.html %}

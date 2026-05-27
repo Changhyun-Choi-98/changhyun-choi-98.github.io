@@ -4,7 +4,7 @@ title: "NVIDIA Transformer Engine"
 nav_exclude: true
 section: study
 subcategory: system-optimization
-date: 2026-05-27
+date: 2026-05-28
 tags:
   - Korean
   - Writing

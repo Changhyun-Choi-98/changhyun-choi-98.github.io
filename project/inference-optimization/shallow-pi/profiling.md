@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Shallow-π Baseline Latency Check"
+title: "2. Shallow-π Baseline Latency Check"
 nav_exclude: true
 section: project
 subcategory: shallow-pi
@@ -8,7 +8,6 @@ date: 2026-05-27
 tags:
   - Korean
   - Python
-  - Writing
 language: ko
 summary: "Profiling tool들을 사용하기 전에 profiler 없는 순수 latency를 먼저 확인"
 math: true
@@ -17,7 +16,7 @@ comment_id: "project-shallow-pi-baseline-latency"
 permalink: /project/inference-optimization/shallow-pi/baseline-latency/
 ---
 
-# **Shallow-π Baseline Latency Check**
+# **2. Shallow-π Baseline Latency Check**
 
 <aside class="series-preface" markdown="1">
 
@@ -1227,7 +1226,7 @@ Case C:
 이걸 분리해야 PyTorch Profiler와 Nsight Systems trace를 제대로 해석할 수 있다. random noise overhead가 negligible인 것을 이미 확인했으므로, 구조 분해에는 fixed-noise가 더 깨끗하다. 따라서 이번에는 **model-only fixed-noise**로 돌린다
 
 <details markdown="1">
-<summary>shell prompt & result json</summary>
+<summary>shell prompts & result</summary>
 
 ```shell
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
@@ -1312,15 +1311,136 @@ PY
 ```
 {: style="margin-left: 1rem;" }
 
-```json
+```text
+num_steps,cuda_median,cuda_p95,wall_median,wall_p95
+1,14.9003,15.5956,14.9625,15.7442
+2,15.8370,17.0223,15.9261,16.8606
+4,17.3294,18.5309,17.3632,18.5529
+6,18.8133,19.8019,18.7842,20.1234
+8,19.8144,20.6324,19.8650,20.5646
+10,22.2703,24.2536,22.4992,24.3688
+12,24.7246,26.7561,24.5631,27.1710
+16,26.3230,27.6713,26.3405,28.0805
 
+Linear fit using CUDA event median:
+  T(num_steps) ≈ 14.1388 ms + 0.7950 ms * num_steps
+  intercept / prefix-ish cost: 14.1388 ms
+  per denoise step cost:       0.7950 ms
+  R^2:                         0.984047
+
+Residuals:
+  N= 1: observed=14.9003 ms, fitted=14.9337 ms, residual=-0.0334 ms
+  N= 2: observed=15.8370 ms, fitted=15.7287 ms, residual=+0.1083 ms
+  N= 4: observed=17.3294 ms, fitted=17.3186 ms, residual=+0.0108 ms
+  N= 6: observed=18.8133 ms, fitted=18.9085 ms, residual=-0.0952 ms
+  N= 8: observed=19.8144 ms, fitted=20.4984 ms, residual=-0.6840 ms
+  N=10: observed=22.2703 ms, fitted=22.0883 ms, residual=+0.1820 ms
+  N=12: observed=24.7246 ms, fitted=23.6782 ms, residual=+1.0464 ms
+  N=16: observed=26.3230 ms, fitted=26.8580 ms, residual=-0.5350 ms
 ```
 {: style="margin-left: 1rem;" }
 
 </details>
 
+현재 `sample_actions()`의 bottleneck은 denoising loop이 아니라 prefix / prefill 계열 one-time cost가 훨씬 크다. Linear fit의 결과는 아래와 같다:
 
+```text
+T(num_steps) ≈ 14.14 ms + 0.795 ms × num_steps
+```
 
+즉 `num_steps=10`에서 대략:
+
+```text
+prefix-ish fixed cost     ≈ 14.14 ms  ≈ 63.5%
+denoise loop total cost   ≈  7.95 ms  ≈ 35.7%
+```
+
+따라서 다음 profiling 목표는 단순하게 "10-step denoise loop가 느리다"가 아니라 아래 3가지를 밝히는 것이다:
+
+```text
+1. prefix / prefill 구간이 왜 14 ms나 드는가?
+2. denoise step 1회당 약 0.8 ms는 어떤 kernel이 지배하는가?
+3. N=10, N=12 주변에서 왜 residual이 커지는가?
+```
+
+결과를 더 자세히 해석해보자. 우선 scaling table의 핵심은 아래와 같다:
+
+| `num_steps` | CUDA median |   증가량 from previous |
+| ----------: | ----------: | ------------------: |
+|           1 |   14.900 ms |                   - |
+|           2 |   15.837 ms |           +0.937 ms |
+|           4 |   17.329 ms | +1.492 ms / 2 steps |
+|           6 |   18.813 ms | +1.484 ms / 2 steps |
+|           8 |   19.814 ms | +1.001 ms / 2 steps |
+|          10 |   22.270 ms | +2.456 ms / 2 steps |
+|          12 |   24.725 ms | +2.454 ms / 2 steps |
+|          16 |   26.323 ms | +1.598 ms / 4 steps |
+
+전체 linear fit은 $R^{2} = 0.984$로 좋다. 그러나 완전하게 매끈한 선형은 아니다:
+
+```text
+N=8  residual = -0.684 ms
+N=12 residual = +1.046 ms
+N=16 residual = -0.535 ms
+```
+
+위 fluctuation의 원인으로는 아래와 같은 것들이 있을 수 있다:
+
+```text
+1. torch.compile graph specialization / recompilation / CUDA graph behavior
+2. GPU clock / power / 공유 서버 노이즈
+3. num_steps 값에 따른 generated graph 차이
+4. denoise loop control-flow 최적화 차이
+5. 측정 시점의 thermal / scheduler variation
+```
+
+하지만 **"prefix-ish fixed cost가 지배적이고, denoise step cost는 step당 약 0.8 ms 수준이다."**라는 큰 구조는 명확하다.
+
+`num_steps`만 줄여서는 큰 speedup에 한계가 있다. denoising step을 10에서 1로 극단적으로 줄여도 model-only latency lower bound가 약 `14.9ms`이다:
+
+```text
+N=10 예상 latency ≈ 14.14 + 0.795 × 10 = 22.09 ms
+N=5  예상 latency ≈ 14.14 + 0.795 × 5  = 18.11 ms
+N=1  예상 latency ≈ 14.14 + 0.795 × 1  = 14.93 ms
+
+N=10 observed / N=1 observed
+= 22.27 / 14.90
+≈ 1.49×
+```
+
+따라서 num_steps reduction만으로는 2× speedup이 어렵다. 2× 이상을 노리려면 반드시 prefix / prefill 계열 cost를 줄여야 한다. 이 값은 `N=1`에서도 이미 `14.9ms`가 걸린다. 이 시간에는 다음이 포함된다:
+
+```text
+preprocess_observation
+image embedding
+language embedding
+prefix attention / prefill
+KV cache generation
+at least one denoise step
+```
+
+의심되는 bottleneck은 아래와 같다:
+
+```text
+1. vision encoder / image embedding
+2. prefix transformer prefill
+3. KV cache construction
+4. masked right-wrist image가 실제로도 embedding되는지
+5. attention implementation
+6. prefix sequence length / image token count
+```
+
+## **Conclusion**
+
+```text
+policy.infer() full latency ≈ 23.5 ms
+├─ sample_actions()       ≈ 21.0~22.3 ms
+│  ├─ prefix-ish fixed    ≈ 14.1 ms
+│  └─ denoise loop        ≈ 0.8 ms × num_steps
+└─ policy wrapper         ≈ 2.4~2.5 ms
+   ├─ observation_from_dict ≈ 1.92 ms
+   └─ others                ≈ 0.5 ms
+```
 
 
 

@@ -7,6 +7,7 @@ subcategory: algorithm
 date: 2026-05-26
 tags:
   - English
+  - C++
   - Writing
 language: en
 summary: "A concise collection of common C++ mistakes and debugging notes from algorithmic problem-solving practice."

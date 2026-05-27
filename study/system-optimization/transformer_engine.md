@@ -7,6 +7,7 @@ subcategory: system-optimization
 date: 2026-05-28
 tags:
   - Korean
+  - CUDA
   - Writing
 language: ko
 summary: "NVIDIA Transformer Engine 하드웨어에 대한 정리"

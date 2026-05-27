@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Shallow-π implementation"
+title: "1. Shallow-π implementation"
 nav_exclude: true
 section: project
 subcategory: shallow-pi
@@ -16,7 +16,7 @@ comment_id: "project-shallow-pi-shallow-pi-implementation"
 permalink: /project/inference-optimization/shallow-pi/shallow-pi-implementation/
 ---
 
-# **Shallow-π implementation**
+# **1. Shallow-π implementation**
 
 <aside class="series-preface" markdown="1">
 

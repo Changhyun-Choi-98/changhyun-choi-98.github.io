@@ -7,6 +7,7 @@ subcategory: system-optimization
 date: 2026-05-23
 tags:
   - Korean
+  - CUDA
 language: ko
 summary: "NVIDIA GPU의 세대와 모델들의 차이와 용도를 정리"
 math: true

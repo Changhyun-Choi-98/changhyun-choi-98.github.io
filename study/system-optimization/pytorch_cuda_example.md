@@ -7,6 +7,9 @@ subcategory: system-optimization
 date: 2026-05-27
 tags:
   - Korean
+  - Python
+  - PyTorch
+  - CUDA
 language: ko
 summary: "PyTorch를 이용한 모델 학습 및 추론에서 CUDA가 어떻게 쓰이는지에 대한 예시"
 math: true

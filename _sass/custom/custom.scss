@@ -335,6 +335,68 @@ html[data-theme="dark"] {
   border-top: $border $border-color;
 }
 
+.post-scroll-target {
+  display: block;
+  scroll-margin-top: $sp-6;
+}
+
+.post-scroll-nav {
+  position: fixed;
+  right: $sp-3;
+  bottom: $sp-5;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: $sp-2;
+  opacity: 0.72;
+  transition: opacity 120ms ease-in-out;
+
+  &:hover,
+  &:focus-within {
+    opacity: 1;
+  }
+}
+
+.post-scroll-button {
+  display: inline-flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  color: $link-color;
+  font-size: $font-size-5;
+  font-weight: 700;
+  line-height: 1;
+  background-color: rgba($body-background-color, 0.88);
+  border: $border $border-color;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: $white;
+    background-color: $link-color;
+    border-color: $link-color;
+    text-decoration: none;
+  }
+
+  &:focus {
+    outline: 2px solid $link-color;
+    outline-offset: 2px;
+  }
+}
+
+@media (min-width: 75rem) {
+  .post-scroll-nav {
+    top: 50%;
+    right: max(1rem, calc((100vw - 66.5rem) / 2 - 3.5rem));
+    bottom: auto;
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+}
+
 .post-navigation-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

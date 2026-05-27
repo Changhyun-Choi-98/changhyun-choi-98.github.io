@@ -1,5 +1,27 @@
+{%- if page.date -%}
+  <nav class="post-scroll-nav" aria-label="Post shortcuts">
+    <a class="post-scroll-button" href="#top" data-post-scroll="top" aria-label="Back to page top" title="Back to page top">&uarr;</a>
+    <a class="post-scroll-button" href="#post-scroll-bottom" data-post-scroll="bottom" aria-label="Jump to bottom" title="Jump to bottom">&darr;</a>
+  </nav>
+  <script>
+    document.querySelectorAll("[data-post-scroll]").forEach(function (button) {
+      button.addEventListener("click", function (event) {
+        var scrollRoot = document.scrollingElement || document.documentElement;
+        var target = button.getAttribute("data-post-scroll") === "bottom" ? scrollRoot.scrollHeight : 0;
+
+        event.preventDefault();
+        window.scrollTo(0, target);
+      });
+    });
+  </script>
+{%- endif -%}
+
 {% include post-navigation.html %}
 
 {%- if site.footer_content -%}
   <p class="text-small mb-0">{{ site.footer_content }}</p>
+{%- endif -%}
+
+{%- if page.date -%}
+  <div id="post-scroll-bottom" class="post-scroll-target" aria-hidden="true"></div>
 {%- endif -%}

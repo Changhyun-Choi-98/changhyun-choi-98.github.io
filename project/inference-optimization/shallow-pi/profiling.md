@@ -610,7 +610,7 @@ uv run python scripts/profiling/profile_shallow_pi_latency.py \
 
 </details>
 
-fixed-noise와 random-noise 결과가 거의 같으므로 (오히여 random-noise run이 약간 더 빠르게 나왔는데, 이정도는 측정 noise / 공유 서버 상태 등의 범위로 보는 것이 합리적임) random noise generation overhead는 neligible하다는 것읕 확인할 수 있다. 즉 `torch.randn` / RNG path는 지금 단계에서 optimization target이 아니다.
+fixed-noise와 random-noise 결과가 거의 같으므로 (오히려 random-noise run이 약간 더 빠르게 나왔는데, 이정도는 측정 noise / 공유 서버 상태 등의 범위로 보는 것이 합리적임) random noise generation overhead는 negligible하다는 것을 확인할 수 있다. 즉 `torch.randn` / RNG path는 지금 단계에서 optimization target이 아니다.
 
 <aside class="content-summary" markdown="1">
 

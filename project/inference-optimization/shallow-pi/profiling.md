@@ -4,7 +4,7 @@ title: "Shallow-π Baseline Latency Check"
 nav_exclude: true
 section: project
 subcategory: shallow-pi
-date: 2026-05-26
+date: 2026-05-27
 tags:
   - Korean
   - Python
@@ -987,6 +987,345 @@ if __name__ == "__main__":
 ```
 
 </details>
+
+<details markdown="1">
+<summary>shell prompt & result json</summary>
+
+```shell
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+export CUDA_VISIBLE_DEVICES=6
+export CUDA_LAUNCH_BLOCKING=0
+export UV_LINK_MODE=copy
+
+RUN_NAME=distill_l06_bf16_gb320_20260514_184612
+STEP=30000
+CKPT=./checkpoints/pi0_libero_l06/${RUN_NAME}/${STEP}
+
+mkdir -p profiles/latency
+
+uv run python scripts/profiling/profile_shallow_pi_policy_stages.py \
+--config pi0_libero_l06 \
+--ckpt "${CKPT}" \
+--device cuda:0 \
+--num-steps 10 \
+--warmup 30 \
+--iters 100 \
+--out-json profiles/latency/policy_stage_breakdown_numsteps10_100iters.json
+```
+{: style="margin-left: 1rem;" }
+
+```json
+{
+  "config": "pi0_libero_l06",
+  "ckpt": "./checkpoints/pi0_libero_l06/distill_l06_bf16_gb320_20260514_184612/30000",
+  "device": "cuda:0",
+  "num_steps": 10,
+  "warmup": 30,
+  "iters": 100,
+  "full_policy_total": {
+    "count": 100,
+    "mean_ms": 23.704008038621396,
+    "median_ms": 23.48822948988527,
+    "p90_ms": 24.658604990690947,
+    "p95_ms": 24.76810000371188,
+    "p99_ms": 24.904964957386255,
+    "min_ms": 23.32890999969095,
+    "max_ms": 24.960848968476057
+  },
+  "stages": {
+    "copy_obs": {
+      "count": 100,
+      "mean_ms": 0.01343892770819366,
+      "median_ms": 0.013194512575864792,
+      "p90_ms": 0.014361925423145294,
+      "p95_ms": 0.014952966012060642,
+      "p99_ms": 0.01714599784463644,
+      "min_ms": 0.012468080967664719,
+      "max_ms": 0.020900974050164223
+    },
+    "input_transform": {
+      "count": 100,
+      "mean_ms": 0.12454838841222227,
+      "median_ms": 0.11845299741253257,
+      "p90_ms": 0.15158706810325384,
+      "p95_ms": 0.15817699022591114,
+      "p99_ms": 0.1767550129443407,
+      "min_ms": 0.11243904009461403,
+      "max_ms": 0.2010620664805174
+    },
+    "observation_from_dict": {
+      "count": 100,
+      "mean_ms": 1.9876398053020239,
+      "median_ms": 1.921984541695565,
+      "p90_ms": 2.212640014477074,
+      "p95_ms": 2.2544129751622677,
+      "p99_ms": 2.4826559238135815,
+      "min_ms": 1.878809998743236,
+      "max_ms": 2.6681750314310193
+    },
+    "output_transform": {
+      "count": 100,
+      "mean_ms": 0.08812469197437167,
+      "median_ms": 0.08372054435312748,
+      "p90_ms": 0.11097593232989311,
+      "p95_ms": 0.11613406240940094,
+      "p99_ms": 0.12070103548467159,
+      "min_ms": 0.07583305705338717,
+      "max_ms": 0.1208609901368618
+    },
+    "sample_actions": {
+      "count": 100,
+      "mean_ms": 21.15997519227676,
+      "median_ms": 21.04175853310153,
+      "p90_ms": 21.74373308662325,
+      "p95_ms": 21.813276107423007,
+      "p99_ms": 21.94621495436877,
+      "min_ms": 20.935378037393093,
+      "max_ms": 21.98795904405415
+    },
+    "stage_sum": {
+      "count": 100,
+      "mean_ms": 23.696277211420238,
+      "median_ms": 23.501925577875227,
+      "p90_ms": 24.637093883939087,
+      "p95_ms": 24.740207940340042,
+      "p99_ms": 24.89900786895305,
+      "min_ms": 23.33356684539467,
+      "max_ms": 25.059939012862742
+    },
+    "tensorize_h2d": {
+      "count": 100,
+      "mean_ms": 0.22605346865020692,
+      "median_ms": 0.22080144844949245,
+      "p90_ms": 0.2539310371503234,
+      "p95_ms": 0.25926902890205383,
+      "p99_ms": 0.26374601293355227,
+      "min_ms": 0.21319999359548092,
+      "max_ms": 0.26438699569553137
+    },
+    "to_cpu_numpy": {
+      "count": 100,
+      "mean_ms": 0.09649673709645867,
+      "median_ms": 0.09389093611389399,
+      "p90_ms": 0.11240900494158268,
+      "p95_ms": 0.11590402573347092,
+      "p99_ms": 0.12263504322618246,
+      "min_ms": 0.08556910324841738,
+      "max_ms": 0.1281519653275609
+    }
+  },
+  "stage_median_percent_of_full": {
+    "copy_obs": 0.05617499855213327,
+    "input_transform": 0.504307902234785,
+    "observation_from_dict": 8.182756143979386,
+    "output_transform": 0.3564361647146714,
+    "sample_actions": 89.58426833390203,
+    "stage_sum": 100.05831043159662,
+    "tensorize_h2d": 0.9400514778884297,
+    "to_cpu_numpy": 0.39973611529266695
+  }
+}
+```
+{: style="margin-left: 1rem;" }
+
+</details>
+
+현재 policy inference는 다음과 같이 분해된다:
+
+```text
+full policy median     ≈ 23.49 ms
+sample_actions median  ≈ 21.04 ms
+policy wrapper overhead ≈  2.45 ms
+```
+
+| Stage                   |        Median | Full 대비 비율 | 판단                      |
+| ----------------------- | ------------: | ---------: | ----------------------- |
+| `sample_actions`        | **21.042 ms** | **89.58%** | 압도적 main bottleneck     |
+| `observation_from_dict` |  **1.922 ms** |  **8.18%** | 가장 큰 non-model overhead |
+| `tensorize_h2d`         |      0.221 ms |      0.94% | 작음                      |
+| `input_transform`       |      0.118 ms |      0.50% | 작음                      |
+| `to_cpu_numpy`          |      0.094 ms |      0.40% | 작음                      |
+| `output_transform`      |      0.084 ms |      0.36% | 작음                      |
+| `copy_obs`              |      0.013 ms |      0.06% | 무시 가능                   |
+
+
+결론은 다음과 같다:
+
+```text
+1. 전체 policy latency의 약 89.6%는 sample_actions() 내부
+2. wrapper overhead 중 가장 큰 것은 observation_from_dict ≈ 1.92 ms
+3. input_transform, tensorize_h2d, to_cpu_numpy, output_transform은 각각 0.1~0.22 ms 수준
+4. 따라서 main optimization target은 여전히 sample_actions()
+5. 다만 observation_from_dict는 나중에 별도 최적화 가치 있음
+```
+
+<aside class="content-summary" markdown="1">
+
+- Model: `pi0_libero_l06`
+- Checkpoint: `distill_l06_bf16_gb320_20260514_184612` / step 30000
+- GPU: NVIDIA L40S, physical GPU 6 exposed as cuda:0
+- num_steps: 10
+- warmup: 30
+- iterations: 100
+
+| Mode | Noise | Median | p95 | p99 |
+|---|---|---:|---:|---:|
+| model-only | fixed | 21.264 ms | 22.530 ms | 24.125 ms |
+| model-only | random | 21.180 ms | 22.383 ms | 23.382 ms |
+| policy-level | random | 23.741 ms | 25.037 ms | 26.103 ms |
+| policy-stage full total | random | 23.488 ms | 24.768 ms | 24.905 ms |
+| policy-stage sample_actions | random | 21.042 ms | 21.813 ms | 21.946 ms |
+| policy-stage observation_from_dict | - | 1.922 ms | 2.254 ms | 2.483 ms |
+
+Interpretation:
+Random noise generation is negligible. About 89–90% of local policy latency is spent inside sample_actions(). The largest non-model overhead is observation_from_dict, contributing about 1.92 ms.
+
+</aside>
+
+
+## **`num_steps` scaling**
+
+`num_steps` scaling은 다음 수식을 fitting하기 위한 실험이다:
+
+{::nomarkdown}
+\[
+T_{\text{num_steps}} \approx T_{\text{prefix}} + \text{num_steps} \times T_{\text{denoise_step}}
+\]
+{:/nomarkdown}
+
+위 수식에서:
+
+```text
+T_prefix:
+  image/language prefix embedding
+  prefix prefill
+  KV cache 생성
+  one-time setup cost
+
+T_denoise_step:
+  embed_suffix
+  action expert transformer forward
+  attention / MLP / GEMM
+  action_out_proj
+  Euler update
+  mask / position overhead
+```
+
+현재 `num_steps=10`에서 `sample_actions ≈ 21.04 ms`인데 아직 이 21ms가 다음 중 무엇인지를 모르는 상황이다:
+
+```text
+Case A:
+  prefix가 크고 denoise step은 작다
+
+Case B:
+  prefix는 작고 denoise step 반복이 대부분이다
+
+Case C:
+  둘 다 비슷하게 크다
+```
+
+이걸 분리해야 PyTorch Profiler와 Nsight Systems trace를 제대로 해석할 수 있다. random noise overhead가 negligible인 것을 이미 확인했으므로, 구조 분해에는 fixed-noise가 더 깨끗하다. 따라서 이번에는 **model-only fixed-noise**로 돌린다
+
+<details markdown="1">
+<summary>shell prompt & result json</summary>
+
+```shell
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+export CUDA_VISIBLE_DEVICES=6
+export CUDA_LAUNCH_BLOCKING=0
+export UV_LINK_MODE=copy
+
+RUN_NAME=distill_l06_bf16_gb320_20260514_184612
+STEP=30000
+CKPT=./checkpoints/pi0_libero_l06/${RUN_NAME}/${STEP}
+
+mkdir -p profiles/latency
+
+for N in 1 2 4 6 8 10 12 16; do
+  echo "==== num_steps=${N} ===="
+
+  uv run python scripts/profiling/profile_shallow_pi_latency.py \
+    --config pi0_libero_l06 \
+    --ckpt "${CKPT}" \
+    --device cuda:0 \
+    --num-steps ${N} \
+    --mode model \
+    --fixed-noise \
+    --warmup 30 \
+    --iters 100 \
+    --out-json profiles/latency/model_fixed_noise_numsteps${N}_100iters.json
+done
+```
+{: style="margin-left: 1rem;" }
+
+```shell
+uv run python - <<'PY'
+import json
+import pathlib
+import numpy as np
+
+base = pathlib.Path("profiles/latency")
+steps = [1, 2, 4, 6, 8, 10, 12, 16]
+
+rows = []
+
+for n in steps:
+    path = base / f"model_fixed_noise_numsteps{n}_100iters.json"
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    rows.append({
+        "num_steps": n,
+        "cuda_median": data["cuda_event"]["median_ms"],
+        "cuda_p95": data["cuda_event"]["p95_ms"],
+        "wall_median": data["sync_wall"]["median_ms"],
+        "wall_p95": data["sync_wall"]["p95_ms"],
+    })
+
+print("num_steps,cuda_median,cuda_p95,wall_median,wall_p95")
+for r in rows:
+    print(f'{r["num_steps"]},{r["cuda_median"]:.4f},{r["cuda_p95"]:.4f},{r["wall_median"]:.4f},{r["wall_p95"]:.4f}')
+
+x = np.array([r["num_steps"] for r in rows], dtype=np.float64)
+y = np.array([r["cuda_median"] for r in rows], dtype=np.float64)
+
+# Fit y = a + b*x
+b, a = np.polyfit(x, y, deg=1)
+y_hat = a + b * x
+
+ss_res = np.sum((y - y_hat) ** 2)
+ss_tot = np.sum((y - y.mean()) ** 2)
+r2 = 1.0 - ss_res / ss_tot if ss_tot > 0 else float("nan")
+
+print()
+print("Linear fit using CUDA event median:")
+print(f"  T(num_steps) ≈ {a:.4f} ms + {b:.4f} ms * num_steps")
+print(f"  intercept / prefix-ish cost: {a:.4f} ms")
+print(f"  per denoise step cost:       {b:.4f} ms")
+print(f"  R^2:                         {r2:.6f}")
+
+print()
+print("Residuals:")
+for n, yi, yh in zip(x, y, y_hat):
+    print(f"  N={int(n):2d}: observed={yi:.4f} ms, fitted={yh:.4f} ms, residual={yi-yh:+.4f} ms")
+PY
+```
+{: style="margin-left: 1rem;" }
+
+```json
+
+```
+{: style="margin-left: 1rem;" }
+
+</details>
+
+
+
+
+
+
+
+
 
 
 {% include comments.html %}

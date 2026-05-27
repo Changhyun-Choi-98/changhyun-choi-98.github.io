@@ -36,6 +36,8 @@ module DeterministicPageSort
   end
 
   def page_value(item, key)
+    return item_property(item, key) if respond_to?(:item_property, true)
+
     value = hash_value(item, key)
     return value unless value.nil?
 

@@ -1,18 +1,157 @@
 {%- if page.date -%}
   <nav class="post-scroll-nav" aria-label="Post shortcuts">
-    <a class="post-scroll-button" href="#top" data-post-scroll="top" aria-label="Back to page top" title="Back to page top">&uarr;</a>
-    <a class="post-scroll-button" href="#post-scroll-bottom" data-post-scroll="bottom" aria-label="Jump to bottom" title="Jump to bottom">&darr;</a>
+    <div class="post-outline" data-post-outline hidden aria-label="Post outline">
+      <div id="post-outline-list" class="post-outline-list" data-post-outline-list role="list"></div>
+    </div>
+    <div class="post-scroll-controls">
+      <button class="post-scroll-button post-outline-toggle" type="button" data-post-outline-toggle aria-label="Toggle post outline" aria-controls="post-outline-list" aria-expanded="false" title="Toggle post outline" hidden>
+        <span class="post-outline-toggle-icon" aria-hidden="true">
+          <span class="post-outline-toggle-bar"></span>
+          <span class="post-outline-toggle-bar"></span>
+          <span class="post-outline-toggle-bar"></span>
+        </span>
+      </button>
+      <a class="post-scroll-button" href="#top" data-post-scroll="top" aria-label="Back to page top" title="Back to page top">&uarr;</a>
+      <a class="post-scroll-button" href="#post-scroll-bottom" data-post-scroll="bottom" aria-label="Jump to bottom" title="Jump to bottom">&darr;</a>
+    </div>
   </nav>
   <script>
-    document.querySelectorAll("[data-post-scroll]").forEach(function (button) {
-      button.addEventListener("click", function (event) {
-        var scrollRoot = document.scrollingElement || document.documentElement;
-        var target = button.getAttribute("data-post-scroll") === "bottom" ? scrollRoot.scrollHeight : 0;
+    (function () {
+      function withAutoScroll(callback) {
+        var page = document.documentElement;
+        var body = document.body;
+        var previousPageBehavior = page.style.scrollBehavior;
+        var previousBodyBehavior = body.style.scrollBehavior;
 
-        event.preventDefault();
-        window.scrollTo(0, target);
+        page.style.scrollBehavior = "auto";
+        body.style.scrollBehavior = "auto";
+        callback();
+        page.style.scrollBehavior = previousPageBehavior;
+        body.style.scrollBehavior = previousBodyBehavior;
+      }
+
+      function currentScrollTop() {
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      }
+
+      function maxScrollTop() {
+        var page = document.documentElement;
+        var body = document.body;
+        var scrollHeight = Math.max(page.scrollHeight, body.scrollHeight);
+        var viewportHeight = window.innerHeight || page.clientHeight;
+
+        return Math.max(0, scrollHeight - viewportHeight);
+      }
+
+      function jumpToEdge(direction) {
+        var page = document.documentElement;
+        var body = document.body;
+        var target = direction === "bottom" ? maxScrollTop() : 0;
+
+        withAutoScroll(function () {
+          window.scrollTo(0, target);
+          page.scrollTop = target;
+          body.scrollTop = target;
+        });
+
+        return currentScrollTop();
+      }
+
+      function keepAtEdge(direction, attempts, lastTop) {
+        if (attempts <= 0) {
+          return;
+        }
+
+        window.setTimeout(function () {
+          var currentTop = currentScrollTop();
+          var movedAway = direction === "bottom" ? currentTop < lastTop - 2 : currentTop > lastTop + 2;
+
+          if (movedAway) {
+            return;
+          }
+
+          keepAtEdge(direction, attempts - 1, jumpToEdge(direction));
+        }, 100);
+      }
+
+      document.querySelectorAll("[data-post-scroll]").forEach(function (button) {
+        button.addEventListener("click", function (event) {
+          var direction = button.getAttribute("data-post-scroll");
+
+          event.preventDefault();
+          var lastTop = jumpToEdge(direction);
+          window.requestAnimationFrame(function () {
+            lastTop = jumpToEdge(direction);
+            keepAtEdge(direction, 20, lastTop);
+          });
+        });
       });
-    });
+
+      function headingText(heading) {
+        var clone = heading.cloneNode(true);
+        var anchor = clone.querySelector(".anchor-heading");
+
+        if (anchor) {
+          anchor.remove();
+        }
+
+        return clone.textContent.replace(/\s+/g, " ").trim();
+      }
+
+      function buildPostOutline() {
+        var outline = document.querySelector("[data-post-outline]");
+        var list = document.querySelector("[data-post-outline-list]");
+        var toggle = document.querySelector("[data-post-outline-toggle]");
+        var content = document.querySelector("#main-content main");
+
+        if (!outline || !list || !content) {
+          return;
+        }
+
+        Array.prototype.slice.call(content.querySelectorAll("h1, h2, h3, h4")).forEach(function (heading) {
+          var title = headingText(heading);
+          var item = document.createElement("div");
+          var link = document.createElement("a");
+          var level = heading.tagName.slice(1);
+
+          if (!heading.id || !title || heading.closest(".comments")) {
+            return;
+          }
+
+          item.className = "post-outline-item";
+          item.setAttribute("role", "listitem");
+          link.className = "post-outline-link post-outline-link-level-" + level;
+          link.href = "#" + heading.id;
+          link.textContent = title;
+          link.addEventListener("click", function (event) {
+            event.preventDefault();
+            window.history.pushState(null, "", link.getAttribute("href"));
+            withAutoScroll(function () {
+              heading.scrollIntoView({ block: "start" });
+            });
+          });
+
+          item.appendChild(link);
+          list.appendChild(item);
+        });
+
+        if (list.children.length > 0) {
+          outline.hidden = false;
+
+          if (toggle) {
+            toggle.hidden = false;
+            toggle.addEventListener("click", function () {
+              var expanded = toggle.getAttribute("aria-expanded") === "true";
+
+              outline.classList.toggle("is-open", !expanded);
+              toggle.setAttribute("aria-expanded", String(!expanded));
+            });
+          }
+        }
+      }
+
+      buildPostOutline();
+    })();
   </script>
 {%- endif -%}
 

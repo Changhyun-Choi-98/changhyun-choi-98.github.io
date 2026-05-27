@@ -20,7 +20,7 @@ permalink: /tags/
   {% for tag in tags %}
 ## {{ tag }}
 
-    {% assign pages_for_tag = site.pages | where_exp: "item", "item.tags contains tag" | sort: "date" | reverse %}
+    {% assign pages_for_tag = site.pages | where_exp: "item", "item.tags contains tag" | sort_pages_for_home %}
     {% for tagged_page in pages_for_tag %}
 - [{{ tagged_page.title }}]({{ tagged_page.url | relative_url }}){% if tagged_page.date %} {{ tagged_page.date | date: "%Y-%m-%d" }}{% endif %}{% if tagged_page.summary %}: {{ tagged_page.summary }}{% endif %}
     {% endfor %}

@@ -3,7 +3,7 @@
 {% if include.subcategory %}
   {% assign content_pages = content_pages | where: "subcategory", include.subcategory %}
 {% endif %}
-{% assign content_pages = content_pages | sort: "date" | reverse %}
+{% assign content_pages = content_pages | sort_pages_by_date %}
 {% assign page_size = site.content_list_page_size | default: 10 %}
 
 {% assign content_count = 0 %}

@@ -19,7 +19,7 @@ This site is a technical portfolio and notes archive for building my career in p
 
 ## New Posts
 
-{% assign recent_pages = site.pages | where_exp: "item", "item.date" | sort: "date" | reverse %}
+{% assign recent_pages = site.pages | where_exp: "item", "item.date" | sort_pages_for_home %}
 {% assign recent_count = 0 %}
 
 {% for recent_page in recent_pages %}

@@ -3,7 +3,7 @@
   {%- if page.subcategory -%}
     {%- assign post_pages = post_pages | where: "subcategory", page.subcategory -%}
   {%- endif -%}
-  {%- assign post_pages = post_pages | sort: "date" | reverse -%}
+  {%- assign post_pages = post_pages | sort_pages_by_date -%}
 
   {%- assign filtered_posts = "" | split: "" -%}
   {%- for post_page in post_pages -%}

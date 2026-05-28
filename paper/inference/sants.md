@@ -214,7 +214,7 @@ w_m
 \]
 {:/nomarkdown}
 
-위에서 $m$은 두 종류의 action error를 뜻한다 ($m \in \\{ \text{seq}, \Delta \\}$). 각각 action sequence 자체가 demonstration과 얼마나 다른지, adjacent action 간 변화량(즉 motion trend)이 demonstration과 얼마나 다른지를 의미한다. 즉, 단순히 각 timestep의 pose가 맞는지만 보는 것이 아니라, action trajectory의 변화 방향도 본다. 이는 contact transition이나 gripper event가 중요한 manipulation에서 중요하다.
+위에서 $m$은 두 종류의 action error를 뜻한다 ($m \in \\{ \text{seq}, \Delta \\}$). 각각 action sequence 자체가 demonstration과 얼마나 다른지, adjacent action 간 변화량(즉 motion trend)이 demonstration과 얼마나 다른지를 의미한다. 즉, 단순히 각 timestep의 pose가 맞는지만 보는 것이 아니라, action trajectory의 변화 방향도 본다. 이는 contact transition이나 gripper event가 critical한 manipulation에서 중요하다.
 
 | Symbol       | 의미                                             |
 | ------------ | ---------------------------------------------- |

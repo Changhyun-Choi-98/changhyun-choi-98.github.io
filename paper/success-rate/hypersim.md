@@ -8,6 +8,7 @@ date: 2026-05-27
 tags:
   - Korean
   - sim2real
+  - VLA
 language: ko
 summary: "더 현실적인 시뮬레이션 + 더 다양한 recovery trajectory + 소량 real data co-training → zero-shot/few-shot sim-to-real 성능 향상"
 math: true

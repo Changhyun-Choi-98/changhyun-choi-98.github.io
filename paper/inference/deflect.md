@@ -7,6 +7,7 @@ subcategory: inference
 date: 2026-05-20
 tags:
   - Korean
+  - VLA
   - Writing
 language: ko
 summary: "fresh observation에서 나온 action이 stale observation에서 나온 action보다 선호된다는 label-free preference pair를 이용해서 async VLA의 delay-robustness를 높이는 offline post-training 방법"

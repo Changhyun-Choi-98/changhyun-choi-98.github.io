@@ -7,6 +7,7 @@ subcategory: inference
 date: 2026-05-19
 tags:
   - Korean
+  - VLA
 language: ko
 summary: "MoT VLA에서 action과 language task가 공유하는 observation KV cache를 통합 관리해 중복 prefill과 resource contention을 줄이고 action frequency와 language throughput을 동시에 높이는 inference system"
 math: true

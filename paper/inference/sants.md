@@ -314,24 +314,7 @@ action utility가 높아지는 것은 다르다.
 
 ### **Experimental Setup**
 
-모든 실험에서 SANTS는 Wan2.2-5B 기반 video-action diffusion policy를 backbone으로 사용한다. SANTS는 이 policy의 video denoising trajectory만 제어하고, action branch는 selected terminal intermediate video representation을 condition으로 action chunk를 생성한다.
-
-Scheduler training 중에는 아래 module들이 모두 frozen 상태로 유지된다.
-
-```text
-Frozen:
-- video backbone
-- video head
-- action head
-- action denoising process
-
-Trainable:
-- SANTS scheduler only
-```
-
-Simulation에서는 RoboTwin 2.0 benchmark를 사용하고, baseline으로 LingBot-VA, Motus, Fast-WAM, π0.5를 비교한다. Real-robot evaluation에서는 π0.5와 Full-Denoising WAM을 비교한다. 여기서 Full-Denoising WAM은 SANTS와 같은 video-action backbone을 공유하지만 항상 future video representation을 final denoised state까지 denoise하는 controlled baseline이다.
-
-평가 metric은 task success rate와 end-to-end policy inference latency이다.
+모든 실험에서 SANTS는 Wan2.2-5B 기반 video-action diffusion policy를 backbone으로 사용한다. Simulation에서는 RoboTwin 2.0 benchmark를 사용하고, baseline으로 LingBot-VA, Motus, Fast-WAM, π0.5를 비교한다. Real-robot evaluation에서는 π0.5와 Full-Denoising WAM을 비교한다. 여기서 Full-Denoising WAM은 SANTS와 같은 video-action backbone을 공유하지만 항상 future video representation을 final denoised state까지 denoise하는 controlled baseline이다. 평가 metric은 task success rate와 end-to-end policy inference latency이다.
 
 ### **Simulation Results on RoboTwin 2.0**
 

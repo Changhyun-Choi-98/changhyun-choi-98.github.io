@@ -33,7 +33,7 @@ permalink: /paper/inference/sants/
 
 기존의 World Action Model(WAM)은 로봇이 바로 action을 예측하는 대신 미래 video representation을 먼저 만들고 이를 action generation에 사용하지만, pixel-space video denoising이 매우 비싸서 inference latency가 크다. 더 중요한 문제는 fully denoised video가 항상 action에 가장 좋은 조건이 아니라는 점이다. 이 논문에서는 denoising depth를 스캔해보니 coarse motion에서는 얕은 denoising만으로도 충분하고, contact/alignment 같은 fine phase에서는 더 깊은 denoising이 유리하지만, 일부 상태에서는 후반 denoising이 물리적으로 부정확한 미래를 만들어 action error를 오히려 키운다는 점을 보인다.
 
-이를 해결하기 위해 SANTS(State-Adaptive Noise Trajectory Scheduler)는 frozen video-action diffusion policy 위에 붙는 lightweight scheduler로, 현재 video token representation과 noise level을 보고 cumulative stopping hazard와 relative noise-progression ratio를 예측한다. SANTS는 video fidelity가 아니라 frozen action branch가 만든 최종 action chunk의 품질과 video update cost를 기준으로 PPO post-training된다.
+SANTS(State-Adaptive Noise Trajectory Scheduler)는 frozen video-action diffusion policy 위에 붙는 lightweight scheduler로, 현재 video token representation과 noise level을 보고 cumulative stopping hazard와 relative noise-progression ratio를 예측한다. SANTS는 video fidelity가 아니라 frozen action branch가 만든 최종 action chunk의 품질과 video update cost를 기준으로 PPO post-training된다.
 
 ## **Introduction**
 

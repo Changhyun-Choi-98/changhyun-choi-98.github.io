@@ -10,12 +10,24 @@ image:
   alt: C language logo
 ---
 
-This site is a technical portfolio and notes archive for building my career in physical AI systems.
+<div style="text-align: center; margin: 2.5rem 0 2rem 0;">
+
+<h1 style="font-size: 1.75rem !important; font-weight: 700; margin-bottom: 0.75rem;">
+Building robust real-time AI for real-world robots
+</h1>
+
+<p style="font-size: 1.05rem; line-height: 1.6; margin: 0 auto; max-width: 720px;">
+A technical portfolio and notes archive on <strong>robot intelligence</strong> and <strong>inference systems</strong>
+</p>
+
+</div>
 
 <div class="home-brand">
   <img class="home-brand-logo" src="{{ '/assets/images/C_Logo.png' | relative_url }}" alt="C language logo">
   <p class="home-brand-caption">(C for "C"hanghyun "C"hoi . "c"om)</p>
 </div>
+
+---
 
 ## New Posts
 

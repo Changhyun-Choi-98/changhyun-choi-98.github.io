@@ -12,6 +12,7 @@ tags:
   - CUDA
   - Python
   - Triton
+  - GPU
 language: ko
 summary: "NVIDIA GPU computing stack으로서의 CUDA와 custom GPU kernel compiler로서의 Triton을 정리"
 math: true

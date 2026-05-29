@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "SMoDP: Semantically Structured Mixture-of-Experts for Compositional Robotic Manipulation"
 nav_exclude: true
 section: paper
@@ -17,8 +17,6 @@ comments: true
 comment_id: "paper-smodp"
 permalink: /paper/success-rate/smodp/
 ---
-
-# **SMoDP: Semantically Structured Mixture-of-Experts for Compositional Robotic Manipulation**
 
 <aside class="series-preface" markdown="1">
 

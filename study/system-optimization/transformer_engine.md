@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "NVIDIA Transformer Engine"
 nav_exclude: true
 section: study
@@ -16,8 +16,6 @@ comments: true
 comment_id: "study-system-optimization-transformer-engine"
 permalink: /study/system-optimization/transformer-engine/
 ---
-
-# **NVIDIA Transformer Engine**
 
 ## **Hardware & Software**
 

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "C++ Coding Test Pitfalls"
 nav_exclude: true
 section: study
@@ -16,8 +16,6 @@ comments: true
 comment_id: "study-algorithm-cpp-pitfalls"
 permalink: /study/algorithm/cpp-pitfalls/
 ---
-
-# **C++ Coding Test Pitfalls**
 
 ---
 

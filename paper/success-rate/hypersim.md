@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "HyperSim: A Holistic Sim-To-Real Framework For Robust Robotic Manipulation"
 nav_exclude: true
 section: paper
@@ -16,8 +16,6 @@ comments: true
 comment_id: "paper-hypersim"
 permalink: /paper/success-rate/hypersim/
 ---
-
-# **HyperSim: A Holistic Sim-To-Real Framework For Robust Robotic Manipulation**
 
 <aside class="series-preface" markdown="1">
 

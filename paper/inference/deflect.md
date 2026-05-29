@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "DEFLECT: Delay-Robust Execution via Flow-matching Likelihood-Estimated Counterfactual Tuning for VLA Policies"
 nav_exclude: true
 section: paper
@@ -16,8 +16,6 @@ comments: true
 comment_id: "paper-deflect"
 permalink: /paper/inference/deflect/
 ---
-
-# **DEFLECT: Delay-Robust Execution via Flow-matching Likelihood-Estimated Counterfactual Tuning for VLA Policies**
 
 <aside class="series-preface" markdown="1">
 

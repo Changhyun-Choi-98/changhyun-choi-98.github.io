@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "Overview of NVIDIA GPU Models"
 nav_exclude: true
 section: study
@@ -16,8 +16,6 @@ comments: true
 comment_id: "study-system-optimization-nvidia-gpu-overview"
 permalink: /study/system-optimization/nvidia-gpu-overview/
 ---
-
-# **Overview of NVIDIA GPU Models**
 
 > **Scope Note:** 이 글은 NVIDIA의 모든 GPU를 빠짐없이 cataloging하는 글이 아니라, AI training/inference, robotics/Physical AI, visualization, workstation 관점에서 자주 마주치는 대표 GPU 계열을 중심으로 정리한 글이다. 따라서 A2, A16, A30, A40, L40 같은 일부 데이터센터 GPU는 필요할 때 별도 글에서 다룬다.
 

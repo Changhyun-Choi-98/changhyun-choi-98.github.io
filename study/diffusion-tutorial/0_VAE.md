@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "0. VAE(Variational AutoEncoder)"
 nav_exclude: true
 section: study
@@ -15,8 +15,6 @@ comments: true
 comment_id: "study-diffusion-tutorial-vae"
 permalink: /study/diffusion-tutorial/vae/
 ---
-
-# **0. VAE(Variational AutoEncoder)**
 
 <aside class="series-preface" markdown="1">
 

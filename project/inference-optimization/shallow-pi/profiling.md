@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "2. Shallow-π Baseline Latency Check"
 nav_exclude: true
 section: project
@@ -15,8 +15,6 @@ comments: true
 comment_id: "project-shallow-pi-baseline-latency"
 permalink: /project/inference-optimization/shallow-pi/baseline-latency/
 ---
-
-# **2. Shallow-π Baseline Latency Check**
 
 <aside class="series-preface" markdown="1">
 

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "A Factory-Floor Deployment Case Study of VLA Pipelines for Industrial Packaging Task: Workflow, Failures, and Lessons"
 nav_exclude: true
 section: paper
@@ -16,8 +16,6 @@ comments: true
 comment_id: "paper-factory-floor"
 permalink: /paper/success-rate/factory-floor/
 ---
-
-# **A Factory-Floor Deployment Case Study of VLA Pipelines for Industrial Packaging Task: Workflow, Failures, and Lessons**
 
 <aside class="series-preface" markdown="1">
 

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "CUDA & Triton"
 nav_exclude: true
 section: study
@@ -20,8 +20,6 @@ comments: true
 comment_id: "study-system-optimization-cuda-triton"
 permalink: /study/system-optimization/cuda-triton/
 ---
-
-# **CUDA & Triton**
 
 지금까지 CUDA에 대해서 어렴풋이 느낌만 가지고 "CUDA 설치해야 한다", "CUDA Kernel 짰다", "PyTorch CUDA 버전이 무엇이다"와 같은 말을 썼다. 또한 [VLA를 real-time speed로 inference하는 논문](https://arxiv.org/abs/2510.26742){:target="_blank" rel="noopener noreferrer"}을 읽으면서 OpenAI Triton이라는 것에 대해서 처음 접했고, 지금 읽고 있는 [AI Systems Performance Engineering](https://www.oreilly.com/library/view/ai-systems-performance/9798341627772/){:target="_blank" rel="noopener noreferrer"} 책에서도 여러 번 등장하는 것을 보았다. 이번에 이것들에 대해서 확실하게 정리하고 넘어가야겠다. CUDA C++와 Triton 문법에 대한 내용은 [다른 카테고리](/study/inference-systems/)에서 다룬다.
 

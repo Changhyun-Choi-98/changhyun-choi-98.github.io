@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "SANTS: A State-Adaptive Scheduler for World Action Models"
 nav_exclude: true
 section: paper
@@ -15,8 +15,6 @@ comments: true
 comment_id: "paper-sants"
 permalink: /paper/inference/sants/
 ---
-
-# **SANTS: A State-Adaptive Scheduler for World Action Models**
 
 <aside class="series-preface" markdown="1">
 

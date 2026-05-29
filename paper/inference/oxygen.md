@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "OxyGen: Unified KV Cache Management for VLA Inference under Multi-Task Parallelism"
 nav_exclude: true
 section: paper
@@ -15,8 +15,6 @@ comments: true
 comment_id: "paper-oxygen"
 permalink: /paper/inference/oxygen/
 ---
-
-# **OxyGen: Unified KV Cache Management for VLA Inference under Multi-Task Parallelism**
 
 <aside class="series-preface" markdown="1">
 

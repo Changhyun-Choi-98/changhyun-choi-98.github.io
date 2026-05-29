@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "CUDA Execution Flow in PyTorch"
 nav_exclude: true
 section: study
@@ -17,8 +17,6 @@ comments: true
 comment_id: "study-system-optimization-torch-cuda-example"
 permalink: /study/system-optimization/torch-cuda-example/
 ---
-
-# **CUDA Execution Flow in PyTorch**
 
 [앞선 게시물에서](/study/system-optimization/cuda-triton/) CUDA와 Triton에 대해서 정리했다. 여기서는 실제 PyTorch training, inference 코드에서 CUDA가 어떻게 쓰이는지에 대한 예시를 정리한다.
 

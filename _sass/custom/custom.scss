@@ -132,6 +132,36 @@
   margin-left: $sp-2;
 }
 
+.post-header {
+  margin-bottom: $sp-6;
+}
+
+.post-title {
+  margin-bottom: $sp-3;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $sp-2;
+  align-items: baseline;
+  color: mix($body-text-color, $body-background-color, 75%);
+  font-size: $font-size-3;
+}
+
+.post-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: $sp-1;
+}
+
+.post-summary {
+  margin: $sp-3 0 0;
+  color: $body-text-color;
+  font-size: $font-size-4;
+  line-height: 1.5;
+}
+
 .theme-switcher {
   display: flex;
   height: 100%;

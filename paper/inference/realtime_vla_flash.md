@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "Realtime-VLA FLASH: Speculative Inference Framework for Diffusion-based VLAs"
 nav_exclude: true
 section: paper
@@ -15,8 +15,6 @@ comments: true
 comment_id: "paper-realtime-vla-flash"
 permalink: /paper/inference/realtime-vla-flash/
 ---
-
-# **Realtime-VLA FLASH: Speculative Inference Framework for Diffusion-based VLAs**
 
 <aside class="series-preface" markdown="1">
 

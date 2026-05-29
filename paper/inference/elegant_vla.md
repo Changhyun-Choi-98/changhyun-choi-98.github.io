@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "ElegantVLA: Learning When to Think for Efficient Vision-Language-Action Models"
 nav_exclude: true
 section: paper
@@ -15,8 +15,6 @@ comments: true
 comment_id: "paper-elegant-vla"
 permalink: /paper/inference/elegant-vla/
 ---
-
-# **ElegantVLA: Learning When to Think for Efficient Vision-Language-Action Models**
 
 <aside class="series-preface" markdown="1">
 
@@ -489,7 +487,7 @@ real-world appendix에서 FLOPs speedup은 2.18×이지만 wall-clock speedup은
 
 [SANTS](/paper/inference/sants/)와 매우 비슷한 문제의식을 공유한다(심지어 arXiv에 하루 간격으로 올라왔다). SANTS가 World Action Model에서 미래 video denoising을 언제 멈추고 얼마나 건너뛸지 결정하는 scheduler라면, ElegantVLA는 실제 VLA inference pipeline 안에서 Vision-LLM과 action head를 언제 full compute하고 언제 reuse할지 결정하는 scheduler이다.
 
-둘 다 핵심은 "매 step 동일한 compute를 쓰지 말고, 현재 robot state와 task phase에 따라 inference compute를 adaptive하게 배분하자"는 것이다. 이 방향은 앞으로 VLA/VAM/WAM 계열 real-time inference에서 꽤 중요해질 것 같다. 특히 robotics에서는 평균 FLOPs보다 observation-action delay와 closed-loop control frequency가 더 직접적으로 task success에 영향을 줄 수 있기 때문에, 이런 phase-adaptive scheduler는 algorithm과 system optimization 사이의 중요한 접점이 될 수 있다.
+둘 다 핵심은 "매 step 동일한 compute를 쓰지 말고, 현재 robot state와 task phase에 따라 inference compute를 adaptive하게 배분하자"는 것이다. 이 방향은 앞으로 VLA/WAM 계열 real-time inference에서 꽤 중요해질 것 같다. 특히 robotics에서는 평균 FLOPs보다 observation-action delay와 closed-loop control frequency가 더 직접적으로 task success에 영향을 줄 수 있기 때문에, 이런 phase-adaptive scheduler는 algorithm과 system optimization 사이의 중요한 접점이 될 수 있다.
 
 
 

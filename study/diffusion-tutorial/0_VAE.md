@@ -32,7 +32,7 @@ VAE 자체에 대한 설명은 Stanley Chan의 [Tutorial on Diffusion Models for
 
 ## **0. Background**
 
-이번, 그리고 이 category에서 앞으로 다룰 모든 게시물은 "생성 모델", 즉 generative AI에 대해 다룬다. 모델은 최근에는 neural network로 대부분 구현한다. 이것에 대해서도 다룰 것이 많으나 우선은 일반적인 "함수", 즉 input이 주어지면 그에 따른 output을 만들어주는 box라 생각해도 된다. 생성 모델은 (input이 무엇인지는 차차 다룰 것이고) output이 의미가 있는 데이터, 예를 들어 image가 되는 box이다.
+이번, 그리고 이 category에서 앞으로 다룰 모든 게시물은 "생성 모델", 즉 generative AI에 대해 다룬다. 생성 모델이란 image나 video 같이 우리가 보기에 의미가 있는 데이터를 "생성"하는 "모델"이다. 모델은 최근에는 neural network로 대부분 구현한다. 이것에 대해서도 다룰 것이 많으나 우선은 일반적인 "함수", 즉 input이 주어지면 그에 따른 output을 만들어주는 box라 생각해도 된다. 생성 모델은 (input이 무엇인지는 차차 다룰 것이고) output이 의미가 있는 데이터, 예를 들어 image가 되는 box이다.
 
 ## **1. Building Blocks of VAE**
 

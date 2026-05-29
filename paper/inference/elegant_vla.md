@@ -68,7 +68,7 @@ $\mathbf{I}\_t$는 현재 카메라 이미지, $q$는 language instruction, $\ma
 4. 실제 robot rollout
 
 <aside class="content-summary" markdown="1">
-CKA는 [Centered Kernel Alignment](https://arxiv.org/abs/1905.00414){:target="_blank" rel="noopener noreferrer"}로, 직관적으로는 두 hidden representation $H_t$, $H\_{\tau}$가 비슷한 구조를 갖는지 비교하는 similarity measure이다. 단순하게 pixel 차이를 보는 것이 아니라 hidden state 내부의 similarity pattern을 비교하기 때문에 semantic stability를 보는 데 더 적합하다.
+CKA는 [Centered Kernel Alignment](https://arxiv.org/abs/1905.00414){:target="_blank" rel="noopener noreferrer"}로, 직관적으로는 두 hidden representation $\mathbf{H}\_t$, $\mathbf{H}\_{\tau}$가 비슷한 구조를 갖는지 비교하는 similarity measure이다. 단순하게 pixel 차이를 보는 것이 아니라 hidden state 내부의 similarity pattern을 비교하기 때문에 semantic stability를 보는 데 더 적합하다.
 </aside>
 
 위 figure를 보면 모든 control step이 균일하게 어렵지 않다는 것을 알 수 있다. 안정적인 구간에서는 representation similarity가 높고, phase transition이나 goal-sensitive stage에서는 representation 변화가 커지는 것을 확인할 수 있다. 또한 final-layer representation 변화가 first-layer representation에서도 어느 정도 관찰된다는 것 또한 확인할 수 있다. 따라서 논문의 저자들은 비싼 full LLM inference를 다 실행하지 않고도, first LLM layer의 CKA similarity를 lightweight probe로 사용해 cache/recompute 결정을 내릴 수 있다고 주장한다.

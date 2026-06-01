@@ -6,6 +6,7 @@ section: work-log
 date: 2026-05-22
 tags:
   - Korean
+  - Graduate School
 language: ko
 summary: "ChatGPT랑 codex를 이용해서 openpi 레포지토리 분석하게 시켜보기"
 math: true

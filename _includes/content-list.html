@@ -1,9 +1,17 @@
-{% assign content_pages = site.pages
-  | where: "section", include.section %}
-{% if include.subcategory %}
-  {% assign content_pages = content_pages | where: "subcategory", include.subcategory %}
+{% if include.all %}
+  {% assign content_pages = site.pages | where_exp: "item", "item.date" %}
+{% else %}
+  {% assign content_pages = site.pages
+    | where: "section", include.section %}
+  {% if include.subcategory %}
+    {% assign content_pages = content_pages | where: "subcategory", include.subcategory %}
+  {% endif %}
 {% endif %}
-{% assign content_pages = content_pages | sort_pages_by_date %}
+{% if include.all %}
+  {% assign content_pages = content_pages | sort_pages_for_home %}
+{% else %}
+  {% assign content_pages = content_pages | sort_pages_by_date %}
+{% endif %}
 {% assign page_size = site.content_list_page_size | default: 10 %}
 
 {% assign content_count = 0 %}
@@ -20,6 +28,32 @@
     {% assign content_page_number = content_index | divided_by: page_size | plus: 1 %}
     <li data-content-list-item data-content-page="{{ content_page_number }}"{% if content_page_number > 1 %} hidden{% endif %}>
       <a href="{{ content_page.url | relative_url }}">{{ content_page.title }}</a>
+      {% if include.show_category %}
+        {% assign content_leaf_label = "" %}
+        {% if content_page.subcategory %}
+          {% assign section_segment = "/" | append: content_page.section | append: "/" %}
+          {% assign subcategory_segment = "/" | append: content_page.subcategory | append: "/" %}
+          {% for category_page in site.pages %}
+            {% unless category_page.date %}
+              {% if category_page.url contains section_segment and category_page.url contains subcategory_segment %}
+                {% assign content_leaf_label = category_page.title %}
+                {% break %}
+              {% endif %}
+            {% endunless %}
+          {% endfor %}
+        {% else %}
+          {% assign section_url = "/" | append: content_page.section | append: "/" %}
+          {% for category_page in site.pages %}
+            {% if category_page.url == section_url %}
+              {% assign content_leaf_label = category_page.title %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        {% if content_leaf_label != "" %}
+          <span class="content-list-category">{{ content_leaf_label }}</span>
+        {% endif %}
+      {% endif %}
       {% if content_page.date %}
         <span class="text-grey-dk-000 content-list-date">{{ content_page.date | date: "%Y-%m-%d" }}</span>
       {% endif %}

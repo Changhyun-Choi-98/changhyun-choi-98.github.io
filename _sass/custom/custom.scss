@@ -624,18 +624,29 @@ button.post-scroll-button {
   }
 }
 
-.content-list-date {
-  white-space: nowrap;
+.content-list-meta {
+  display: inline-flex;
+  max-width: 100%;
+  margin-left: $sp-2;
+  flex-wrap: wrap;
+  gap: $sp-2;
+  align-items: baseline;
+  vertical-align: baseline;
+  white-space: normal;
 }
 
 .content-list-category {
-  display: inline-block;
-  margin-left: $sp-2;
   color: #047857;
   font-size: $font-size-2;
   font-weight: 600;
   line-height: 1.2;
+}
+
+.content-list-category,
+.content-list-date {
+  overflow-wrap: normal;
   white-space: nowrap;
+  word-break: normal;
 }
 
 html[data-theme="dark"] {

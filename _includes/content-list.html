@@ -28,15 +28,20 @@
     {% assign content_page_number = content_index | divided_by: page_size | plus: 1 %}
     <li data-content-list-item data-content-page="{{ content_page_number }}"{% if content_page_number > 1 %} hidden{% endif %}>
       <a href="{{ content_page.url | relative_url }}">{{ content_page.title }}</a>
+      {% assign content_category_path = "" %}
       {% if include.show_category %}
-        {% assign content_leaf_label = "" %}
+        {% assign content_category_title = "" %}
+        {% assign content_category_parent = "" %}
+        {% assign content_category_grand_parent = "" %}
         {% if content_page.subcategory %}
           {% assign section_segment = "/" | append: content_page.section | append: "/" %}
           {% assign subcategory_segment = "/" | append: content_page.subcategory | append: "/" %}
           {% for category_page in site.pages %}
             {% unless category_page.date %}
               {% if category_page.url contains section_segment and category_page.url contains subcategory_segment %}
-                {% assign content_leaf_label = category_page.title %}
+                {% assign content_category_title = category_page.title %}
+                {% assign content_category_parent = category_page.parent %}
+                {% assign content_category_grand_parent = category_page.grand_parent %}
                 {% break %}
               {% endif %}
             {% endunless %}
@@ -45,16 +50,35 @@
           {% assign section_url = "/" | append: content_page.section | append: "/" %}
           {% for category_page in site.pages %}
             {% if category_page.url == section_url %}
-              {% assign content_leaf_label = category_page.title %}
+              {% assign content_category_title = category_page.title %}
+              {% assign content_category_parent = category_page.parent %}
+              {% assign content_category_grand_parent = category_page.grand_parent %}
               {% break %}
             {% endif %}
           {% endfor %}
         {% endif %}
-        {% if content_leaf_label != "" %}
-          <span class="content-list-category">{{ content_leaf_label }}</span>
+        {% assign content_category_parts = "" | split: "" %}
+        {% if content_category_grand_parent and content_category_grand_parent != "" %}
+          {% assign content_category_parts = content_category_parts | push: content_category_grand_parent %}
         {% endif %}
-      {% endif %}
-      {% if content_page.date %}
+        {% if content_category_parent and content_category_parent != "" %}
+          {% assign content_category_parts = content_category_parts | push: content_category_parent %}
+        {% endif %}
+        {% if content_category_title != "" %}
+          {% assign content_category_parts = content_category_parts | push: content_category_title %}
+        {% endif %}
+        {% assign content_category_path = content_category_parts | join: " / " %}
+        {% if content_category_path != "" or content_page.date %}
+          <span class="content-list-meta">
+          {% if content_category_path != "" %}
+            <span class="content-list-category">{{ content_category_path }}</span>
+          {% endif %}
+          {% if content_page.date %}
+            <span class="text-grey-dk-000 content-list-date">{{ content_page.date | date: "%Y-%m-%d" }}</span>
+          {% endif %}
+          </span>
+        {% endif %}
+      {% elsif content_page.date %}
         <span class="text-grey-dk-000 content-list-date">{{ content_page.date | date: "%Y-%m-%d" }}</span>
       {% endif %}
       {% if content_page.summary %}

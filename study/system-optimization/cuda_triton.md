@@ -31,11 +31,11 @@ CUDA는 NVIDIA GPU를 CPU 옆의 범용 병렬 가속기로 사용하기 위한 
 3. **CUDA compiler/toolchain**: `nvcc`, `ptxas`, PTX, CUBIN, fatbinary, NVRTC
 4. **CUDA Runtime API**: `cudaMalloc`, `cudaMemcpyAsync`, `cudaLaunchKernel`, stream/event/graph 관리
 5. **CUDA Driver API**: `libcuda.so`, context/module/kernel launch 등 더 낮은 레벨 API
-6. **GPU-accelerated libraries**: cuBLAS/cuBLASLt, cuDNN, NCCL, cuFFT, cuRAND, cuSPARSE 등
+6. **GPU-accelerated libraries**: cuBLAS/cuBLASLt, cuDNN, [NCCL](/study/system-optimization/nccl-nixl/), cuFFT, cuRAND, cuSPARSE 등
 7. **profiling/debugging tools**: Nsight Systems, Nsight Compute, CUPTI, Compute Sanitizer, cuda-gdb
 8. **NVIDIA GPU hardware execution layer**: SM, warp scheduler, CUDA cores, Tensor Cores, shared memory, registers, L2, HBM, copy engine 등
 
-딥러닝에서 `model.cuda()`나 `tensor.to("cuda")`를 쓴다는 것은 대부분 CUDA C++를 직접 작성한다는 뜻이 아니라, PyTorch/TensorRT/ONNX Runtime 같은 프레임워크가 내부적으로 CUDA Runtime/Driver + cuBLAS/cuDNN/NCCL/custom CUDA kernels/Triton kernels를 호출한다는 뜻이다.
+딥러닝에서 `model.cuda()`나 `tensor.to("cuda")`를 쓴다는 것은 대부분 CUDA C++를 직접 작성한다는 뜻이 아니라, PyTorch/TensorRT/ONNX Runtime 같은 프레임워크가 내부적으로 CUDA Runtime/Driver + cuBLAS/cuDNN/[NCCL](/study/system-optimization/nccl-nixl/)/custom CUDA kernels/Triton kernels를 호출한다는 뜻이다.
 
 OpenAI가 공개한 Triton, 현재는 보통 Triton language/compiler 또는 triton-lang으로 부르는 도구는 CUDA 전체를 대체하는 것이 아니다. 이 글의 NVIDIA GPU 맥락에서는 CUDA C++/NVCC로 custom GPU kernel을 직접 작성하던 부분을 Python 기반 tiled programming model과 JIT compiler로 대체하거나 보완하는 계층에 가깝다. Triton kernel은 PyTorch CUDA tensor pointer를 입력으로 받아 실행되는 경우가 많고, 최종적으로는 NVIDIA driver와 GPU execution stack 위에서 실행된다.
 
@@ -49,7 +49,7 @@ OpenAI가 공개한 Triton, 현재는 보통 Triton language/compiler 또는 tri
 | **CUDA Driver API**  | NVIDIA driver가 노출하는 더 낮은 레벨 API                                              | `cuInit`, `cuCtxCreate`, `cuModuleLoad`, `cuLaunchKernel`    |
 | **CUDA C++**         | CUDA programming model을 C++ extension으로 표현하는 언어                                     | `__global__ void kernel(...)`                                |
 | **CUDA kernel**      | GPU device에서 병렬 실행되는 함수                                                      | matmul kernel, layernorm kernel, softmax kernel              |
-| **CUDA library**     | NVIDIA가 최적화해서 제공하는 GPU 연산 라이브러리                                               | cuBLAS, cuDNN, NCCL                                          |
+| **CUDA library**     | NVIDIA가 최적화해서 제공하는 GPU 연산 라이브러리                                               | cuBLAS, cuDNN, [NCCL](/study/system-optimization/nccl-nixl/)                                          |
 | **CUDA version**     | 문맥에 따라 driver compatibility, toolkit version, PyTorch build CUDA version을 의미 | `nvidia-smi`, `nvcc --version`, `torch.version.cuda`         |
 
 중요한 점은 CUDA Runtime API는 CUDA Driver API 위에 구현되어 있다는 것이다. 실무적으로는 Runtime API를 더 자주 보게 된다. Runtime API는 primary context initialization, module management 등을 암묵적으로 처리해주므로 코드가 단순하다. 반대로 Driver API는 context와 module loading을 명시적으로 제어할 수 있어서 compiler/runtime/framework 구현에서 자주 등장한다.
@@ -73,7 +73,7 @@ OpenAI가 공개한 Triton, 현재는 보통 Triton language/compiler 또는 tri
 [CUDA-accelerated Libraries]
   cuBLAS / cuBLASLt    -> GEMM, batched GEMM, matmul
   cuDNN                -> DNN primitives: convolution, attention, normalization, softmax, pooling, pointwise/fused ops
-  NCCL                 -> multi-GPU collective communication
+  [NCCL](/study/system-optimization/nccl-nixl/)                 -> multi-GPU collective communication
   cuRAND/cuFFT/etc.    -> random, FFT, sparse, etc.
   Custom CUDA kernels  -> PyTorch native kernels, FlashAttention, fused ops
   Triton kernels       -> user-written or compiler-generated fused kernels
@@ -205,7 +205,7 @@ GPU를 compute device로 쓰기 위해 반드시 NVIDIA driver가 필요하다. 
 `nvidia-smi`가 작동한다는 것은 보통 driver와 GPU device discovery가 된다는 뜻이다. 하지만 `nvidia-smi`에 보이는 CUDA version은 설치된 CUDA Toolkit 버전이 아니라 현재 설치된 NVIDIA driver가 지원하는 최대 CUDA API/Runtime 호환 버전(현재 NVIDIA driver가 지원할 수 있는 CUDA compatibility 수준)이다. 실제 개발 toolkit version은 `nvcc --version`, PyTorch build CUDA version(PyTorch binary가 포함/기대하는 CUDA 런타임 버전)은 `torch.version.cuda`로 따로 봐야 한다. 즉 `nvidia-smi`의 CUDA Version, `nvcc --version`의 CUDA Toolkit version, `torch.version.cuda`의 PyTorch build CUDA version은 서로 다른 값일 수 있다. 실행이 되려면 핵심적으로 NVIDIA driver가 해당 CUDA runtime/library가 요구하는 minimum driver version 이상이어야 한다. 보통 새 driver는 과거 CUDA runtime과의 backward compatibility를 제공하지만, 구체적인 호환성은 CUDA compatibility matrix와 framework build 조건을 확인해야 한다.
 
 ### **CUDA Toolkit**
-CUDA C++를 직접 컴파일하거나 native extension을 빌드하려면 CUDA Toolkit이 필요하다. CUDA Toolkit은 CUDA application을 만들고, 빌드하고, 실행하기 위한 compiler, headers, runtime library, GPU-accelerated libraries, debugging/optimization tools 등을 포함한다. 다만 cuDNN, NCCL, TensorRT 같은 딥러닝 관련 구성요소는 CUDA 위에서 동작하지만, 설치 방식상 CUDA Toolkit 자체와 별도로 배포되거나 PyTorch/TensorRT package에 함께 포함되는 경우가 많다.
+CUDA C++를 직접 컴파일하거나 native extension을 빌드하려면 CUDA Toolkit이 필요하다. CUDA Toolkit은 CUDA application을 만들고, 빌드하고, 실행하기 위한 compiler, headers, runtime library, GPU-accelerated libraries, debugging/optimization tools 등을 포함한다. 다만 cuDNN, [NCCL](/study/system-optimization/nccl-nixl/), TensorRT 같은 딥러닝 관련 구성요소는 CUDA 위에서 동작하지만, 설치 방식상 CUDA Toolkit 자체와 별도로 배포되거나 PyTorch/TensorRT package에 함께 포함되는 경우가 많다.
 
 CUDA Toolkit에는 보통 다음과 같은 것들이 들어있다:
 
@@ -329,7 +329,7 @@ Triton 방식:
 * CUDA-compatible execution environment
 * PyTorch tensor/device memory
 * CUDA stream semantics
-* 경우에 따라 cuBLAS/cuDNN/NCCL 같은 libraries
+* 경우에 따라 cuBLAS/cuDNN/[NCCL](/study/system-optimization/nccl-nixl/) 같은 libraries
 
 CUDA C++과 Triton의 구성 요소를 대응시키면 다음과 같다:
 

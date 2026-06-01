@@ -290,7 +290,7 @@ GPU3 grad
   -> every GPU receives averaged/summed grad
 ```
 
-이때 PyTorch DDP는 일반적으로 NCCL(NVIDIA Collective Communication Library)을 사용한다. [NCCL](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/index.html){:target="_blank" rel="noopener noreferrer"}은 topology-aware inter-GPU communication primitives를 제공하는 NVIDIA library이고, collective communication과 point-to-point send/receive primitives를 구현한다. 흐름은 다음과 같다:
+이때 PyTorch DDP는 일반적으로 NCCL(NVIDIA Collective Communication Library)을 사용한다. [NCCL](/study/system-optimization/nccl-nixl/)은 topology-aware inter-GPU communication primitives를 제공하는 NVIDIA library이고, collective communication과 point-to-point send/receive primitives를 구현한다. 흐름은 다음과 같다:
 
 ```text
 loss.backward()

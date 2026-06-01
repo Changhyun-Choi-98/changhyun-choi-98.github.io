@@ -227,7 +227,7 @@ NCCL과 NIXL은 대체 관계가 아니라 보완 관계다. NCCL은 여러 GPU 
 | 성능 핵심 | topology-aware collective algorithm                         | nonblocking transfer, memory/storage hierarchy abstraction            |
 | 예시    | 8 GPU의 gradient all-reduce                                  | GPU 0의 1 GB KV cache를 GPU 1 또는 SSD tier로 이동                           |
 
-최신 NVIDIA 자료 기준으로도 이 방향성은 유지된다. 다만 NIXL은 단순히 “KV cache 전송 라이브러리”에만 머물지 않고, disaggregated KV cache movement, long-context storage, model weight transfer, elastic expert parallelism 같은 inference framework 내부 data movement 전반을 위한 abstraction으로 확장되고 있다. [NVIDIA 2026년 글](https://developer.nvidia.com/blog/enhancing-distributed-inference-performance-with-the-nvidia-inference-transfer-library/){:target="_blank" rel="noopener noreferrer"}도 NIXL이 non-blocking API, dynamic metadata exchange, pluggable backend plugin을 제공하며 [Dynamo](https://www.nvidia.com/en-us/ai/dynamo/){:target="_blank" rel="noopener noreferrer"}, TensorRT-LLM, vLLM, LMCache 등 주요 inference framework와 통합되고 있다고 설명한다.
+최신 NVIDIA 자료 기준으로도 이 방향성은 유지된다. 다만 NIXL은 단순히 “KV cache 전송 라이브러리”에만 머물지 않고, disaggregated KV cache movement, long-context storage, model weight transfer, elastic expert parallelism 같은 inference framework 내부 data movement 전반을 위한 abstraction으로 확장되고 있다. [NVIDIA 2026년 글](https://developer.nvidia.com/blog/enhancing-distributed-inference-performance-with-the-nvidia-inference-transfer-library/){:target="_blank" rel="noopener noreferrer"}도 NIXL이 non-blocking API, dynamic metadata exchange, pluggable backend plugin을 제공하며 Dynamo, TensorRT-LLM, vLLM, LMCache 등 주요 inference framework와 통합되고 있다고 설명한다.
 
 
 

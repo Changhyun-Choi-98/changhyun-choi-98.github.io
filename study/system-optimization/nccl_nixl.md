@@ -178,7 +178,7 @@ NCCL은 message size와 interconnect topology, GPU generation을 보고 collecti
 
 #### **3. SHARP/NVLS 같은 in-network aggregation 활용**
 
-일부 고성능 fabric에서는 reduction 일부를 GPU가 아니라 network switch가 처리할 수 있다. all-reduce 같은 collective의 일부 aggregation을 network fabric에 offload하면 GPU가 처리해야 하는 데이터 이동량과 latency를 줄일 수 있다. 이것은 대규모 cluster에서 매우 중요하다. GPU 수가 커질수록 “계산하는 GPU”만 중요한 것이 아니라, “데이터를 합치는 network fabric” 자체가 일종의 accelerator가 된다.
+일부 고성능 fabric에서는 reduction 일부를 GPU가 아니라 network switch가 처리할 수 있다. `all-reduce` 같은 collective의 일부 aggregation을 network fabric에 offload하면 GPU가 처리해야 하는 데이터 이동량과 latency를 줄일 수 있다. 이것은 대규모 cluster에서 매우 중요하다. GPU 수가 커질수록 “계산하는 GPU”만 중요한 것이 아니라, “데이터를 합치는 network fabric” 자체가 일종의 accelerator가 된다.
 
 
 ## **NIXL**

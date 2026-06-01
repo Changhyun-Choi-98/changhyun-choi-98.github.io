@@ -459,7 +459,7 @@ State conditioning의 이득은 매우 작다. Easy에서는 최대 +0.7pp, Hard
 
 실험 결과를 종합하면 Qwen-VLA의 핵심 주장은 어느 정도 뒷받침된다. Qwen-VLA-Instruct는 하나의 generalist model로 simulation manipulation, real-world ALOHA, VLN, static OOD manipulation, dynamic manipulation에서 모두 경쟁력 있는 성능을 보인다. 특히 real-world ALOHA OOD와 DOMINO zero-shot 결과는 large-scale heterogeneous pretraining이 단순 in-domain imitation을 넘어 visual / spatial / instruction generalization에 도움을 줄 수 있음을 보여준다.
 
-하지만 결과를 과장해서 해석할 필요는 없다. Qwen-VLA가 모든 task에서 압도적인 것은 아니고, navigation 일부 metric이나 SimplerEnv-OOD의 PutFront처럼 약한 부분도 있다. 따라서 이 논문의 가장 중요한 contribution은 “모든 benchmark를 완전히 정복했다”가 아니라, **manipulation, navigation, egocentric motion, trajectory prediction을 하나의 VLA training framework로 묶었을 때 generalist policy가 specialist 수준에 가까운 성능과 의미 있는 OOD generalization을 보일 수 있다**는 점이다.
+하지만 Qwen-VLA가 모든 task에서 압도적인 것은 아니고, navigation 일부 metric이나 SimplerEnv-OOD의 PutFront처럼 약한 부분도 있다. 따라서 이 논문의 가장 중요한 contribution은 “모든 benchmark를 완전히 정복했다”가 아니라, **manipulation, navigation, egocentric motion, trajectory prediction을 하나의 VLA training framework로 묶었을 때 generalist policy가 specialist 수준에 가까운 성능과 의미 있는 OOD generalization을 보일 수 있다**는 점이다.
 
 
 

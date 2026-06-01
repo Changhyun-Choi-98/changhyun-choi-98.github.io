@@ -93,7 +93,7 @@ GPU 2: full_result의 shard 2
 GPU 3: full_result의 shard 3
 ```
 
-이 operation은 FSDP나 ZeRO(Zero Redundancy Optimizer, 분산 학습에서 발생하는 여러 GPU의 메모리 중복을 제거하는 메모리 최적화 기술)-style sharded training에서 중요하다. DDP에서는 모든 GPU가 full gradient를 갖는 방향으로 동작하지만, sharded training에서는 gradient, parameter, optimizer state를 여러 GPU에 나눠 저장한다. 따라서 모든 rank가 전체 결과를 복제하는 `all-reduce`보다, reduce된 결과의 shard만 각 rank가 받는 `reduce-scatter`가 메모리 효율적이다. 또한 all-reduce는 개념적으로 다음처럼 볼 수 있다:
+이 operation은 FSDP(PyTorch Fully Sharded Data Parallel)나 ZeRO(Zero Redundancy Optimizer)-style sharded training에서 중요하다. DDP에서는 모든 GPU가 full gradient를 갖는 방향으로 동작하지만, sharded training에서는 gradient, parameter, optimizer state를 여러 GPU에 나눠 저장한다. 따라서 모든 rank가 전체 결과를 복제하는 `all-reduce`보다, reduce된 결과의 shard만 각 rank가 받는 `reduce-scatter`가 메모리 효율적이다. 또한 all-reduce는 개념적으로 다음처럼 볼 수 있다:
 
 ```text
 all-reduce = reduce-scatter + all-gather
@@ -121,7 +121,7 @@ GPU 2: [x0, x1, x2, x3]
 GPU 3: [x0, x1, x2, x3]
 ```
 
-All-gather는 sharded training에서 자주 나온다. 예를 들어 [FSDP](https://docs.pytorch.org/docs/stable/fsdp.html){:target="_blank" rel="noopener noreferrer"}(PyTorch Fully Sharded Data Parallel)에서는 parameter, gradient, optimizer state를 여러 GPU에 나눠 저장한다(그래서 DDP처럼 각 rank에 전체 모델 상태를 항상 복제하지 않기 때문에 메모리 사용량을 줄인다). 그런데 특정 transformer block을 계산하려면 해당 block의 weight 전체가 필요할 수 있다. 이때 각 GPU가 가진 weight shard를 모아 일시적으로 full weight를 만들기 위해 all-gather가 쓰인다. 
+All-gather는 sharded training에서 자주 나온다. 예를 들어 FSDP에서는 parameter, gradient, optimizer state를 여러 GPU에 나눠 저장하지만 특정 transformer block을 계산하려면 해당 block의 weight 전체가 필요할 수 있다. 이때 각 GPU가 가진 weight shard를 모아 일시적으로 full weight를 만들기 위해 all-gather가 쓰인다.
 
 all-gather는 엄밀히 말하면 arithmetic aggregation은 아니다. `all-reduce`는 sum/max/min 같은 reduction을 하지만, `all-gather`는 각 rank의 데이터를 “모아서 복제”한다.
 

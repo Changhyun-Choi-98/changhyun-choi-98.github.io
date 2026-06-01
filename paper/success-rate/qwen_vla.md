@@ -68,7 +68,7 @@ Qwen3.5는 native multimodal backbone이고, visual token을 text token stream�
 
 ### **DiT-style flow-matching action expert**
 
-input은 VLM hidden states, noisy action chunk, timestep embedding이다.
+input은 VLM hidden states, noisy action chunk, timestep embedding이다. Positional encoding은 multi-section RoPE를 썼다 (aligned with the backbone).
 
 Qwen-VLA에서는 VLM의 pretrained capability를 망가뜨리지 않으면서 action generation 능력을 붙이기 위해 backbone과 action expert를 decoupled 시켰다. VLM backbone은 perception/reasoning을 보존하고, action expert는 continuous action distribution의 multi-modality와 high-frequency dynamics를 담당한다.
 

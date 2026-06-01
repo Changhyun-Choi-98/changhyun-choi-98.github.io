@@ -344,7 +344,7 @@ Qwen-VLA는 manipulation만 다루는 모델이 아니라, navigation trajectory
 | Qwen-VLA-Base | 5.2 | 61.7 | 53.8 | 49.4 | 6.4 | 55.1 | 45.8 | 56.2 |
 | **Qwen-VLA-Instruct** | 5.1 | **69.0** | **57.5** | 51.2 | **5.8** | **59.6** | **47.8** | 57.1 |
 
-Qwen-VLA-Instruct는 R2R Val-Unseen에서 OS 69.0, SR 57.5를 기록하고, RxR Val-Unseen에서는 SR 59.6, SPL 47.8을 기록한다. 이 결과는 Qwen-VLA가 robot arm manipulation뿐 아니라 mobile navigation trajectory prediction도 하나의 framework 안에서 처리할 수 있음을 보여준다.
+Qwen-VLA-Instruct는 R2R Val-Unseen에서 OS(Oracle Success rate) 69.0, SR 57.5를 기록하고, RxR Val-Unseen에서는 SR 59.6, SPL(Success weighted by Path Length) 47.8을 기록한다. 이 결과는 Qwen-VLA가 robot arm manipulation뿐 아니라 mobile navigation trajectory prediction도 하나의 framework 안에서 처리할 수 있음을 보여준다.
 
 다만 navigation에서 모든 metric이 압도적으로 최고인 것은 아니다. 예를 들어 R2R SPL은 StreamVLN이 51.9로 Qwen-VLA-Instruct의 51.2보다 조금 높고, RxR nDTW도 StreamVLN이 더 높다. 따라서 navigation 결과는 “Qwen-VLA가 VLN specialist를 완전히 대체한다”기보다는, **manipulation 중심의 generalist VLA가 VLN에서도 competitive한 성능을 낸다**는 쪽으로 해석하는 것이 더 적절하다.
 
@@ -360,7 +360,7 @@ Qwen-VLA-Instruct는 R2R Val-Unseen에서 OS 69.0, SR 57.5를 기록하고, RxR 
 
 Qwen-VLA-Instruct는 평균 32.0%로 π0.5의 12.6%보다 높다. 특히 MoveRight와 PlaceNear에서 π0.5는 0.0%이지만, Qwen-VLA-Instruct는 각각 33.3%, 39.6%를 달성한다. 이는 Qwen-VLA가 단순히 seen task를 imitation하는 것이 아니라, language instruction에 포함된 spatial relation을 어느 정도 action으로 옮길 수 있음을 보여준다.
 
-StackYellow도 흥미롭다. Training data에는 green block을 yellow block 위에 쌓는 경우만 있지만, evaluation에서는 yellow block을 green block 위에 쌓아야 한다. Qwen-VLA-Instruct는 이 reversed color-order setting에서 22.9%를 달성해 π0.5의 4.2%보다 높다. 이는 object-color binding과 spatial goal interpretation 측면에서 Qwen-VLA의 pretraining이 도움을 준다는 신호다.
+StackYellow에서는 training data에는 green block을 yellow block 위에 쌓는 경우만 있지만, evaluation에서는 yellow block을 green block 위에 쌓아야 한다. Qwen-VLA-Instruct는 이 reversed color-order setting에서 22.9%를 달성해 π0.5의 4.2%보다 높다. 이는 object-color binding과 spatial goal interpretation 측면에서 Qwen-VLA의 pretraining이 도움을 준다는 신호다.
 
 다만 PutFront에서는 Qwen-VLA-Instruct가 4.2%로 낮고, Qwen-VLA-Base의 6.3%보다도 낮다. 따라서 OOD generalization이 모든 spatial primitive에 대해 균일하게 좋아진 것은 아니며, direction-specific relation이나 viewpoint-dependent instruction에서는 여전히 취약할 수 있다.
 
@@ -377,7 +377,7 @@ DOMINO는 moving object dynamics가 있는 dynamic manipulation benchmark이다.
 | Qwen-VLA-Base | Zero-shot | 21.1 | 37.4 |
 | **Qwen-VLA-Instruct** | **Zero-shot** | **26.6** | **39.5** |
 
-Qwen-VLA-Instruct는 dynamic manipulation data 없이 zero-shot으로 SR 26.6%, MS 39.5를 달성한다. 이는 DOMINO-specific fine-tuning을 한 PUMA보다도 SR 기준 +9.4pp, MS 기준 +4.5 높다.
+Qwen-VLA-Instruct는 dynamic manipulation data 없이 zero-shot으로 SR 26.6%, MS(Manipulation Score) 39.5를 달성한다. 이는 DOMINO-specific fine-tuning을 한 PUMA보다도 SR 기준 +9.4pp, MS 기준 +4.5 높다.
 
 논문은 이 결과를 두 가지로 해석한다. 첫째, flow-matching action decoder가 coherent action chunk를 생성하기 때문에 dynamic object를 다룰 때 hesitation이 줄어든다. 둘째, manipulation, navigation, trajectory prediction, vision-language data를 함께 학습하면서 visual grounding과 spatial-to-kinematic prior가 더 넓게 형성된다. 즉, DOMINO 결과는 Qwen-VLA의 unified action-and-trajectory pretraining이 static manipulation을 넘어 dynamic setting에도 일부 transfer될 수 있음을 보여준다.
 

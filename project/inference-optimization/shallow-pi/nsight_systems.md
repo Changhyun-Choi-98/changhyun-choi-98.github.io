@@ -511,7 +511,7 @@ SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10.sqlite does not contain 
 
 현재 `sample_actions()`는 `num_steps=N`일 때 대략 `N + 1`번의 cudaGraphLaunch + cudaStreamSynchronize + tiny D2H copy를 발생시키고 있다. (CUDA API Summary의 Num Calls 항목을 iteration 횟수인 5로 나눠서 확인)
 
-이 패턴은 `sample_actions()` 내부의 GPU tensor 기반 while time >= ... 조건문이 매 denoise step마다 CPU-GPU synchronization을 유발하고 있을 가능성을 강하게 시사한다. 그리고 이것을 [shallow-$\pi$의 코드](https://github.com/icsl-Jeon/openpi/blob/a5940ac510c7f5d94918f238cfc3722be1a2c5c8/src/openpi/models_pytorch/pi0_pytorch.py#L406){:target="_blank" rel="noopener noreferrer"}나 [original $\pi_0$의 코드](https://github.com/Physical-Intelligence/openpi/blob/c23745b5ad24e98f66967ea795a07b2588ed6c79/src/openpi/models_pytorch/pi0_pytorch.py#L407){:target="_blank" rel="noopener noreferrer"}에서 실제로 확인했다. 해당 코드에는 아래의 두 핵심 요소가 있다:
+이 패턴은 `sample_actions()` 내부의 GPU tensor 기반 `while` condition evaluation이 매 denoise step마다 CUDA scalar readback을 유발한다는 가설과 정합적이다. 그리고 이것을 [shallow-$\pi$의 코드](https://github.com/icsl-Jeon/openpi/blob/a5940ac510c7f5d94918f238cfc3722be1a2c5c8/src/openpi/models_pytorch/pi0_pytorch.py#L406){:target="_blank" rel="noopener noreferrer"}나 [original $\pi_0$의 코드](https://github.com/Physical-Intelligence/openpi/blob/c23745b5ad24e98f66967ea795a07b2588ed6c79/src/openpi/models_pytorch/pi0_pytorch.py#L407){:target="_blank" rel="noopener noreferrer"}에서 실제로 확인했다. 해당 코드에는 아래의 두 핵심 요소가 있다:
 
 1. `time`와 `dt`가 CUDA tensor
     ```python
@@ -523,7 +523,7 @@ SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10.sqlite does not contain 
     while time >= -dt / 2:
     ```
 
-Python은 `while` loop 탈출 여부를 CPU boolean으로 결정한다. 그러면 PyTorch는 이 scalar CUDA tensor의 값을 CPU 쪽으로 가져와서 조건을 판단해야 하고, 이 과정에서 tiny Device-to-Hose copy과 stream synchronization이 발생할 수 있다. 이번 Nsight Systems 결과가 그 가설을 강하게 뒷받침한다:
+Python은 `while` loop 탈출 여부를 CPU boolean으로 결정한다. 그러면 PyTorch는 이 scalar CUDA tensor의 값을 CPU 쪽으로 가져와서 조건을 판단해야 하고, 이 과정에서 tiny Device-to-Host copy과 stream synchronization이 발생할 수 있다. 이번 Nsight Systems 결과가 그 가설을 강하게 뒷받침한다:
 
 ```text
 N=1:
@@ -693,6 +693,8 @@ SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite doe
 </details>
 
 Sanity check도 완료했다. 변경 전과 후의 action 차이가 허용 범위 이내였다.
+
+주의할 점은 for-loop 변경 후 NVTX range 시간이 곧바로 end-to-end inference latency를 의미하지 않는다는 점이다. 기존 while 버전에서는 매 denoise step마다 GPU scalar condition readback이 발생하면서 `cudaStreamSynchronize`가 loop 내부에 들어갔기 때문에 NVTX range 안에 대기 시간이 포함되었다. 반면 for-loop 변경 후에는 per-step synchronization이 제거되어 `sample_actions()` 호출은 대부분 CUDA Graph launch를 enqueue하고 빠르게 반환한다. 따라서 Nsight Systems의 NVTX range는 주로 CPU-side enqueue time을 보여주고, 실제 GPU work 대기 시간은 trace loop 뒤의 최종 `torch.cuda.synchronize()`에 모인다. 즉 `cudaDeviceSynchronize` 93 ms는 새로운 병목이라기보다, 5회 inference에 대한 queued GPU work를 마지막에 기다린 결과로 해석해야 한다.
 
 | 항목                   |           Original | Minimal for-loop inplace | 판단                               |
 | -------------------- | ----------------- | ----------------------- | -------------------------------- |

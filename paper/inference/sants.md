@@ -20,7 +20,7 @@ permalink: /paper/inference/sants/
 
 - **Authors:** Yirui Sun¹³\*, Guangyu Zhuge¹²\*, Keliang Liu¹, Jie Gu¹, Xinyu Bing¹², Zhongxue Gan¹†, Chunxu Tian¹†
 - **Affiliations:** ¹Fudan University, ²Harbin Institute of Technology, ³Deep Computing Era Technology Co., Ltd, \*Equal contribution, †Corresponding authors
-- **Pages:** [arXiv](https://arxiv.org/abs/2605.27947){:target="_blank" rel="noopener noreferrer"}, [Project Page](https://advanced-robotics-lab.github.io/SANTS/){:target="_blank" rel="noopener noreferrer"}, [GitHub](https://github.com/Advanced-Robotics-Lab/SANTS-code){:target="_blank" rel="noopener noreferrer"}
+- **Links:** [arXiv](https://arxiv.org/abs/2605.27947){:target="_blank" rel="noopener noreferrer"}, [Project Page](https://advanced-robotics-lab.github.io/SANTS/){:target="_blank" rel="noopener noreferrer"}, [GitHub](https://github.com/Advanced-Robotics-Lab/SANTS-code){:target="_blank" rel="noopener noreferrer"}
 - **arXiv Submitted:** 2026-05-27
 
 </aside>

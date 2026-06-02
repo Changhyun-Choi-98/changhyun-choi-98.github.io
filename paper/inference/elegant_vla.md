@@ -20,7 +20,7 @@ permalink: /paper/inference/elegant-vla/
 
 - **Authors:** Ye Li¹, Huanan Liu¹, Kangye Ji¹, Yuan Meng¹\*, Jiajun Fan², Yuansong Wang¹, Shiyu Qin¹, Chenglei Wu¹, Shu-Tao Xia¹, Zhi Wang¹\*
 - **Affiliations:** ¹Tsinghua University, ²University of Illinois at Urbana-Champaign, \*Corresponding authors
-- **Pages:** [arXiv](https://arxiv.org/abs/2605.29438){:target="_blank" rel="noopener noreferrer"}, [Project Page](https://anonymous.4open.science/w/elegantvla/){:target="_blank" rel="noopener noreferrer"}
+- **Links:** [arXiv](https://arxiv.org/abs/2605.29438){:target="_blank" rel="noopener noreferrer"}, [Project Page](https://anonymous.4open.science/w/elegantvla/){:target="_blank" rel="noopener noreferrer"}
 - **arXiv Submitted:** 2026-05-28
 
 </aside>

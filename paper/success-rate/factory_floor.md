@@ -21,7 +21,7 @@ permalink: /paper/success-rate/factory-floor/
 
 - **Authors:** Brian Zhu¹, Philipp Schmitt¹, Philine Meister¹, Lukas Gensler¹, Momen Khalil¹, Emmanuele Poggi¹, Johannes Hechtl¹, Carsten Braunroth¹, Kai Wurm¹, Gokul Narayanan¹, Eugen Solowjow¹, Georg von Wichert¹, Andre Scholz¹, Felix Albrecht¹, Maxmillian Metzner¹
 - **Affiliations:** ¹Siemens Corporation, author list provided in Acknowledgments as Project Members
-- **Pages:** [arXiv](https://arxiv.org/abs/2605.27461){:target="_blank" rel="noopener noreferrer"}
+- **Links:** [arXiv](https://arxiv.org/abs/2605.27461){:target="_blank" rel="noopener noreferrer"}
 - **arXiv Submitted:** 2026-05-25
 
 </aside>

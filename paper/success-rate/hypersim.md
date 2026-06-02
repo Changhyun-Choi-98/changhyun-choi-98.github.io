@@ -21,7 +21,7 @@ permalink: /paper/success-rate/hypersim/
 
 - **Authors:** Junyi Dong¹\*†, Haotian Luo¹\*, Ziwei Xu¹, Shengwei Bian¹, Heng Zhang¹, Sitong Mao¹, Jingyi Guo¹, Yang Xu¹, Wenhao Chen¹, Qiuyu Feng¹, Yao Mu², Ping Luo³, Shunbo Zhou¹, Xiaodong Wu¹
 - **Affiliations:** ¹CloudRobo Lab, Huawei Cloud Computing Technologies Co., Ltd., ²Shanghai Jiao Tong University, ³The University of Hong Kong, \*Equal contribution, †Corresponding authors
-- **Pages:** [arXiv](https://arxiv.org/abs/2605.26638){:target="_blank" rel="noopener noreferrer"}
+- **Links:** [arXiv](https://arxiv.org/abs/2605.26638){:target="_blank" rel="noopener noreferrer"}
 - **arXiv Submitted:** 2026-05-26
 
 </aside>

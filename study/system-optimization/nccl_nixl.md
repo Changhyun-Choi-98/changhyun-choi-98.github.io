@@ -8,6 +8,7 @@ date: 2026-06-01
 tags:
   - Korean
   - CUDA
+  - PyTorch
 language: ko
 summary: "GPU 수가 늘어날수록 병목이 되는 inter-GPU data movement를 NCCL collective communication과 NIXL inference transfer 관점에서 정리한다"
 math: true

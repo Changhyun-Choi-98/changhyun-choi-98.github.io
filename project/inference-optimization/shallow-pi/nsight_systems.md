@@ -43,7 +43,7 @@ permalink: /project/inference-optimization/shallow-pi/nsight-systems/
 
 
 
-[지난 게시물](/project/inference-optimization/shallow-pi/shallow-pi-implementation/)에서 baseline 수치를 확인했다. 결론은 "**prefix-ish fixed cost가 지배적이고, denoise step cost는 step당 약 0.8 ms 수준이다**"였다. 이제 Nsight Systems로 bottleneck을 더 뜯어보자.
+[지난 게시물](/project/inference-optimization/shallow-pi/baseline-latency/)에서 baseline 수치를 확인했다. 결론은 "**prefix-ish fixed cost가 지배적이고, denoise step cost는 step당 약 0.8 ms 수준이다**"였다. 이제 Nsight Systems로 bottleneck을 더 뜯어보자.
 
 PyTorch Profiler로 operator table을 보는 것 대신, Nsight Systems trace를 먼저 찍는 이유는 아래와 같다:
 
@@ -214,7 +214,7 @@ if __name__ == "__main__":
 
 </details>
 
-위 script에서는 [지난 게시물](/project/inference-optimization/shallow-pi/shallow-pi-implementation/)에서 사용한 코드에서 `sample_actions()`만 포함하고 아래 항목들은 제외했다.
+위 script에서는 [지난 게시물](/project/inference-optimization/shallow-pi/baseline-latency/)에서 사용한 코드에서 `sample_actions()`만 포함하고 아래 항목들은 제외했다.
 
 ```text
 input transform 반복

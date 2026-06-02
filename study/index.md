@@ -16,5 +16,4 @@ Study Notes
 
 - [Diffusion Tutorial](/study/diffusion-tutorial/)
 - [Algorithm](/study/algorithm/)
-- [System Optimization](/study/system-optimization/)
 - [Inference Systems](/study/inference-systems/)

@@ -54,8 +54,9 @@ PyTorch Profiler로 operator table을 보는 것 대신, Nsight Systems trace를
 
 그러므로 현재 목표는 **Nsight Systems로 N=1과 N=10의 compiled production timeline을 비교**하는 것이다.
 
+## **1st trial**
 
-## **code**
+### **code**
 
 <details markdown="1">
 <summary><code>profile_shallow_pi_latency.py</code></summary>
@@ -226,7 +227,7 @@ Docker
 websocket
 ```
 
-## **N=1**
+### **N=1 Setting**
 
 <details markdown="1">
 <summary>shell commands & result</summary>
@@ -368,7 +369,7 @@ SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N1.sqlite does not contain s
 
 </details>
 
-## **N=10**
+### **N=10 Setting**
 
 <details markdown="1">
 <summary>shell commands & result</summary>
@@ -504,6 +505,58 @@ SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10.sqlite does not contain 
 {: style="margin-left: 1rem;" }
 
 </details>
+
+
+### **Result Analysis**
+
+현재 `sample_actions()`는 `num_steps=N`일 때 대략 `N + 1`번의 cudaGraphLaunch + cudaStreamSynchronize + tiny D2H copy를 발생시키고 있다. (CUDA API Summary의 Num Calls 항목을 iteration 횟수인 5로 나눠서 확인)
+
+이 패턴은 `sample_actions()` 내부의 GPU tensor 기반 while time >= ... 조건문이 매 denoise step마다 CPU-GPU synchronization을 유발하고 있을 가능성을 강하게 시사한다. 그리고 이것을 [shallow-$\pi$의 코드](https://github.com/icsl-Jeon/openpi/blob/a5940ac510c7f5d94918f238cfc3722be1a2c5c8/src/openpi/models_pytorch/pi0_pytorch.py#L406){:target="_blank" rel="noopener noreferrer"}나 [original $\pi_0$의 코드](https://github.com/Physical-Intelligence/openpi/blob/c23745b5ad24e98f66967ea795a07b2588ed6c79/src/openpi/models_pytorch/pi0_pytorch.py#L407){:target="_blank" rel="noopener noreferrer"}에서 실제로 확인했다. 해당 코드에는 아래의 두 핵심 요소가 있다:
+
+1. `time`와 `dt`가 CUDA tensor
+    ```python
+    dt = torch.tensor(dt, dtype=torch.float32, device=device)
+    time = torch.tensor(1.0, dtype=torch.float32, device=device)
+    ```
+2. `while` 조건문이 GPU tensor expression
+    ```python
+    while time >= -dt / 2:
+    ```
+
+Python은 `while` loop 탈출 여부를 CPU boolean으로 결정한다. 그러면 PyTorch는 이 scalar CUDA tensor의 값을 CPU 쪽으로 가져와서 조건을 판단해야 하고, 이 과정에서 tiny Device-to-Hose copy과 stream synchronization이 발생할 수 있다. 이번 Nsight Systems 결과가 그 가설을 강하게 뒷받침한다:
+
+```text
+N=1:
+  10 cudaStreamSynchronize / 5 iters = 2 per inference
+  10 cudaGraphLaunch       / 5 iters = 2 per inference
+  10 D2H memops            / 5 iters = 2 per inference
+
+N=10:
+  55 cudaStreamSynchronize / 5 iters = 11 per inference
+  55 cudaGraphLaunch       / 5 iters = 11 per inference
+  55 D2H memops            / 5 iters = 11 per inference
+```
+
+즉 실제 코드와 trace가 같이 가리키는 것은 아래와 같다:
+
+> **while condition check가 denoise step마다 한 번, 그리고 마지막 종료 조건 확인에서 한 번 더 발생한다**
+
+`sample_actions()` 안에서는 prefix prefill로 얻은 `past_key_values`를 `denoise_step()`에 넘긴다. `denoise_step()` 또한 [GitHub에서](https://github.com/icsl-Jeon/openpi/blob/a5940ac510c7f5d94918f238cfc3722be1a2c5c8/src/openpi/models_pytorch/pi0_pytorch.py#L421){:target="_blank" rel="noopener noreferrer"} [확인할 수 있다](https://github.com/Physical-Intelligence/openpi/blob/c23745b5ad24e98f66967ea795a07b2588ed6c79/src/openpi/models_pytorch/pi0_pytorch.py#L422){:target="_blank" rel="noopener noreferrer"}.
+
+따라서 현재 inference는 아래와 같이 정리할 수 있다:
+
+```text
+sample_actions()
+├─ prefix path: image/language embedding + prefix KV cache 생성
+└─ denoise loop
+   ├─ while GPU tensor condition check
+   ├─ embed_suffix(state, x_t, timestep)
+   ├─ suffix attention mask / position_ids 생성
+   ├─ Gemma expert forward with cached prefix KV
+   ├─ action_out_proj
+   └─ Euler update
+```
+
 
 
 

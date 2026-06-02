@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "3. Nsight Systems profiling"
+title: "3. Nsight Systems profiling & further optimization"
 nav_exclude: true
 section: project
 subcategory: shallow-pi
@@ -12,7 +12,7 @@ tags:
   - Nsight Systems
   - Writing
 language: ko
-summary: "Nsight Systems를 이용해서 bottleneck 지점을 더 정확하게 찾기"
+summary: "Nsight Systems를 이용해서 bottleneck 지점을 더 정확하게 찾고 원인 분석 및 최적화"
 math: true
 comments: true
 comment_id: "project-shallow-pi-nsight-systems"
@@ -54,7 +54,7 @@ PyTorch Profiler로 operator table을 보는 것 대신, Nsight Systems trace를
 
 그러므로 현재 목표는 **Nsight Systems로 N=1과 N=10의 compiled production timeline을 비교**하는 것이다.
 
-## **1st trial**
+## **1st step**
 
 ### **code**
 
@@ -557,6 +557,150 @@ sample_actions()
    └─ Euler update
 ```
 
+`sample_actions()`는 `PI0Pytorch` class의 `__init__`에서 `torch.compile(..., mode="max-autotune")`으로 compile된다. [PyTorch docs](https://docs.pytorch.org/docs/2.12/generated/torch.compile.html){:target="_blank" rel="noopener noreferrer"}를 보면 `"max-autotune"`이 GPU에서 CUDA Graph를 기본적으로 enable한다고 설명한다. 이 option에는 아래와 같은 장점이 있다:
+
+```text
+1. 반복 inference에서 Python overhead 감소
+2. 작은 kernel launch overhead 감소 가능
+3. pointwise op fusion 가능
+4. matmul / convolution config autotuning 가능
+5. static shape inference에서 CUDA Graph replay로 overhead 감소 가능
+```
+
+하지만 아래와 같은 단점을 수반한다:
+
+```text
+1. 첫 실행 compile/autotune overhead가 큼
+2. shape나 control flow가 바뀌면 recompile 가능
+3. Python control flow와 GPU scalar condition이 있으면 graph가 끊길 수 있음
+4. profiler에서 실제 kernel이 CUDA Graph 안에 숨어 보일 수 있음
+5. max-autotune이 항상 빠른 것은 아니므로 default/reduce-overhead/no-cudagraphs ablation 필요
+```
+
+현재 관찰된 현상이 3, 4번 단점이다:
+
+```text
+GPU tensor scalar while condition
+→ CPU가 매 step 조건을 확인해야 함
+→ graph가 loop 전체를 하나로 깔끔하게 capture하기 어려움
+→ Nsight Systems에는 cudaGraphLaunch / sync / tiny D2H가 num_steps+1 패턴으로 보임
+```
+
+
+## **2nd step**
+
+우선 앞에서 발견한 GPU tensor scalar condition을 Python while 조건으로 평가하는 부분을 제거하겠다. 이 부분이 Nsight Systems 결과에서 보인 `num_steps + 1`개의 `cudaGraphLaunch`, `cudaStreamSynchronize`, tiny D2H memop 패턴과 직접 연결되는 강한 후보이기 때문이다.
+
+`sample_actions()`의 `while time >= -dt / 2:`를 `for _ in range(num_steps):`로 바꿨다. latency를 확인해보니 약 `1ms` 줄었다(약 5.1% speedup). Tail latency는 크게 안정화되었다(p95 기준 `22.733 - 20.309 = 2.424 ms` 개선). Nsight Systems의 결과는 아래와 같다:
+
+<details markdown="1">
+<summary>shell commands & result</summary>
+
+```text
+Generating SQLite file profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite from profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.nsys-rep
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/nvtx_sum.py]...
+
+ ** NVTX Range Summary (nvtx_sum):
+
+ Time (%)  Total Time (ns)  Instances   Avg (ns)     Med (ns)    Min (ns)   Max (ns)   StdDev (ns)   Style                  Range
+ --------  ---------------  ---------  -----------  -----------  ---------  ---------  -----------  -------  -----------------------------------
+     44.8        2,421,582          1  2,421,582.0  2,421,582.0  2,421,582  2,421,582          0.0  PushPop  :sample_actions_iter_0_num_steps_10
+     14.5          782,127          1    782,127.0    782,127.0    782,127    782,127          0.0  PushPop  :sample_actions_iter_1_num_steps_10
+     13.7          738,652          1    738,652.0    738,652.0    738,652    738,652          0.0  PushPop  :sample_actions_iter_4_num_steps_10
+     13.6          734,826          1    734,826.0    734,826.0    734,826    734,826          0.0  PushPop  :sample_actions_iter_3_num_steps_10
+     13.5          731,742          1    731,742.0    731,742.0    731,742    731,742          0.0  PushPop  :sample_actions_iter_2_num_steps_10
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/osrt_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain OS Runtime trace data.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/cuda_api_sum.py]...
+
+ ** CUDA API Summary (cuda_api_sum):
+
+ Time (%)  Total Time (ns)  Num Calls    Avg (ns)      Med (ns)     Min (ns)    Max (ns)   StdDev (ns)              Name
+ --------  ---------------  ---------  ------------  ------------  ----------  ----------  -----------  ----------------------------
+     97.9       93,249,397          1  93,249,397.0  93,249,397.0  93,249,397  93,249,397          0.0  cudaDeviceSynchronize
+      1.7        1,633,115          5     326,623.0     231,805.0     228,521     702,458    210,151.0  cudaGraphLaunch_v10000
+      0.4          346,485         50       6,929.7       3,935.5       3,425      64,576      9,658.1  cudaMemcpyAsync
+      0.0           31,096          1      31,096.0      31,096.0      31,096      31,096          0.0  cuProfilerStart
+      0.0            4,517          5         903.4         641.0         631       1,913        565.1  cudaStreamIsCapturing_v10000
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/cuda_gpu_kern_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain CUDA kernel data.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/cuda_gpu_mem_time_sum.py]...
+
+ ** CUDA GPU MemOps Summary (by Time) (cuda_gpu_mem_time_sum):
+
+ Time (%)  Total Time (ns)  Count  Avg (ns)  Med (ns)  Min (ns)  Max (ns)  StdDev (ns)            Operation
+ --------  ---------------  -----  --------  --------  --------  --------  -----------  ------------------------------
+    100.0           74,656     50   1,493.1   1,312.0     1,088     2,208        409.5  [CUDA memcpy Device-to-Device]
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/cuda_gpu_mem_size_sum.py]...
+
+ ** CUDA GPU MemOps Summary (by Size) (cuda_gpu_mem_size_sum):
+
+ Total (MB)  Count  Avg (MB)  Med (MB)  Min (MB)  Max (MB)  StdDev (MB)            Operation
+ ----------  -----  --------  --------  --------  --------  -----------  ------------------------------
+      9.067     50     0.181     0.000     0.000     0.602        0.278  [CUDA memcpy Device-to-Device]
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/openmp_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain OpenMP event data.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/opengl_khr_range_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain KHR Extension (KHR_DEBUG) data.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/opengl_khr_gpu_range_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain GPU KHR Extension (KHR_DEBUG) data.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/vulkan_marker_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain Vulkan Debug Extension (Vulkan Debug Util) data.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/vulkan_gpu_marker_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain GPU Vulkan Debug Extension (GPU Vulkan Debug markers) data.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/dx11_pix_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain DX11 CPU debug markers.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/dx12_gpu_marker_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain DX12 GPU debug markers.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/dx12_pix_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain DX12 CPU debug markers.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/wddm_queue_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain WDDM context data.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/um_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain CUDA Unified Memory CPU page faults data.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/um_total_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain CUDA Unified Memory CPU page faults data.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/um_cpu_page_faults_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain CUDA Unified Memory CPU page faults data.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/openacc_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain OpenACC event data.
+
+Processing [profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite] with [/usr/local/cuda-13.0/nsight-systems-2025.3.2/host-linux-x64/reports/syscall_sum.py]...
+SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10_after_forloop.sqlite does not contain syscall data.
+
+
+```
+{: style="margin-left: 1rem;" }
+
+</details>
+
+Sanity check도 완료했다. 변경 전과 후의 action 차이가 허용 범위 이내였다.
+
+| 항목                   |           Original | Minimal for-loop inplace | 판단                               |
+| -------------------- | ----------------- | ----------------------- | -------------------------------- |
+| CUDA median          |          21.271 ms |            **20.220 ms** | **약 1.05 ms 개선**                 |
+| CUDA p95             |          22.733 ms |            **20.383 ms** | **tail latency 크게 개선**           |
+| sync wall median     |          21.264 ms |            **20.231 ms** | 일관된 개선                           |
+| `cudaGraphLaunch`    | 55 calls / 5 iters |    **5 calls / 5 iters** | `11 → 1` per inference           |
+| D2H memops           | 55 calls / 5 iters |                    **0** | GPU scalar condition readback 제거 |
 
 
 

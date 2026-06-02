@@ -43,7 +43,7 @@ permalink: /project/inference-optimization/shallow-pi/nsight-systems/
 
 
 
-[지난 게시물](/project/inference-optimization/shallow-pi/shallow-pi-implementation/)에서 baseline 수치를 확인했다. 결론은 "**prefix-ish fixed cost가 지배적이고, denoise step cost는 step당 약 0.8 ms 수준이다**"였다. 이제 Nsight Systems로 bottleneck의 더 뜯어보자.
+[지난 게시물](/project/inference-optimization/shallow-pi/shallow-pi-implementation/)에서 baseline 수치를 확인했다. 결론은 "**prefix-ish fixed cost가 지배적이고, denoise step cost는 step당 약 0.8 ms 수준이다**"였다. 이제 Nsight Systems로 bottleneck을 더 뜯어보자.
 
 PyTorch Profiler로 operator table을 보는 것 대신, Nsight Systems trace를 먼저 찍는 이유는 아래와 같다:
 
@@ -52,7 +52,7 @@ PyTorch Profiler로 operator table을 보는 것 대신, Nsight Systems trace를
 3. kernel 사이 gap이 있는지, GPU가 계속 바쁜지, launch-bound인지 바로 확인 가능
 4. 이후 PyTorch Profiler / Nsight Compute를 어디에 집중할지 결정 가능
 
-그러므로 현재 목표는 **Nsight Systems로 N=1과 N=10의 compiled production timeline을 비교**하는 것이다.
+그러므로 현재 목표는 **Nsight Systems로 N=1과 N=10의 compiled model-only timeline을 비교**하는 것이다.
 
 ## **1st step**
 
@@ -513,7 +513,7 @@ SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10.sqlite does not contain 
 
 이 패턴은 `sample_actions()` 내부의 GPU tensor 기반 `while` condition evaluation이 매 denoise step마다 CUDA scalar readback을 유발한다는 가설과 정합적이다. 그리고 이것을 [shallow-$\pi$의 코드](https://github.com/icsl-Jeon/openpi/blob/a5940ac510c7f5d94918f238cfc3722be1a2c5c8/src/openpi/models_pytorch/pi0_pytorch.py#L406){:target="_blank" rel="noopener noreferrer"}나 [original $\pi_0$의 코드](https://github.com/Physical-Intelligence/openpi/blob/c23745b5ad24e98f66967ea795a07b2588ed6c79/src/openpi/models_pytorch/pi0_pytorch.py#L407){:target="_blank" rel="noopener noreferrer"}에서 실제로 확인했다. 해당 코드에는 아래의 두 핵심 요소가 있다:
 
-1. `time`와 `dt`가 CUDA tensor
+1. `time`과 `dt`가 CUDA tensor
     ```python
     dt = torch.tensor(dt, dtype=torch.float32, device=device)
     time = torch.tensor(1.0, dtype=torch.float32, device=device)
@@ -523,7 +523,7 @@ SKIPPED: profiles/nsys/shallow_pi_model_fixed_noise_N10.sqlite does not contain 
     while time >= -dt / 2:
     ```
 
-Python은 `while` loop 탈출 여부를 CPU boolean으로 결정한다. 그러면 PyTorch는 이 scalar CUDA tensor의 값을 CPU 쪽으로 가져와서 조건을 판단해야 하고, 이 과정에서 tiny Device-to-Host copy과 stream synchronization이 발생할 수 있다. 이번 Nsight Systems 결과가 그 가설을 강하게 뒷받침한다:
+Python은 `while` loop 탈출 여부를 CPU boolean으로 결정한다. 그러면 PyTorch는 이 scalar CUDA tensor의 값을 CPU 쪽으로 가져와서 조건을 판단해야 하고, 이 과정에서 tiny Device-to-Host copy와 stream synchronization이 발생할 수 있다. 이번 Nsight Systems 결과가 그 가설을 강하게 뒷받침한다:
 
 ```text
 N=1:

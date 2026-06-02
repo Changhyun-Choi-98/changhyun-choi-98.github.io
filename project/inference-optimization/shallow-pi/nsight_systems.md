@@ -4,13 +4,12 @@ title: "3. Nsight Systems profiling & further optimization"
 nav_exclude: true
 section: project
 subcategory: shallow-pi
-date: 2026-06-02
+date: 2026-06-03
 tags:
   - Korean
   - Python
   - Profiling
   - Nsight Systems
-  - Writing
 language: ko
 summary: "Nsight Systems를 이용해서 bottleneck 지점을 더 정확하게 찾고 원인 분석 및 최적화"
 math: true
@@ -44,15 +43,6 @@ permalink: /project/inference-optimization/shallow-pi/nsight-systems/
 
 
 [지난 게시물](/project/inference-optimization/shallow-pi/baseline-latency/)에서 baseline 수치를 확인했다. 결론은 "**prefix-ish fixed cost가 지배적이고, denoise step cost는 step당 약 0.8 ms 수준이다**"였다. 이제 Nsight Systems로 bottleneck을 더 뜯어보자.
-
-PyTorch Profiler로 operator table을 보는 것 대신, Nsight Systems trace를 먼저 찍는 이유는 아래와 같다:
-
-1. prefix cluster와 denoise cluster가 timeline에서 분리되어 보일 가능성이 큼
-2. N=1 trace와 N=10 trace를 비교하면 prefix one-time cost와 반복 cost를 시각적으로 분리 가능
-3. kernel 사이 gap이 있는지, GPU가 계속 바쁜지, launch-bound인지 바로 확인 가능
-4. 이후 PyTorch Profiler / Nsight Compute를 어디에 집중할지 결정 가능
-
-그러므로 현재 목표는 **Nsight Systems로 N=1과 N=10의 compiled model-only timeline을 비교**하는 것이다.
 
 ## **1st step**
 
@@ -587,11 +577,11 @@ GPU tensor scalar while condition
 ```
 
 
-## **2nd step**
+## **2nd step (`for` loop patch)**
 
 우선 앞에서 발견한 GPU tensor scalar condition을 Python while 조건으로 평가하는 부분을 제거하겠다. 이 부분이 Nsight Systems 결과에서 보인 `num_steps + 1`개의 `cudaGraphLaunch`, `cudaStreamSynchronize`, tiny D2H memop 패턴과 직접 연결되는 강한 후보이기 때문이다.
 
-`sample_actions()`의 `while time >= -dt / 2:`를 `for _ in range(num_steps):`로 바꿨다. latency를 확인해보니 약 `1ms` 줄었다(약 5.1% speedup). Tail latency는 크게 안정화되었다(p95 기준 `22.733 - 20.309 = 2.424 ms` 개선). Nsight Systems의 결과는 아래와 같다:
+`sample_actions()`의 `while time >= -dt / 2:`를 `for _ in range(num_steps):`로 바꿨다. latency를 확인해보니 약 `1ms` 줄었다(약 5.1% speedup). Tail latency는 크게 안정화되었다(p95 기준 약 `2ms` 개선). Nsight Systems의 결과는 아래와 같다:
 
 <details markdown="1">
 <summary>shell commands & result</summary>
@@ -703,6 +693,255 @@ Sanity check도 완료했다. 변경 전과 후의 action 차이가 허용 범�
 | sync wall median     |          21.264 ms |            **20.231 ms** | 일관된 개선                           |
 | `cudaGraphLaunch`    | 55 calls / 5 iters |    **5 calls / 5 iters** | `11 → 1` per inference           |
 | D2H memops           | 55 calls / 5 iters |                    **0** | GPU scalar condition readback 제거 |
+
+
+
+
+## **3rd step (`num_steps` scaling 재실행)**
+
+[지난 게시물](/project/inference-optimization/shallow-pi/baseline-latency/)에서 구한 linear fit은 아래와 같았다:
+
+```text
+T(num_steps) ≈ 14.1388 ms + 0.7950 ms × num_steps
+R² ≈ 0.984
+```
+
+이제 다음 질문을 해결한다:
+
+```text
+while→for patch가 intercept를 줄였는가?
+slope를 줄였는가?
+N=10 주변 tail jitter만 줄였는가?
+```
+
+<details markdown="1">
+<summary>shell commands & result</summary>
+```shell
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+export CUDA_VISIBLE_DEVICES=6
+export CUDA_LAUNCH_BLOCKING=0
+export UV_LINK_MODE=copy
+
+RUN_NAME=distill_l06_bf16_gb320_20260514_184612
+STEP=30000
+CKPT=./checkpoints/pi0_libero_l06/${RUN_NAME}/${STEP}
+
+mkdir -p profiles/latency
+
+for N in 1 2 4 6 8 10 12 16; do
+  echo "==== after minimal for-loop, num_steps=${N} ===="
+
+  uv run python scripts/profiling/profile_shallow_pi_latency.py \
+    --config pi0_libero_l06 \
+    --ckpt "${CKPT}" \
+    --device cuda:0 \
+    --num-steps ${N} \
+    --mode model \
+    --fixed-noise \
+    --warmup 30 \
+    --iters 100 \
+    --out-json profiles/latency/model_fixed_noise_numsteps${N}_100iters_after_forloop_inplace.json
+done
+```
+{: style="margin-left: 1rem;" }
+
+```python
+uv run python - <<'PY'
+import json
+import pathlib
+import numpy as np
+
+base = pathlib.Path("profiles/latency")
+steps = [1, 2, 4, 6, 8, 10, 12, 16]
+
+rows = []
+
+for n in steps:
+    path = base / f"model_fixed_noise_numsteps{n}_100iters_after_forloop_inplace.json"
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    rows.append({
+        "num_steps": n,
+        "cuda_median": data["cuda_event"]["median_ms"],
+        "cuda_p95": data["cuda_event"]["p95_ms"],
+        "wall_median": data["sync_wall"]["median_ms"],
+        "wall_p95": data["sync_wall"]["p95_ms"],
+    })
+
+print("num_steps,cuda_median,cuda_p95,wall_median,wall_p95")
+for r in rows:
+    print(f'{r["num_steps"]},{r["cuda_median"]:.4f},{r["cuda_p95"]:.4f},{r["wall_median"]:.4f},{r["wall_p95"]:.4f}')
+
+x = np.array([r["num_steps"] for r in rows], dtype=np.float64)
+y = np.array([r["cuda_median"] for r in rows], dtype=np.float64)
+
+b, a = np.polyfit(x, y, deg=1)
+y_hat = a + b * x
+
+ss_res = np.sum((y - y_hat) ** 2)
+ss_tot = np.sum((y - y.mean()) ** 2)
+r2 = 1.0 - ss_res / ss_tot if ss_tot > 0 else float("nan")
+
+print()
+print("Linear fit using CUDA event median:")
+print(f"  T(num_steps) ≈ {a:.4f} ms + {b:.4f} ms * num_steps")
+print(f"  intercept / prefix-ish cost: {a:.4f} ms")
+print(f"  per denoise step cost:       {b:.4f} ms")
+print(f"  R^2:                         {r2:.6f}")
+
+print()
+print("Residuals:")
+for n, yi, yh in zip(x, y, y_hat):
+    print(f"  N={int(n):2d}: observed={yi:.4f} ms, fitted={yh:.4f} ms, residual={yi-yh:+.4f} ms")
+PY
+```
+{: style="margin-left: 1rem;" }
+
+```
+num_steps,cuda_median,cuda_p95,wall_median,wall_p95
+1,14.4742,14.6493,14.4983,14.6487
+2,15.3308,15.5085,15.3477,15.5184
+4,16.5324,16.7055,16.5277,16.7273
+6,17.7069,17.9528,17.7119,17.9586
+8,18.9512,19.1642,18.9647,19.1770
+10,20.0278,20.2585,20.0399,20.2174
+12,21.4829,21.5398,21.4986,21.5723
+16,24.0840,24.1193,24.0871,24.1350
+
+Linear fit using CUDA event median:
+  T(num_steps) ≈ 13.9442 ms + 0.6277 ms * num_steps
+  intercept / prefix-ish cost: 13.9442 ms
+  per denoise step cost:       0.6277 ms
+  R^2:                         0.998912
+
+Residuals:
+  N= 1: observed=14.4742 ms, fitted=14.5720 ms, residual=-0.0977 ms
+  N= 2: observed=15.3308 ms, fitted=15.1997 ms, residual=+0.1311 ms
+  N= 4: observed=16.5324 ms, fitted=16.4552 ms, residual=+0.0772 ms
+  N= 6: observed=17.7069 ms, fitted=17.7106 ms, residual=-0.0037 ms
+  N= 8: observed=18.9512 ms, fitted=18.9661 ms, residual=-0.0149 ms
+  N=10: observed=20.0278 ms, fitted=20.2216 ms, residual=-0.1938 ms
+  N=12: observed=21.4829 ms, fitted=21.4770 ms, residual=+0.0058 ms
+  N=16: observed=24.0840 ms, fitted=23.9880 ms, residual=+0.0960 ms
+```
+{: style="margin-left: 1rem;" }
+
+
+</details>
+
+### **Result analysis**
+
+```text
+Before:
+T(num_steps) ≈ 14.1388 ms + 0.7950 ms × num_steps
+R² = 0.984047
+
+After minimal while→for:
+T(num_steps) ≈ 13.9442 ms + 0.6277 ms × num_steps
+R² = 0.998912
+```
+
+예상할 수 있었듯이, 2nd step에서 진행했던 patch의 주요 효과는 prefix fixed cost 감소가 아니라 denoise step당 반복 overhead 감소이다.
+
+| 항목               |         Before |              After |                            변화 |
+| ---------------- | -------------: | -----------------: | ----------------------------: |
+| intercept        |     14.1388 ms |         13.9442 ms |                    -0.1946 ms |
+| per-step slope   | 0.7950 ms/step | **0.6277 ms/step** | **-0.1673 ms/step, 약 -21.0%** |
+| R²               |         0.9840 |         **0.9989** |                scaling 훨씬 선형화 |
+| N=10 CUDA median |     22.2703 ms |     **20.0278 ms** |                **-2.2425 ms** |
+| N=10 CUDA p95    |     24.2536 ms |     **20.2585 ms** |                **-3.9951 ms** |
+
+추가적으로, scaling trend가 훨씬 깨끗해졌는데 이는 아래와 같이 유추해볼 수 있다:
+
+```text
+Before:
+  tensor while condition 때문에 graph replay / sync / D2H pattern이 num_steps별로 지저분하게 섞임
+
+After:
+  for-loop로 graph structure가 안정화되어 latency model이 거의 선형화됨
+```
+
+### **policy-level latency check**
+
+<details markdown="1">
+<summary>shell command & result</summary>
+```shell
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+export CUDA_VISIBLE_DEVICES=6
+export CUDA_LAUNCH_BLOCKING=0
+export UV_LINK_MODE=copy
+
+RUN_NAME=distill_l06_bf16_gb320_20260514_184612
+STEP=30000
+CKPT=./checkpoints/pi0_libero_l06/${RUN_NAME}/${STEP}
+
+mkdir -p profiles/latency
+
+uv run python scripts/profiling/profile_shallow_pi_latency.py \
+  --config pi0_libero_l06 \
+  --ckpt "${CKPT}" \
+  --device cuda:0 \
+  --num-steps 10 \
+  --mode policy \
+  --warmup 30 \
+  --iters 100 \
+  --out-json profiles/latency/policy_numsteps10_100iters_after_forloop_inplace.json
+```
+{: style="margin-left: 1rem;" }
+
+```json
+{
+  "config": "pi0_libero_l06",
+  "ckpt": "./checkpoints/pi0_libero_l06/distill_l06_bf16_gb320_20260514_184612/30000",
+  "device": "cuda:0",
+  "num_steps": 10,
+  "mode": "policy",
+  "fixed_noise": false,
+  "warmup": 30,
+  "iters": 100,
+  "cuda_event": {
+    "count": 100,
+    "mean_ms": 22.842999000549316,
+    "median_ms": 22.828096389770508,
+    "p90_ms": 22.956928253173828,
+    "p95_ms": 22.97929573059082,
+    "p99_ms": 22.9935359954834,
+    "min_ms": 22.764095306396484,
+    "max_ms": 22.99625587463379
+  },
+  "sync_wall": {
+    "count": 100,
+    "mean_ms": 22.830096010075067,
+    "median_ms": 22.815933500169194,
+    "p90_ms": 22.845122002763674,
+    "p95_ms": 22.857551000925014,
+    "p99_ms": 22.92256800137693,
+    "min_ms": 22.768767001252854,
+    "max_ms": 24.132639002345968
+  }
+}
+```
+{: style="margin-left: 1rem;" }
+
+</details>
+
+model-only 개선이 policy-level로 잘 전달된 것을 확인해볼 수 있다.
+
+| Metric           | Original policy | After minimal `for` patch |            개선 |
+| ---------------- | --------------: | ------------------------: | ------------: |
+| CUDA median      |       23.764 ms |             **22.828 ms** | **-0.936 ms** |
+| CUDA p95         |       25.102 ms |             **22.979 ms** | **-2.123 ms** |
+| Sync wall median |       23.741 ms |             **22.816 ms** | **-0.925 ms** |
+| Sync wall p95    |       25.037 ms |             **22.858 ms** | **-2.180 ms** |
+| Sync wall p99    |       26.103 ms |             **22.923 ms** | **-3.181 ms** |
+
+```text
+1. model-only speedup이 policy-level API latency에도 그대로 전달됨.
+2. median은 약 3.9% 개선.
+3. p95/p99 tail latency는 훨씬 크게 개선.
+4. policy wrapper overhead는 거의 그대로이고, sample_actions 내부 개선이 주효과.
+```
 
 
 

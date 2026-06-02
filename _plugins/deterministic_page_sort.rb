@@ -2,17 +2,6 @@ require "date"
 require "time"
 
 module DeterministicPageSort
-  LEAF_ORDER = {
-    "study:diffusion-tutorial" => 1,
-    "study:algorithm" => 2,
-    "study:system-optimization" => 3,
-    "study:inference-systems" => 4,
-    "paper:inference" => 5,
-    "paper:success-rate" => 6,
-    "project:shallow-pi" => 7,
-    "work-log:" => 8,
-  }.freeze
-
   def sort_pages_by_date(input)
     sort_pages(input, include_leaf_order: false)
   end
@@ -24,11 +13,74 @@ module DeterministicPageSort
   private
 
   def sort_pages(input, include_leaf_order:)
+    leaf_order = include_leaf_order ? sidebar_leaf_order : {}
+
     Array(input).sort_by do |item|
       key = [-timestamp_for(page_value(item, "date"))]
-      key << LEAF_ORDER.fetch(leaf_key(item), 999) if include_leaf_order
+      key << leaf_order.fetch(leaf_key(item), 999) if include_leaf_order
       key + [sort_text(page_value(item, "title")), page_value(item, "url").to_s]
     end
+  end
+
+  def sidebar_leaf_order
+    site = liquid_site
+    site ? build_sidebar_leaf_order(site) : {}
+  end
+
+  def build_sidebar_leaf_order(site)
+    content_keys = site.pages.each_with_object({}) do |page, keys|
+      next unless page_value(page, "date")
+
+      keys[leaf_key(page)] = true
+    end
+
+    nav_pages = site.pages.select { |page| nav_page?(page) }
+    pages_by_title = nav_pages.each_with_object({}) do |page, pages|
+      pages[page_value(page, "title")] ||= page
+    end
+
+    nav_pages
+      .select { |page| content_keys[leaf_key_for_nav_page(page)] }
+      .sort_by { |page| sidebar_sort_key(page, pages_by_title) }
+      .each_with_index
+      .to_h { |page, index| [leaf_key_for_nav_page(page), index] }
+  end
+
+  def liquid_site
+    @context.registers[:site] if defined?(@context) && @context
+  end
+
+  def nav_page?(page)
+    page_value(page, "title") &&
+      page_value(page, "date").nil? &&
+      page_value(page, "nav_exclude") != true
+  end
+
+  def leaf_key_for_nav_page(page)
+    segments = page_value(page, "url").to_s.split("/").reject(&:empty?)
+    return "" if segments.empty?
+
+    section = segments.first
+    subcategory = segments.length == 1 ? "" : segments.last
+    "#{section}:#{subcategory}"
+  end
+
+  def sidebar_sort_key(page, pages_by_title)
+    ancestor_chain(page, pages_by_title).flat_map do |nav_page|
+      [
+        nav_order(page_value(nav_page, "nav_order")),
+        sort_text(page_value(nav_page, "title")),
+        page_value(nav_page, "url").to_s,
+      ]
+    end
+  end
+
+  def ancestor_chain(page, pages_by_title)
+    [
+      pages_by_title[page_value(page, "grand_parent")],
+      pages_by_title[page_value(page, "parent")],
+      page,
+    ].compact.uniq
   end
 
   def leaf_key(item)
@@ -74,6 +126,12 @@ module DeterministicPageSort
 
   def sort_text(value)
     value.to_s.downcase
+  end
+
+  def nav_order(value)
+    value.nil? ? 999 : value.to_f
+  rescue ArgumentError, TypeError
+    999
   end
 end
 

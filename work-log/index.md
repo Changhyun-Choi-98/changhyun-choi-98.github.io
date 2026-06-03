@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Work Log
-nav_order: 7
+nav_order: 5
 has_toc: false
 permalink: /work-log/
 ---

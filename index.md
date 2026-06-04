@@ -17,7 +17,7 @@ Building robust real-time AI for real-world robots
 </h1>
 
 <p style="font-size: 1.05rem; line-height: 1.6; margin: 0 auto; max-width: 720px;">
-A technical portfolio and notes archive on <strong>robot intelligence</strong> and <strong>inference systems</strong>
+A research notes archive on <strong>robot intelligence</strong> and <strong>real-time inference systems</strong>
 </p>
 
 </div>

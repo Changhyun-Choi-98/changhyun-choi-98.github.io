@@ -8,6 +8,7 @@ date: 2026-05-21
 tags:
   - Korean
   - VLA
+  - auxiliary model training
 language: ko
 summary: "π0-style flow-matching dVLA의 replanning latency를 lightweight draft와 flow-consistency verification으로 줄이는 speculative inference framework"
 math: true

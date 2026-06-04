@@ -8,6 +8,7 @@ date: 2026-05-29
 tags:
   - Korean
   - VLA
+  - scheduler training
 language: ko
 summary: "VLA가 매 control step마다 전부 “생각”하지 않고, 현재 로봇 phase가 안정적인지/민감한지를 보고 Vision-LLM과 action head 계산을 동적으로 재사용하는 plug-in inference scheduler"
 math: true

@@ -9,6 +9,7 @@ tags:
   - Korean
   - real-world
   - VLA
+  - fine-tuning
 language: ko
 summary: "데이터 수집·teleoperation·runtime·failure analysis 루프를 설계해서 pretrained π0.5를 실제 공장 포장 작업에 배포하는 시도, 그리고 거기서 얻은 교훈들"
 math: true

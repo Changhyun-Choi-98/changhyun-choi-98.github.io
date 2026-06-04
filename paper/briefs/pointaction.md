@@ -8,7 +8,9 @@ date: 2026-06-03
 tags:
   - Korean
   - WAM
+  - success-rate
   - fine-tuning
+  - component-scratch-training
 language: ko
 summary: "pretrained video diffusion model이 RGB뿐 아니라 temporally consistent XYZ pointmap까지 생성하게 만들고, 이 3D point dynamics를 embodiment-specific diffusion action decoder가 action chunk로 변환"
 math: true

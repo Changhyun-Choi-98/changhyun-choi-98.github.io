@@ -9,6 +9,7 @@ tags:
   - Korean
   - VLA
   - inference-time
+  - training-free
 language: ko
 summary: "action chunking robot policy에서 고정 execution horizon 대신, predicted action chunk의 low-speed valley를 phase boundary로 사용해 매 query마다 실행 길이를 동적으로 선택하는 training-free test-time execution 방법"
 math: true

@@ -8,7 +8,8 @@ date: 2026-06-02
 tags:
   - Korean
   - VLA
-  - reasoning
+  - success-rate
+  - fine-tuning
 language: ko
 summary: "VLA의 reasoning을 자연어 CoT가 아니라, 다른 VLA instance도 consume할 수 있는 WAE-regularized Gaussian continuous reasoning interface로 정의"
 math: true

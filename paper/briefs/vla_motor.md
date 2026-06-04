@@ -8,7 +8,7 @@ date: 2026-06-02
 tags:
   - Korean
   - VLA
-  - success rate
+  - success-rate
   - fine-tuning
 language: ko
 summary: "training distribution에서 멀고 서로 중복되지 않는 테스트 케이스로 VLA 실패를 적극적으로 찾고, 그 실패 trajectory를 VLM agent가 성공 trajectory로 고쳐 fine-tuning data로 쓰는 failure-driven VLA enhancement framework"

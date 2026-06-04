@@ -9,6 +9,7 @@ tags:
   - Korean
   - VLA
   - inference-time
+  - training-free
 language: ko
 summary: "last denoising step들에서 clean-action estimate들의 variance를 future action별 stability proxy로 사용해, 안정적인 action prefix만 실행하고 고분산 구간 전에 replan"
 math: true

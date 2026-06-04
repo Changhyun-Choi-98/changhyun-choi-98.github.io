@@ -9,7 +9,7 @@ tags:
   - Korean
   - Python
   - Profiling
-  - Nsight Systems
+  - Nsight-Systems
 language: ko
 summary: "Nsight Systems를 이용해서 bottleneck 지점을 더 정확하게 찾고 원인 분석 및 최적화"
 math: true

@@ -8,7 +8,7 @@ date: 2026-05-28
 tags:
   - Korean
   - WAM
-  - scheduler training
+  - scheduler-training
 language: ko
 summary: "WAM이 매번 미래 영상을 끝까지 denoise하지 않고, 현재 로봇 상태에 따라 “여기서 멈출지”와 “얼마나 크게 건너뛸지”를 결정해 full-denoising WAM 대비 success-latency tradeoff를 개선하는 state-adaptive video denoising scheduler"
 math: true

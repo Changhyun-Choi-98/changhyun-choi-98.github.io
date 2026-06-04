@@ -4,7 +4,7 @@ title: "C++ Coding Test Pitfalls"
 nav_exclude: true
 section: study
 subcategory: algorithm
-date: 2026-05-26
+date: 2026-06-04
 tags:
   - English
   - C++
@@ -21,5 +21,23 @@ permalink: /study/algorithm/cpp-pitfalls/
 
 1. Unlike Python, C++ distinguishes between double quotes and single quotes.
     - In C++, `"a"` is not a character literal; it is an ordinary string literal, and its type is `const char[2]`.
+2. C++ operator precedence
+```cpp
+  () [] . ->        // strongest
+  ! ~ ++ --         // unary operators
+  * / %
+  + -
+  << >>
+  < <= > >=
+  == !=
+  &
+  ^
+  |
+  &&   // logical AND
+  ||   // logical OR
+  ?:
+  = += -= ...
+  ,    // weakest
+```
 
 {% include comments.html %}

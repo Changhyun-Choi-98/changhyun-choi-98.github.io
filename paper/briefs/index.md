@@ -9,6 +9,6 @@ permalink: /paper/briefs/
 
 # Briefs
 
-Short paper notes for 3-line summaries or reading memos
+Short paper notes
 
 {% include content-list.html section="paper" subcategory="briefs" %}

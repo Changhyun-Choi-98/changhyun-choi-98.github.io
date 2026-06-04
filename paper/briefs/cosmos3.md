@@ -9,7 +9,7 @@ tags:
   - Korean
   - WAM
   - success-rate
-  - Foundation-Model
+  - foundation-Model
 language: ko
 summary: "language, image, video, audio, action을 하나의 Mixture-of-Transformers (MoT) 기반 omnimodal world model로 통합해, VLM·video generator·forward/inverse dynamics·robot policy를 하나의 Physical AI backbone으로 다루는 NVIDIA의 대규모 foundation model"
 math: true

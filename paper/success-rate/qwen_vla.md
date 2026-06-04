@@ -8,7 +8,7 @@ date: 2026-06-01
 tags:
   - Korean
   - VLA
-  - Foundation-Model
+  - foundation-Model
 language: ko
 summary: "Qwen3.5 VLM + DiT flow-matching action decoder / embodiment-aware prompt / joint pretraining → generalist VLA (manipulation, navigation, human egocentric motion, trajectory prediction)"
 math: true

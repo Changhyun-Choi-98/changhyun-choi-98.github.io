@@ -9,7 +9,7 @@ tags:
   - Korean
   - WAM
   - success-rate
-  - Foundation-Model
+  - foundation-Model
 language: ko
 summary: "action generation, video prediction, action-conditioned evaluation을 하나의 shared video diffusion backbone 위에서 통합한 manipulation framework"
 math: true

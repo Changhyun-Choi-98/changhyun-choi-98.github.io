@@ -17,3 +17,4 @@ Notes on papers I have read
 - [Inference](/paper/inference/)
 - [Success Rate](/paper/success-rate/)
 - [Briefs](/paper/briefs/)
+- [Weekly Review](/paper/weekly-review/)

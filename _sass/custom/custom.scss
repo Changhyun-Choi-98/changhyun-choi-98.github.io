@@ -82,6 +82,25 @@
   }
 }
 
+@include mq(lg) {
+  .side-bar {
+    width: $nav-width;
+    min-width: $nav-width;
+  }
+
+  .side-bar + .main {
+    max-width: none;
+    margin-left: $nav-width;
+    margin-right: 0;
+  }
+}
+
+@media (min-width: 75rem) {
+  body:has(.post-scroll-nav) .main-content-wrap {
+    padding-right: calc(11rem + #{$sp-6});
+  }
+}
+
 .home-brand {
   display: flex;
   flex-direction: column;
@@ -510,7 +529,7 @@ button.post-scroll-button {
 @media (min-width: 75rem) {
   .post-scroll-nav {
     top: 50%;
-    right: max(#{$sp-3}, calc((100vw - 66.5rem) / 2 - 12rem));
+    right: $sp-3;
     bottom: auto;
     width: 11rem;
     align-items: stretch;

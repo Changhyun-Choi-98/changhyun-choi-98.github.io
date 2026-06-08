@@ -35,7 +35,7 @@ permalink: /work-log/openpi/source/codex-deep-dive/
 
 ### 2.1 π0: flow matching VLA
 
-공식 π0 블로그와 논문은 일반ist robot policy를 만들기 위해 인터넷 규모 VLM pretraining과 대규모 로봇 데이터를 결합한다고 설명한다. 논문 초록은 pretrained VLM 위에 flow matching architecture를 얹어 인터넷 규모 semantic knowledge를 상속하고, 여러 dexterous robot platform 데이터로 학습한다고 요약한다. 공식 블로그도 VLM은 원래 discrete language token을 내지만 로봇 제어는 최대 50Hz 수준의 연속 motor command가 필요하므로, diffusion 계열인 flow matching으로 continuous action output을 추가했다고 설명한다.
+공식 π0 블로그와 논문은 generalist robot policy를 만들기 위해 인터넷 규모 VLM pretraining과 대규모 로봇 데이터를 결합한다고 설명한다. 논문 초록은 pretrained VLM 위에 flow matching architecture를 얹어 인터넷 규모 semantic knowledge를 상속하고, 여러 dexterous robot platform 데이터로 학습한다고 요약한다. 공식 블로그도 VLM은 원래 discrete language token을 내지만 로봇 제어는 최대 50Hz 수준의 연속 motor command가 필요하므로, diffusion 계열인 flow matching으로 continuous action output을 추가했다고 설명한다.
 
 이 저장소의 대응은 명확하다.
 

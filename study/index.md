@@ -15,4 +15,3 @@ Study Notes
 {: .text-delta }
 
 - [Diffusion Tutorial](/study/diffusion-tutorial/)
-- [Algorithm](/study/algorithm/)

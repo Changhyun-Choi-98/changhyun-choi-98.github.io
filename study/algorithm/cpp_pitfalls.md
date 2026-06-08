@@ -4,7 +4,7 @@ title: "C++ Coding Test Pitfalls"
 nav_exclude: true
 section: study
 subcategory: algorithm
-date: 2026-06-04
+date: 2026-06-08
 tags:
   - English
   - C++
@@ -39,6 +39,10 @@ permalink: /study/algorithm/cpp-pitfalls/
   = += -= ...
   ,    // weakest
 ```
-3. Always be mindful of variable scope.
+3. Always be mindful of variable scope and type.
+
+4. Convert between `std::string` and `int`.
+    - `std::stoi(str)` for `std::string` → `int`
+    - `std::to_string(num)` for `int` → `std::string`
 
 {% include comments.html %}

@@ -39,5 +39,6 @@ permalink: /study/algorithm/cpp-pitfalls/
   = += -= ...
   ,    // weakest
 ```
+3. Always be mindful of variable scope.
 
 {% include comments.html %}

@@ -10,4 +10,4 @@ permalink: /project/paper-to-prototype-lab/
 
 # Paper-to-Prototype Lab
 
-Reproducing and extending robotics / Physical AI papers through claim-level evaluation, closed-loop testing, latency profiling, and failure analysis
+Reproducing and extending papers through claim-level evaluation, closed-loop testing, latency profiling, and failure analysis

@@ -38,11 +38,11 @@ permalink: /paper/briefs/gear-vla/
 
 ## **Summary**
 
-1. 기존 VLA는 action tokenization, 3D spatial feature, cross-embodiment learning을 각각 다루지만, **low-level trajectory token에 과적합**하거나, **3D feature가 VLM semantic space와 어긋나**거나, **robot-specific prompt/head가 shared policy representation을 오염시키**는 문제가 있다.
-2. 이 논문은 **semantically grounded + geometry-aware + embodiment-shareable action representation을 학습**하는 것이 real-world manipulation generalization의 핵심이라고 본다.
+1. 기존 VLA는 action tokenization, 3D spatial feature, cross-embodiment learning을 각각 다루지만, **low-level trajectory token에 overfitting**되거나, **3D feature가 VLM semantic space와 어긋나**거나, **robot-specific prompt/head가 shared policy representation을 오염시키**는 문제가 있다.
+2. 이 논문은 **semantically grounded + geometry-aware + embodiment-shareable action representation을 학습**하는 것이 real-world manipulation generalization의 핵심이라고 주장한다.
 3. 핵심 아이디어는 먼저 **VLM을 embodied reasoning / [FAST](https://arxiv.org/abs/2501.09747){:target="_blank" rel="noopener noreferrer"}-style action token / video-derived latent action ID로 pretrain**한 뒤, **latent action token의 K/V cache만 DiT-based continuous action expert에 넘기고 stop-gradient를 걸어 continuous action loss가 VLM backbone을 직접 업데이트하지 못하게 하는 것**이다.
 4. 여기에 **frozen 2D VLM visual pathway와 trainable VGGT 3D spatial encoder를 zero-initialized connector로 결합**하고, robot별 차이는 **embodiment-specific state projector와 embodiment-invariant relative end-effector action**으로 low-level interface에 가둔다.
-5. LIBERO 평균 98.7%, zero-shot LIBERO-Plus 88.7%, RoboTwin 2.0 clean/randomized 91.1%/89.9%, AgileX real-world bimanual 85.9%, pretraining-unseen LDT-01 lightweight adaptation 81.0%, 212 unseen object universal grasping 90.1%를 보고한다.
+5. LIBERO 평균 98.7%, zero-shot LIBERO-Plus 88.7%, RoboTwin 2.0 clean/randomized 91.1%/89.9%, AgileX real-world bimanual 85.9%, pretraining-unseen LDT-01 lightweight adaptation 81.0%, 212 unseen object universal grasping 90.1%를 달성한다.
 
 
 

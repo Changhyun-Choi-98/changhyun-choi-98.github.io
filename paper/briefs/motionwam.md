@@ -39,7 +39,7 @@ permalink: /paper/briefs/motion-wam/
 2. 동시에 **WAM**은 video dynamics prior를 policy에 넣을 수 있어 temporal coherence와 physical grounding 측면에서 유망하지만, high-dimensional video-action latent를 반복 denoising해야 해서 **real-time humanoid control에는 너무 느리다**는 문제가 있다.
 3. MotionWAM은 **Video DiT + Motion DiT의 dual-DiT 구조**를 사용하되, **fully denoised future video를 만들지 않고 Video DiT branch의 intermediate denoising feature를 single forward pass로 뽑아 Motion DiT action policy에 condition으로** 넣는다.
 4. 학습은 **Stage 1 egocentric video pretraining**, **Stage 2 cross-embodiment action post-training**, **Stage 3 Unitree G1 whole-body teleoperation fine-tuning**의 3단계로 구성되며, **output은 SONIC 기반 unified whole-body motion token과 continuous end-effector/gripper channel**로 구성된다.
-5. 실험에서는 9개 real-world Unitree G1 loco-manipulation task에서 MotionWAM이 strongest baseline인 GR00T-N1.7의 43.9% 대비 76.1% overall success rate를 달성하고, A100 기준 Cosmos Policy보다 7배 빠른 4.9 Hz chunk-wise inference frequency를 보고한다.
+5. 실험에서는 9개 real-world Unitree G1 loco-manipulation task에서 MotionWAM이 strongest baseline인 GR00T-N1.7의 43.9% 대비 76.1% overall success rate를 달성하고, A100 기준 Cosmos Policy보다 7배 빠른 4.9 Hz chunk-wise inference frequency를 달성한다.
 
 
 

@@ -15,7 +15,7 @@ comment_id: "work-log-openpi"
 permalink: /work-log/openpi/
 ---
 
-토큰이 조금 남아서 재미로 `codex gpt-5.5 xhigh`랑 `ChatGPT 5.5 Pro` 각각에 [openpi 레포지토리](https://github.com/Physical-Intelligence/openpi){:target="_blank" rel="noopener noreferrer"}를 분석해서 마크다운 파일로 만들어보라고 시켜봤다. 아직 내용을 제대로 읽어보지는 못했지만 우선 기록용으로 여기에 올린다.
+토큰이 조금 남아서 재미로 `codex gpt-5.5 xhigh`랑 `ChatGPT 5.5 Pro` 각각에 [openpi 레포지토리](https://github.com/Physical-Intelligence/openpi){:target="_blank" rel="noopener noreferrer"}를 분석해서 마크다운 파일로 만들어보라고 시켜봤다.
 
 긴 source note들은 본문에 그대로 펼치지 않고 appendix 페이지로 분리한다. 생성 주체가 섞여 있으므로 `Codex`와 `ChatGPT`를 제목과 목록에서 명시한다.
 

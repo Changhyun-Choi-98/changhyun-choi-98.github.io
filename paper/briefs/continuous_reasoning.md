@@ -27,9 +27,11 @@ permalink: /paper/briefs/continuous-reasoning/
 
 </aside>
 
+## **Overview Figure**
+
 ![cr_overview](/paper/briefs/images/cr_overview.jpg)
-*Overview*
-{: .figure-caption}
+
+## **Summary**
 
 1. 기존 language/text CoT는 task-level reasoning에는 좋지만, **robot action은 훨씬 더 fine-grained continuous control이므로 시간 granularity가 맞지 않는다**.
 2. 이 논문은 **observation/instruction에서 continuous thought**를 만들고, 이를 **WAE(Wasserstein autoencoder)-regularized Gaussian latent space**로 정규화한 뒤, chunked flow-matching action generation의 **shared reasoning context**로 사용한다.

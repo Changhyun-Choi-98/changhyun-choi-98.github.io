@@ -27,9 +27,11 @@ permalink: /paper/briefs/vla-motor/
 
 </aside>
 
+## **Overview Figure**
+
 ![vla_motor_overview](/paper/briefs/images/vla_motor_overview.png)
-*Overview*
-{: .figure-caption}
+
+## **Summary**
 
 1. VLA는 training data coverage 밖의 edge-case에서 자주 실패하므로, VLAMotor는 fused hidden state 기준으로 **training sample과의 distance가 크고 uncertainty가 높은 test case를 우선 선택**하고, redundancy elimination으로 서로 중복되는 실패 케이스를 줄인다.
 2. 선택된 failure trajectory는 **VLM-based agent**가 semantic abstraction으로 해석하고, perception/motion/interaction repair skill sequence로 바꾼 뒤 IK와 motion planning으로 **실행 가능한 성공 trajectory를 만든다**.

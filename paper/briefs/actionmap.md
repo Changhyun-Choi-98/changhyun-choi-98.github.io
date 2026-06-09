@@ -28,14 +28,14 @@ permalink: /paper/briefs/actionmap/
 
 </aside>
 
+## **Overview Figure**
 
 ![actionmap_overview](/paper/briefs/images/actionmap_overview.png)
 
 
 ![actionmap_overview_2](/paper/briefs/images/actionmap_overview_2.png)
-*Overview*
-{: .figure-caption}
 
+## **Summary**
 
 1. 기존 VLA는 backbone, dataset, training recipe는 빠르게 커졌지만, action decoder는 여전히 autoregressive token, L1 regression, flow-matching denoising처럼 **최종적으로 하나의 point action을 예측하는 구조**가 많아 action space의 spatial structure를 충분히 활용하지 못한다.
 2. 이 논문은 **end-effector action이 연속적인 기하 공간에 놓여 있고, 서로 가까운 action들이 물리적으로 비슷한 의미를 갖는다는 점을 action head 설계에 직접 넣으려** 한다.

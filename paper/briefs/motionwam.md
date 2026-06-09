@@ -29,14 +29,11 @@ permalink: /paper/briefs/motion-wam/
 
 </aside>
 
-
-
+## **Overview Figure**
 
 ![motionwam_overview](/paper/briefs/images/motionwam_overview.png)
-*Overview*
-{: .figure-caption}
 
-
+## **Summary**
 
 1. 기존 **humanoid loco-manipulation**은 보통 **high-level manipulation policy가 upper body만 세밀하게 제어하고, lower body는 low-level locomotion controller가 velocity, torso height, orientation 같은 coarse command를 추종하는 hierarchical 구조**라서 upper/lower body action space가 불일치하고 **다리가 task-driven interaction에 적극적으로 쓰이지 못한다**.
 2. 동시에 **WAM**은 video dynamics prior를 policy에 넣을 수 있어 temporal coherence와 physical grounding 측면에서 유망하지만, high-dimensional video-action latent를 반복 denoising해야 해서 **real-time humanoid control에는 너무 느리다**는 문제가 있다.

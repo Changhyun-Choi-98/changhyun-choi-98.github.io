@@ -30,12 +30,13 @@ permalink: /paper/briefs/aha-wam/
 
 </aside>
 
+## **Overview Figure**
 
 ![ahawam_overview](/paper/briefs/images/ahawam_overview.png)
 
 ![ahawam_architecture](/paper/briefs/images/ahawam_overview_2.png)
-*Overview*
-{: .figure-caption}
+
+## **Summary**
 
 1. 기존 WAM은 future video prediction과 action generation을 같은 짧은 horizon / temporal rhythm에 결합해, **video branch가 실제 제어에 덜 중요한 dense adjacent-frame variation까지 매 control step마다 처리해야 한다는 비효율**이 있었다.
 2. AHA-WAM은 **video branch는 느리지만 긴 horizon의 latent world planning**을 하고, **action branch는 빠르게 최신 observation/proprioception을 반영해 short action chunk를 실행**해야 한다는 **temporal asymmetry**를 문제의 핵심으로 본다.

@@ -29,9 +29,11 @@ permalink: /paper/briefs/3dthinkvla/
 
 </aside>
 
+## **Overview Figure**
+
 ![3dthinkvla_overview](/paper/briefs/images/3dthinkvla_overview.png)
-*Overview*
-{: .figure-caption}
+
+## **Summary**
 
 1. 기존 2D-image 기반 VLA는 semantic recognition은 강하지만, object height, relative pose, orientation, distance 같은 **3D spatial reasoning이 약해서 manipulation에서 2D semantic/action shortcut에 의존하기 쉽다**.
 2. Explicit 3D input을 쓰는 방법은 **depth/point cloud sensor나 backbone modification이 필요**하고, 단순 3D data co-training은 action prompt가 들어올 때 3D reasoning이 비활성화되는 **prompt-induced reasoning gap**을 만든다.

@@ -28,9 +28,11 @@ permalink: /paper/briefs/pointaction/
 
 </aside>
 
+## **Overview Figure**
+
 ![pointaction_overview](/paper/briefs/images/pointaction_overview.png)
-*Overview*
-{: .figure-caption}
+
+## **Summary**
 
 1. 기존 VAM(Video-Action Models)은 미래 RGB video rollout을 action reasoning trace로 쓰지만, **RGB만으로는 metric 3D motion, contact geometry, fine-grained spatial constraint가 under-specified되어 있어서 action grounding이 어렵다**.
 2. PointAction은 **RGB-XYZ joint video generation model을 학습해 dynamic 3D pointmaps를 만들고, robot-centric points를 추출**한 뒤 PointNet-style encoder + lightweight DiT diffusion decoder로 low-level action chunk를 생성한다.

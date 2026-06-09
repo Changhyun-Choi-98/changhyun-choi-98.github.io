@@ -27,9 +27,11 @@ permalink: /paper/briefs/pace/
 
 </aside>
 
+## **Overview Figure**
+
 ![pace_overview](/paper/briefs/images/pace_overview.png)
-*Overview*
-{: .figure-caption}
+
+## **Summary**
 
 1. 기존 Diffusion Policy, VLA 계열의 action chunking은 한 번 query할 때 여러 future action을 예측하지만, 그중 몇 step을 실제로 실행할지는 보통 **고정 horizon `H`**로 정한다.
 2. 논문은 이 `H`가 **task-dependent하고 non-monotonic**해서, 하나의 고정값으로는 안정적인 deployment rule이 되기 어렵다는 점을 보인다.

@@ -27,9 +27,11 @@ permalink: /paper/briefs/tau-0/
 
 </aside>
 
+## **Overview Figure**
+
 ![tau_0_overview](/paper/briefs/images/tau_0_overview.jpg)
-*Overview*
-{: .figure-caption}
+
+## **Summary**
 
 1. VAM(Video Action Model)은 current multi-view observation,  language instruction, robot state를 입력받아 **future video latent와 continuous action chunk를 함께 예측**한다.
 2. ACVS(Action-Conditioned Video Simulator)는 후보 action chunk를 condition으로 future multi-view rollout과 dense task-progress reward를 예측해, **실행 전에 action의 결과를 평가**한다.

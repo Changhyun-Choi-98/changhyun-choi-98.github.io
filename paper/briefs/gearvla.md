@@ -29,15 +29,14 @@ permalink: /paper/briefs/gear-vla/
 
 </aside>
 
+## **Overview Figure**
 
 ![gearvla_overview](/paper/briefs/images/gearvla_overview.png)
 
 
 ![gearvla_overview_2](/paper/briefs/images/gearvla_overview_2.png)
-*Overview*
-{: .figure-caption}
 
-
+## **Summary**
 
 1. 기존 VLA는 action tokenization, 3D spatial feature, cross-embodiment learning을 각각 다루지만, **low-level trajectory token에 과적합**하거나, **3D feature가 VLM semantic space와 어긋나**거나, **robot-specific prompt/head가 shared policy representation을 오염시키**는 문제가 있다.
 2. 이 논문은 **semantically grounded + geometry-aware + embodiment-shareable action representation을 학습**하는 것이 real-world manipulation generalization의 핵심이라고 본다.

@@ -29,13 +29,12 @@ permalink: /paper/briefs/grail/
 
 </aside>
 
-![grail_data](/paper/briefs/images/grail_data.jpeg)
-*Asset-Conditioned 4D HOI Generation*
-{: .figure-caption}
+## **Overview Figure**
 
+![grail_data](/paper/briefs/images/grail_data.jpeg)
 ![gail_trajectory](/paper/briefs/images/grail_trajectory.jpeg)
-*Task-General Tracking via Complementary Controller Adaptation*
-{: .figure-caption}
+
+## **Summary**
 
 1. 기존 humanoid loco-manipulation 데이터는 teleoperation, motion capture, in-the-wild video reconstruction에 의존하는데, 이는 **물리적 세팅 변경, actor instrumentation, robot operation, monocular depth/scale/contact ambiguity 때문에 scale-up이 어렵다**.
 2. GRAIL은 **“먼저 3D scene을 완전히 지정하고, 그 위에서 VFM(Video Foundation Model)이 interaction video를 만들게 한 뒤, 알려진 geometry/camera/scale/depth를 이용해 4D HOI(4D Human-Object Interaction, 시간에 따라 변하는 human pose와 object pose를 함께 복원하는 문제)를 복원한다”**는 방향으로 문제를 바꾼다.

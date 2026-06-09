@@ -27,9 +27,11 @@ permalink: /paper/briefs/oscar/
 
 </aside>
 
+## **Overview Figure**
+
 ![oscar_overview](/paper/briefs/images/oscar_overview.png)
-*Overview*
-{: .figure-caption}
+
+## **Summary**
 
 1. 기존 action-conditioned video world model은 robot policy evaluation에 쓰기 위해서는 정확한 action following, 다양한 scene/task/action coverage, cross-embodiment generalization이 필요하지만, **latent-action 방식은 action이 압축되어 spatial-temporal motion을 정밀하게 따르기 어렵고**, **dense geometry 방식은 특정 robot appearance나 embodiment에 overfit되기 쉽다**.
 2. OSCAR는 이 문제를 **2D kinematic skeleton rendering과 대규모 표준화 데이터 파이프라인(curates, filters, and deduplicates broad robotics and egocentric human datasets)으로 해결**하려고 한다.

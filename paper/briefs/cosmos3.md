@@ -27,9 +27,11 @@ permalink: /paper/briefs/cosmos3/
 
 </aside>
 
+## **Overview Figure**
+
 ![cosmos3_overview](/paper/briefs/images/cosmos3_overview.png)
-*Overview*
-{: .figure-caption}
+
+## **Summary**
 
 1. 기존 Physical AI pipeline은 VLM, video world model, VLA/WAM, forward dynamics model을 따로 붙이는 구조라서 비효율적인데, Cosmos 3는 이를 **AR Reasoner + Diffusion Generator 구조로 통합**한다.
 2. 핵심은 **AR token subsequence와 diffusion token subsequence를 한 sequence로 묶고**, Reasoner는 causal attention, Generator는 AR+DM 전체에 full attention을 하도록 설계한 **dual-tower MoT**다.
@@ -46,9 +48,6 @@ permalink: /paper/briefs/cosmos3/
 | Robot policy                    | DROID post-trained policy          |
 
 ![cosmos3_MoT](/paper/briefs/images/cosmos3_MoT.png)
-*Mixture-of-Transformers architecture*
-{: .figure-caption}
-
 
 
 

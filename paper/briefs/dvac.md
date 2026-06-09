@@ -27,9 +27,11 @@ permalink: /paper/briefs/dvac/
 
 </aside>
 
+## **Overview Figure**
+
 ![dvac_overview](/paper/briefs/images/dvac_overview.png)
-*Overview*
-{: .figure-caption}
+
+## **Summary**
 
 1. 기존 action chunking은 **fixed execution horizon**을 쓰기 때문에, free-space motion에서는 너무 자주 replan하고 contact/precision phase에서는 너무 긴 open-loop horizon로 실행할 수 있다.
 2. DVAC는 **denoising 과정의 마지막 $L$ steps에서 각 future action index $k$의 clean-action estimate variance $V\_{s}(k)$를 계산**하고, rolling statistics 기반 (adaptive) threshold $\tau_s=\mu_s+\alpha\sigma_s$를 넘어가기 전 prefix만 실행한다.

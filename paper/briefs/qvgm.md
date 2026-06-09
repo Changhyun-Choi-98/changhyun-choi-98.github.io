@@ -28,14 +28,14 @@ permalink: /paper/briefs/q-vgm/
 
 </aside>
 
+## **Overview Figure**
 
 ![qvgm_overview](/paper/briefs/images/qvgm_overview.png)
 
 
 ![qvgm_overview_2](/paper/briefs/images/qvgm_overview_2.png)
-*Overview*
-{: .figure-caption}
 
+## **Summary**
 
 1. 기존 flow-matching VLA policy는 continuous action chunk를 잘 생성하지만, **policy-gradient RL에는 tractable action likelihood가 없고**, **direct Q-maximization**은 multi-step denoising chain 전체로 critic gradient를 backpropagate해야 해서 **VLA scale에서 불안정**하다는 문제가 있다.
 2. 이 논문은 pretrained / few-shot-SFT $\pi\_{0.5}$ VLA를 추가 expert demonstration 없이 **self-generated rollout data만으로** task success가 높아지도록 **offline value-guided fine-tuning**하는 문제를 다룬다.

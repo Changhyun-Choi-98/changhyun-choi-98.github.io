@@ -28,10 +28,11 @@ permalink: /paper/briefs/flash-wam/
 
 </aside>
 
-![flash_wam_overview](/paper/briefs/images/flash_wam_overview.png)
-*Overview*
-{: .figure-caption}
+## **Overview Figure**
 
+![flash_wam_overview](/paper/briefs/images/flash_wam_overview.png)
+
+## **Summary**
 
 1. 기존 WAM은 미래 video latent와 robot action chunk를 함께 생성하기 때문에 강한 manipulation 성능을 보이지만, 매 control chunk마다 video denoising과 action denoising을 수십 step 수행해야 해서 **real-time closed-loop control**에 부적합하다.
 2. 대표 WAM인 LingBot-VA는 RoboTwin 2.0에서 **한 chunk를 생성하는 데 video 25 step, action 50 step을 사용하며 총 8.1초**가 걸린다.

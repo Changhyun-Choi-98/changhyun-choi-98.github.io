@@ -44,4 +44,4 @@ permalink: /paper/briefs/grail/
 
 
 
-{% include comments.html %}
+{% comment %}{% include comments.html %}{% endcomment %}

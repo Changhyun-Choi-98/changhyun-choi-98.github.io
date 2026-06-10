@@ -489,4 +489,4 @@ long-duration real-world deployment와 failure recovery는 열린 문제로 남�
 
 
 
-{% include comments.html %}
+{% comment %}{% include comments.html %}{% endcomment %}

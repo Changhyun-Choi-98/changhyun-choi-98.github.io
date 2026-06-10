@@ -43,4 +43,4 @@ permalink: /paper/briefs/3dthinkvla/
 
 
 
-{% include comments.html %}
+{% comment %}{% include comments.html %}{% endcomment %}

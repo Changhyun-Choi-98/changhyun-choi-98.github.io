@@ -39,4 +39,4 @@ permalink: /paper/briefs/continuous-reasoning/
 
 
 
-{% include comments.html %}
+{% comment %}{% include comments.html %}{% endcomment %}

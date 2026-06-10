@@ -42,4 +42,4 @@ permalink: /paper/briefs/flash-wam/
 
 
 
-{% include comments.html %}
+{% comment %}{% include comments.html %}{% endcomment %}

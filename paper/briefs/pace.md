@@ -39,4 +39,4 @@ permalink: /paper/briefs/pace/
 
 
 
-{% include comments.html %}
+{% comment %}{% include comments.html %}{% endcomment %}

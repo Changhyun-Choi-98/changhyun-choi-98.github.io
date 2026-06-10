@@ -39,4 +39,4 @@ permalink: /paper/briefs/dvac/
 
 
 
-{% include comments.html %}
+{% comment %}{% include comments.html %}{% endcomment %}

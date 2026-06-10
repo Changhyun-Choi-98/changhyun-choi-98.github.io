@@ -51,4 +51,4 @@ permalink: /paper/briefs/cosmos3/
 
 
 
-{% include comments.html %}
+{% comment %}{% include comments.html %}{% endcomment %}

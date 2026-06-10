@@ -47,4 +47,4 @@ permalink: /paper/briefs/motion-wam/
 
 
 
-{% include comments.html %}
+{% comment %}{% include comments.html %}{% endcomment %}

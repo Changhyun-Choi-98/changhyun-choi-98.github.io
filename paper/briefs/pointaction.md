@@ -40,4 +40,4 @@ permalink: /paper/briefs/pointaction/
 
 
 
-{% include comments.html %}
+{% comment %}{% include comments.html %}{% endcomment %}

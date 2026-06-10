@@ -45,4 +45,4 @@ permalink: /paper/briefs/q-vgm/
 
 
 
-{% include comments.html %}
+{% comment %}{% include comments.html %}{% endcomment %}

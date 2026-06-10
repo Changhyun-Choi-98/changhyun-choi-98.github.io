@@ -37,4 +37,4 @@ permalink: /work-log/openpi/
 | ChatGPT | [OpenPI Core Code Deep Dive](/work-log/openpi/source/chatgpt-core-code-deep-dive/) | `chatGPT_openpi_core_code_deep_dive_kr.md` | `model.py`, `pi0.py`, `policy.py`, `transforms.py` 중심 코드 해설 |
 | ChatGPT | [OpenPI Complete Project Guide](/work-log/openpi/source/chatgpt-complete-project-guide/) | `chatGPT_openpi_project_complete_guide_kr.md` | 모델, 코드, 학습, 추론, 서빙, 데이터 변환을 묶은 종합 가이드 |
 
-{% include comments.html %}
+{% comment %}{% include comments.html %}{% endcomment %}

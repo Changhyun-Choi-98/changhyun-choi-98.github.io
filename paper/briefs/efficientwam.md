@@ -45,4 +45,4 @@ permalink: /paper/briefs/efficient-wam/
 
 
 
-{% include comments.html %}
+{% comment %}{% include comments.html %}{% endcomment %}

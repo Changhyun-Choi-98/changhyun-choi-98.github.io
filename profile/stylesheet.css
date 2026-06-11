@@ -225,7 +225,7 @@ html[data-theme="dark"] {
 
 .profile-page .news-list > li > strong {
   color: var(--profile-text-color);
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .profile-page .news-list > ul > li {

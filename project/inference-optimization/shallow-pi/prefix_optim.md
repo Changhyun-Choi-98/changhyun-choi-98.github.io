@@ -11,7 +11,7 @@ tags:
   - Profiling
   - Writing
 language: ko
-summary: "the remaining dominant fixed cost from prefix image embedding and prefill 분석 및 해결"
+summary: "remaining dominant fixed cost from prefix and prefill 분석 및 해결"
 math: true
 comments: true
 comment_id: "project-shallow-pi-prefix-optim"

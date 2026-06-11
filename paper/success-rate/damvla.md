@@ -91,7 +91,7 @@ new sensor feedback updates buffers
 3. Action latency
     * policy가 complete synchronized observation bundle을 기다리므로 slowest modality가 action generation을 막는다.
 
-**Objective / data** 관점에서, naive high-frequency baseline인 [X-VLA100](https://arxiv.org/abs/2510.10274){:target="_blank" rel="noopener noreferrer"}은 visual observation을 100 Hz로 upsample한다. 이 경우 동일한 visual frame이 서로 다른 action label과 pairing되며, 논문의 저자들은 이것이 contradictory training signal을 만들고 policy가 small hesitant movements를 예측하게 만든다고 주장한다. 즉, control frequency를 25 Hz에서 100 Hz로 단순하게 올리는 것은 해결책이 아니다. *data alignment 자체가 action supervision을 오염시킬 수 있다.*
+**Objective / data** 관점에서, naive high-frequency baseline인 [$\text{X-VLA}\_{100}$](https://arxiv.org/abs/2510.10274){:target="_blank" rel="noopener noreferrer"}은 visual observation을 100 Hz로 upsample한다. 이 경우 동일한 visual frame이 서로 다른 action label과 pairing되며, 논문의 저자들은 이것이 contradictory training signal을 만들고 policy가 small hesitant movements를 예측하게 만든다고 주장한다. 즉, control frequency를 25 Hz에서 100 Hz로 단순하게 올리는 것은 해결책이 아니다. *data alignment 자체가 action supervision을 오염시킬 수 있다.*
 
 **Action representation / chunking** 관점에서, 기존 VLA는 heavy VLM latency 때문에 action generation rate가 낮다. action chunking은 이를 완화하지만, chunk execution 중 high-frequency force feedback이 action correction에 직접 쓰이지 않으면 contact-rich task에서 mid-chunk error를 고치지 못한다. *DAM-VLA도 이 한계를 완전히 해결하지는 않는다. 저자도 force를 “better representation”에는 쓰지만 chunk 내부 action correction에는 쓰지 않는다고 한계로 인정한다.*
 
@@ -430,7 +430,7 @@ force signal은 external F/T sensor가 아니라 Franka built-in joint-torque es
     * task당 15 trials는 real robot paper에서는 의미 있는 수치지만, confidence interval이나 significance test가 제시되지는 않는다. 특히 Socket처럼 80% 성공률인 task는 더 많은 trial에서 variance를 확인할 필요가 있다.
 
 4. **Exact training objective와 code 공개 여부가 제한적이다**
-    * 논문은 policy가 8-D action을 예측한다고 설명하지만, action loss의 정확한 수식은 명시하지 않는다. 또한 PDF 기준으로 code, dataset, checkpoint 공개 여부가 명확하지 않다.
+    * 논문은 policy가 8-D action을 예측한다고 설명하지만, action loss의 정확한 수식은 명시하지 않는다. 또한 작성일 기준으로 code, dataset, checkpoint 공개 여부가 명확하지 않다.
 
 5. **World model이나 planner는 아니다**
     * DAM-VLA는 미래 상태를 예측하거나 candidate action을 rollout해서 평가하지 않는다. Force/proprioception history를 통해 implicit contact state를 표현하지만, explicit dynamics model이나 world model은 아니다.

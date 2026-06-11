@@ -89,60 +89,95 @@ html[data-theme="dark"] {
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-a {
-  color: var(--profile-link-color);
-  text-decoration: none;
-}
-
-a:focus,
-a:hover {
-  color: var(--profile-link-hover-color);
-  text-decoration: none;
-}
-
-body {
+.profile-page {
   color: var(--profile-text-color);
   background-color: var(--profile-background-color);
 }
 
-body,
-td,
-th,
-tr,
-p,
-a {
+.profile-page *,
+.profile-page *::before,
+.profile-page *::after {
+  box-sizing: border-box;
+}
+
+.main-content .profile-page table {
+  display: table;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.main-content .profile-page .table-wrapper > table {
+  width: 100%;
+  min-width: 0;
+}
+
+.profile-page table,
+.profile-page tbody,
+.profile-page tr,
+.profile-page th,
+.profile-page td {
+  background-color: var(--profile-background-color);
+  border: 0;
+}
+
+.profile-page .table-wrapper {
+  overflow: visible;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.profile-page a {
+  overflow: visible;
+  color: var(--profile-link-color);
+  text-decoration: none;
+  text-overflow: clip;
+}
+
+.profile-page a:focus,
+.profile-page a:hover {
+  color: var(--profile-link-hover-color);
+  text-decoration: none;
+}
+
+.profile-page,
+.profile-page td,
+.profile-page th,
+.profile-page tr,
+.profile-page p,
+.profile-page a {
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 14px
 }
 
-strong {
+.profile-page strong {
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 14px;
 }
 
-heading {
+.profile-page heading {
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 22px;
 }
 
-papertitle {
+.profile-page papertitle {
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 14px;
   font-weight: 700
 }
 
-name {
+.profile-page name {
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 32px;
 }
 
-.one {
+.profile-page .one {
   width: 160px;
   height: 160px;
   position: relative;
 }
 
-.two {
+.profile-page .two {
   width: 160px;
   height: 160px;
   position: absolute;
@@ -151,13 +186,13 @@ name {
   -webkit-transition: opacity .2s ease-in-out;
 }
 
-.fade {
+.profile-page .fade {
   transition: opacity .2s ease-in-out;
   -moz-transition: opacity .2s ease-in-out;
   -webkit-transition: opacity .2s ease-in-out;
 }
 
-span.highlight {
+.profile-page span.highlight {
   display: inline-block;
   padding: 0.12em 0.35em;
   background-color: var(--profile-highlight-color);
@@ -165,30 +200,45 @@ span.highlight {
   line-height: 1.45;
 }
 
-.news-list > li {
+.profile-page .news-list,
+.profile-page .news-list > ul {
+  padding-left: 40px;
+}
+
+.profile-page .news-list > ul {
+  margin-top: 0.2em;
+  margin-bottom: 0;
+}
+
+.profile-page .news-list li::before {
+  content: none !important;
+}
+
+.profile-page .news-list > li {
   list-style-type: none;
   line-height: 1.35;
 }
 
-.news-list > li:not(:first-child) {
+.profile-page .news-list > li:not(:first-child) {
   margin-top: 0.75em !important;
 }
 
-.news-list > li > strong {
+.profile-page .news-list > li > strong {
   color: var(--profile-text-color);
   font-size: 15px;
 }
 
-.news-list > ul > li {
+.profile-page .news-list > ul > li {
   list-style-type: none;
   position: relative;
 }
 
-.news-list > ul > li::before {
-  content: "\2022";
+.profile-page .news-list > ul > li::before {
+  content: "\2022" !important;
   position: absolute;
   left: -1em;
   top: 0.72em;
+  margin-left: 0 !important;
   transform: translateY(-50%);
   color: var(--profile-text-color);
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
@@ -196,48 +246,72 @@ span.highlight {
   line-height: 1;
 }
 
-span.strong-highlight {
+.profile-page span.strong-highlight {
   font-weight: bold;
   background-color: var(--profile-strong-highlight-color);
 }
 
-html[data-theme="dark"] span.strong-highlight {
+html[data-theme="dark"] .profile-page span.strong-highlight {
   color: #000000;
 }
 
-.paper {
+.profile-page .paper {
   color: var(--profile-paper-color);
   font-weight: bold;
 }
-.project {
+.profile-page .project {
   color: var(--profile-project-color);
   font-weight: bold;
 }
-.award {
+.profile-page .award {
   color: var(--profile-award-color);
   font-weight: bold;
 }
-.other {
+.profile-page .other {
   color: var(--profile-other-color);
   font-weight: bold;
 }
 
 /* 모바일 대응: 프로필 영역 세로 배치 (텍스트 100% 위, 사진 아래) */
 @media (max-width: 768px) {
-  /* 모든 셀을 한 줄씩 세로로 배치 */
-  tr,
-  td {
+  .profile-page {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: visible;
+  }
+
+  .profile-page .table-wrapper {
     display: block !important;
     width: 100% !important;
     max-width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .profile-page table,
+  .profile-page tbody,
+  .profile-page tr,
+  .profile-page td {
+    display: contents !important;
+  }
+
+  .profile-page p,
+  .profile-page small,
+  .profile-page li,
+  .profile-page name,
+  .profile-page a {
+    max-width: 100%;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
   }
 
   /* 프로필 사진은 너무 커지지 않게 중앙 정렬 + 더 작은 너비 */
-  img.hoverZoomLink {
+  .profile-page img.hoverZoomLink {
     display: block;
     margin: 0 auto;
-    width: 50% !important;
-    max-width: 50% !important;
+    width: min(62%, 220px) !important;
+    max-width: min(62%, 220px) !important;
     height: auto;
   }
 }

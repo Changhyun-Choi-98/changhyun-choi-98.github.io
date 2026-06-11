@@ -11,3 +11,8 @@ permalink: /project/paper-to-prototype-lab/
 # Paper-to-Prototype Lab
 
 Reproducing and extending papers through claim-level evaluation, closed-loop testing, latency profiling, and failure analysis
+
+## Topics
+{: .text-delta }
+
+- [Flash-WAM](/project/paper-to-prototype-lab/flash-wam/)

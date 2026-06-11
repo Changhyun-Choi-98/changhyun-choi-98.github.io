@@ -8,7 +8,7 @@ date: 2026-06-04
 tags:
   - Korean
   - success-rate
-  - data-generation
+  - training-data
   - fine-tuning
   - auxiliary-module-training
   - sim2real

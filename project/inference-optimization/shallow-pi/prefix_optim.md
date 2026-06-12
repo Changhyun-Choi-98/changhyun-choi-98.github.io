@@ -4,7 +4,7 @@ title: "4. Prefix / Prefill Bottleneck Breakdown"
 nav_exclude: true
 section: project
 subcategory: shallow-pi
-date: 2026-06-11
+date: 2026-06-12
 tags:
   - Korean
   - Python

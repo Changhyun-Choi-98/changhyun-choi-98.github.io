@@ -384,7 +384,33 @@ IMAGE_KEYS = (
 
 즉 `image_2`는 `right_wrist_0_rgb`이다.
 
-지금 실험을 진행하고 있는 LIBERO input transform은 이 image를 실제 image가 아니라 `np.zeros_like(base_image)`로 채우고, `pi0` 모델에서는 mask를 `False`로 둔다. 그런데 `PI0Pytorch.embed_prefix()`는 image mask를 보기 전에 모든 image에 대해 먼저 `self.paligemma_with_expert.embed_image(img)`를 호출한다. 이 부분을 제거하면 valid token은 유지하면서 prefix length를 줄일 수 있을 것이다.
+지금 실험을 진행하고 있는 LIBERO input transform은 이 image를 실제 image가 아니라 `np.zeros_like(base_image)`로 채우고, `pi0` 모델에서는 mask를 `False`로 둔다. 그런데 `PI0Pytorch.embed_prefix()`는 image mask를 보기 전에 모든 image에 대해 먼저 `self.paligemma_with_expert.embed_image(img)`를 호출한다. 이 부분을 제거하면 valid token은 유지하면서 prefix length를 줄일 수 있을 것이다. (이것을 발견하고 논문을 다시 확인했는데, 이 작업을 저자들도 했던 것 같은데 공식 repository에는 반영을 하지 않은 것 같다..) 해당 작업을 진행한 결과는 아래와 같다. 전체 policy latency 기준:
+
+```text
+23.74 ms → 18.49 ms
+약 5.25 ms 감소
+약 22.1% latency reduction
+약 1.28× speedup
+```
+
+model-only 기준:
+
+```text
+Before image skip, after for-loop: 20.03 ms
+After image skip:                  15.89 ms
+약 4.14 ms 감소
+약 20.7% latency reduction
+약 1.26× speedup
+```
+
+지금까지 진행한 optimization 누적 효과는 다음과 같다:
+
+| State                   | Sync wall median |           p95 | 해석       |
+| -------------------- | --------------- | ------------ | -------- |
+| Original policy      |        23.741 ms |     25.037 ms | 최초 기준    |
+| After `while→for`    |        22.816 ms |     22.858 ms | tail 안정화 |
+| After `image_2 skip` |    **18.487 ms** | **18.526 ms** | 큰 폭 개선   |
+
 
 
 

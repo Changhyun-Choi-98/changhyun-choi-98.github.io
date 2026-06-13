@@ -4,9 +4,10 @@ title: "1. Runpod Server Manifest"
 nav_exclude: true
 section: project
 subcategory: flash-wam
-date: 2026-06-12
+date: 2026-06-13
 tags:
   - English
+  - Korean
 language: en
 summary: "public-safe Runpod GPU server snapshot after initial setup"
 math: true
@@ -14,6 +15,14 @@ comments: true
 comment_id: "project-flash-wam-runpod-setting"
 permalink: /project/paper-to-prototype-lab/flash-wam/runpod-setting/
 ---
+
+<aside class="series-preface" markdown="1">
+
+* The paper reports latency on L40S, but due to RunPod availability constraints, this project was conducted on an **A100-SXM4-80GB**. Therefore, the latency results in this project should be interpreted not as a hardware-exact reproduction of the paper’s latency results, but as **independent real-time profiling** in an A100 environment.
+
+* 논문은 L40S 기준 latency를 보고하지만, Runpod availability 문제로 본 프로젝트는 **A100-SXM4-80GB**에서 수행했다. 따라서 본 프로젝트의 latency 결과는 paper latency의 hardware-exact reproduction이 아니라, A100 환경에서의 **independent real-time profiling**으로 해석한다.
+
+</aside>
 
 
 ## TL;DR

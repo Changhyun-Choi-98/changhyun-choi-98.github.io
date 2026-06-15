@@ -4,10 +4,9 @@ title: "1. Runpod Server Manifest"
 nav_exclude: true
 section: project
 subcategory: flash-wam
-date: 2026-06-13
+date: 2026-06-15
 tags:
   - English
-  - Korean
 language: en
 summary: "public-safe Runpod GPU server snapshot after initial setup"
 math: true
@@ -16,74 +15,57 @@ comment_id: "project-flash-wam-runpod-setting"
 permalink: /project/paper-to-prototype-lab/flash-wam/runpod-setting/
 ---
 
-<aside class="series-preface" markdown="1">
-
-* The paper reports latency on L40S, but due to Runpod availability constraints, this project was conducted on an **A100-SXM4-80GB**. Therefore, the latency results in this project should be interpreted not as a hardware-exact reproduction of the paper’s latency results, but as **independent real-time profiling** in an A100 environment.
-
-* 논문은 L40S 기준 latency를 보고하지만, Runpod availability 문제로 본 프로젝트는 **A100-SXM4-80GB**에서 수행했다. 따라서 본 프로젝트의 latency 결과는 paper latency의 hardware-exact reproduction이 아니라, A100 환경에서의 **independent real-time profiling**으로 해석한다.
-
-</aside>
-
 
 ## TL;DR
 
 This is a public-safe, one-time server snapshot collected from inside the current Runpod GPU server after initial setup. It records automatically verifiable hardware, storage, OS, CUDA, Python, PyTorch, and key ML package information. Pricing, billing metadata, region, template name, SSH details, public IP addresses, credentials, project repositories, checkpoints, datasets, and experiment results are intentionally excluded.
-
-## Generation Metadata
-
-| Item | Value |
-| --- | --- |
-| Generated at UTC | 2026-06-12T23:41:24Z |
-| Generated at local time | 2026-06-12T23:41:24+00:00 |
-| Manifest version | public-server-manifest-v1 |
-| Snapshot note | One-time server snapshot created after initial Runpod setup. |
 
 ## Hardware Summary
 
 | Item | Value | Source |
 | --- | ---: | --- |
 | GPU count | 1 | auto-detected |
-| GPU model | NVIDIA A100-SXM4-80GB | auto-detected |
-| VRAM per GPU | 80.0 GiB (81920 MiB) | auto-detected |
-| NVIDIA Driver | 570.124.06 | auto-detected |
-| CUDA Version from nvidia-smi | 12.8 | auto-detected |
-| CPU model | AMD EPYC 7343 16-Core Processor | auto-detected |
-| vCPU count | 64 | auto-detected |
-| System RAM | 503Gi | auto-detected |
-| /workspace storage | 2.1P | auto-detected |
+| GPU model | NVIDIA L40S | auto-detected |
+| VRAM per GPU | 45.0 GiB (46,068 MiB) | auto-detected |
+| NVIDIA Driver | 550.127.05 | auto-detected |
+| CUDA Version from nvidia-smi | 12.4 | auto-detected |
+| CPU model | AMD EPYC 7702 64-Core Processor | auto-detected |
+| vCPU count | 256 | auto-detected |
+| System RAM | 1.0Ti | auto-detected |
+| /workspace storage | 311T total, 141T available | auto-detected |
 
 ## GPU Details
 
 | GPU | Model | VRAM | Driver | CUDA from nvidia-smi | Power Limit | PCI Bus ID |
 | ---: | --- | ---: | --- | --- | ---: | --- |
-| 0 | NVIDIA A100-SXM4-80GB | 80.0 GiB (81920 MiB) | 570.124.06 | 12.8 | 500.0 W | 00000000:C1:00.0 |
+| 0 | NVIDIA L40S | 45.0 GiB (46,068 MiB) | 550.127.05 | 12.4 | 350 W | 00000000:24:00.0 |
 
 ## CPU Details
 
 | Item | Value |
 | --- | ---: |
 | Architecture | x86_64 |
-| CPU model | AMD EPYC 7343 16-Core Processor |
-| vCPU count | 64 |
+| CPU model | AMD EPYC 7702 64-Core Processor |
+| vCPU count | 256 |
 | Sockets | 2 |
-| Cores per socket | 16 |
+| Cores per socket | 64 |
 | Threads per core | 2 |
-| CPU max MHz | 3940.6250 |
+| CPU max MHz | 2183.5930 |
 
 ## Memory
 
 | Item | Value |
 | --- | ---: |
-| Total RAM | 503Gi |
-| Used RAM | 26Gi |
-| Available RAM | 464Gi |
+| Total RAM | 1.0Ti |
+| Used RAM | 52Gi |
+| Available RAM | 947Gi |
 
 ## Storage
 
 | Mount | Size | Used | Available | Use% | Filesystem |
 | --- | ---: | ---: | ---: | ---: | --- |
-| / | 80G | 1.5G | 79G | 2% | overlay |
-| /workspace | 2.1P | 1.4P | 736T | 66% | fuse |
+| / | 300G | 1.1G | 299G | 1% | overlay |
+| /workspace | 311T | 171T | 141T | 55% | fuse |
 | /dev/shm | 58G | 0 | 58G | 0% | tmpfs |
 
 ## Operating System
@@ -93,7 +75,7 @@ This is a public-safe, one-time server snapshot collected from inside the curren
 | OS | Ubuntu 22.04.5 LTS |
 | OS ID | ubuntu |
 | OS version | 22.04 |
-| Kernel release | 6.8.0-52-generic |
+| Kernel release | 5.15.0-97-generic |
 | Machine architecture | x86_64 |
 
 ## Python Environment
@@ -102,24 +84,24 @@ This is a public-safe, one-time server snapshot collected from inside the curren
 | --- | --- |
 | Python | 3.11.10 |
 | Python executable | /usr/bin/python |
-| pip | 24.2 |
+| pip | pip 24.2 (python 3.11) |
 
 ## CUDA / PyTorch Runtime
 
 | Item | Value |
 | --- | --- |
 | PyTorch | 2.4.1+cu124 |
-| CUDA available in PyTorch | True |
+| CUDA available in PyTorch | true |
 | PyTorch CUDA version | 12.4 |
 | cuDNN | 90100 |
 | PyTorch CUDA device count | 1 |
-| NVCC | release 12.4, build 12.4.131 |
+| NVCC | release 12.4, build V12.4.131 |
 
 ## PyTorch CUDA Devices
 
 | Device | Name | Total Memory | Compute Capability |
 | ---: | --- | ---: | --- |
-| 0 | NVIDIA A100-SXM4-80GB | 79.3 GiB | 8.0 |
+| 0 | NVIDIA L40S | 44.5 GiB (45,589 MiB) | 8.9 |
 
 ## Key Package Versions
 
@@ -149,6 +131,7 @@ This is a public-safe, one-time server snapshot collected from inside the curren
 - This manifest is intended to be safe for public blog publication.
 - Pricing, billing type, region, data center, template name, public IP address, SSH port, credentials, API tokens, project repositories, checkpoints, datasets, and experiment results are intentionally excluded.
 - Project-specific reproducibility metadata should be documented separately in each project report.
+
 
 
 

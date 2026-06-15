@@ -15,4 +15,4 @@ Reproducing and extending papers through claim-level evaluation, closed-loop tes
 ## Topics
 {: .text-delta }
 
-- [Flash-WAM](/project/paper-to-prototype-lab/flash-wam/)
+- [Realtime-VLA FLASH](/project/paper-to-prototype-lab/realtime-vla-flash/)

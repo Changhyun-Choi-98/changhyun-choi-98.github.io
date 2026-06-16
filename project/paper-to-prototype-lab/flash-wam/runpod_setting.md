@@ -16,11 +16,11 @@ permalink: /project/paper-to-prototype-lab/realtime-vla-flash/runpod-setting/
 ---
 
 
-## TL;DR
+## **TL;DR**
 
 This is a public-safe, one-time server snapshot collected from inside the current Runpod GPU server after initial setup. It records automatically verifiable hardware, storage, OS, CUDA, Python, PyTorch, and key ML package information. Pricing, billing metadata, region, template name, SSH details, public IP addresses, credentials, project repositories, checkpoints, datasets, and experiment results are intentionally excluded.
 
-## Hardware Summary
+## **Hardware Summary**
 
 | Item | Value | Source |
 | --- | ---: | --- |
@@ -34,13 +34,13 @@ This is a public-safe, one-time server snapshot collected from inside the curren
 | System RAM | 1.0Ti | auto-detected |
 | /workspace storage | 378T total, 125T available | auto-detected |
 
-## GPU Details
+## **GPU Details**
 
 | GPU | Model | VRAM | Driver | CUDA from nvidia-smi | Power Limit | PCI Bus ID |
 | ---: | --- | ---: | --- | --- | ---: | --- |
 | 0 | NVIDIA L40S | 46068 MiB | 580.159.03 | 13.0 | 262.00 W | 00000000:C3:00.0 |
 
-## CPU Details
+## **CPU Details**
 
 | Item | Value |
 | --- | ---: |
@@ -52,7 +52,7 @@ This is a public-safe, one-time server snapshot collected from inside the curren
 | Threads per core | 2 |
 | CPU max MHz | 3764.2019 MHz |
 
-## Memory
+## **Memory**
 
 | Item | Value |
 | --- | ---: |
@@ -60,7 +60,7 @@ This is a public-safe, one-time server snapshot collected from inside the curren
 | Used RAM | 40Gi |
 | Available RAM | 966Gi |
 
-## Storage
+## **Storage**
 
 | Mount | Size | Used | Available | Use% | Filesystem |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -68,7 +68,7 @@ This is a public-safe, one-time server snapshot collected from inside the curren
 | /workspace | 378T | 253T | 125T | 67% | fuse |
 | /dev/shm | 58G | 0 | 58G | 0% | tmpfs |
 
-## Operating System
+## **Operating System**
 
 | Item | Value |
 | --- | --- |
@@ -78,7 +78,7 @@ This is a public-safe, one-time server snapshot collected from inside the curren
 | Kernel release | 6.17.0-29-generic |
 | Machine architecture | x86_64 |
 
-## Python Environment
+## **Python Environment**
 
 | Item | Value |
 | --- | --- |
@@ -86,7 +86,7 @@ This is a public-safe, one-time server snapshot collected from inside the curren
 | Python executable | /usr/local/bin/python |
 | pip | 25.2 |
 
-## CUDA / PyTorch Runtime
+## **CUDA / PyTorch Runtime**
 
 | Item | Value |
 | --- | --- |
@@ -97,13 +97,13 @@ This is a public-safe, one-time server snapshot collected from inside the curren
 | PyTorch CUDA device count | 1 |
 | NVCC | release 12.8, build V12.8.93 |
 
-## PyTorch CUDA Devices
+## **PyTorch CUDA Devices**
 
 | Device | Name | Total Memory | Compute Capability |
 | ---: | --- | ---: | --- |
 | 0 | NVIDIA L40S | 44.39 GiB | 8.9 |
 
-## Key Package Versions
+## **Key Package Versions**
 
 | Package | Version |
 | --- | --- |
@@ -125,7 +125,7 @@ This is a public-safe, one-time server snapshot collected from inside the curren
 | safetensors | not installed |
 | xformers | not installed |
 
-## Publication Notes
+## **Publication Notes**
 
 - This manifest includes only information automatically detected from inside the server/container.
 - This manifest is intended to be safe for public blog publication.

@@ -39,7 +39,7 @@ permalink: /paper/briefs/qwen-robotmanip/
 ## **Summary**
 
 
-1. 기존 VLA 모델들은 LIBERO, RoboTwin 같은 standard in-domain benchmark에서는 높은 점수를 보이지만, **다른 embodiment, 다른 camera, 다른 scene, 다른 instruction으로 넘어가면 일반화가 급격히 약해지는 문제**가 있다.
+1. 기존 VLA 모델들은 LIBERO, RoboTwin 같은 standard in-domain benchmark에서는 높은 점수를 보이지만, **다른 embodiment, 다른 camera, 다른 scene, 다른 instruction으로 넘어가면 generalization이 급격히 약해지는 문제**가 있다.
 2. 이 논문은 **로봇 데이터가 embodiment, coordinate frame, action space, teleoperation setup별로 서로 달라서 단순히 데이터를 많이 섞는 것만으로는 scaling law가 생기지 않는다**는 문제를 다룬다.
 3. 핵심 아이디어는 **alignment first, then scale**로, canonical 80D state-action vector, per-dimension binary mask, camera-frame delta EEF pose, structured embodiment prompt, in-context policy adaptation을 통해 **여러 robot morphology의 데이터를 하나의 일관된 물리 표현으로 맞춘 뒤 대규모 pretraining을 수행**하는 것이다.
 4. 모델은 [Qwen3.5-4B](https://qwen.ai/blog?id=qwen3.5){:target="_blank" rel="noopener noreferrer"} / [Qwen-VL](https://arxiv.org/abs/2511.21631){:target="_blank" rel="noopener noreferrer"} 계열 **vision-language backbone과 flow-matching DiT action expert**로 구성되며, **manipulation data와 vision-language data를 dual-stream으로 co-training**하고, **downstream domain에서는 SFT 또는 mixed post-training으로 adaptation**한다.

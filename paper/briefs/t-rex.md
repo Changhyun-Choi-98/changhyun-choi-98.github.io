@@ -13,6 +13,7 @@ tags:
   - fine-tuning
   - auxiliary-module-training
   - training-data
+  - MoE
 language: ko
 summary: "tactile-free human egocentric pretraining으로 얻은 visuomotor prior를 tactile-rich robot mid-training으로 contact dynamics에 맞춘 뒤, slow action expert와 fast tactile expert를 cascaded flow matching으로 연결해 action chunk 내부에서도 tactile feedback에 반응하는 tactile-reactive dexterous VLA"
 math: true

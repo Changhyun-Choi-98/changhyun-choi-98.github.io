@@ -16,3 +16,6 @@ vendor/
 
 # Temporary files
 tmp.md
+paper/briefs/template.md
+paper/inference/template.md
+paper/success-rate/template.md

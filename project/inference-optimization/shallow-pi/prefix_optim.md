@@ -10,7 +10,7 @@ tags:
   - Python
   - Profiling
 language: ko
-summary: "prefix fixed cost를 image embedding과 prefill 단계로 분해한 뒤, LIBERO에서 mask 처리된 right-wrist image branch가 여전히 vision tower를 통과하는 낭비를 찾아 제거하고 policy latency를 23.74ms에서 18.49ms로 줄인 과정"
+summary: "prefix fixed cost를 image embedding과 prefill 단계로 분해한 뒤, LIBERO에서 mask 처리된 right-wrist image branch가 여전히 vision tower를 통과하는 낭비를 찾아 제거"
 math: true
 comments: true
 comment_id: "project-shallow-pi-prefix-optim"

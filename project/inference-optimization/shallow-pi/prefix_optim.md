@@ -1,17 +1,16 @@
 ---
 layout: post
-title: "4. Prefix / Prefill Bottleneck Breakdown"
+title: "4. Prefix Fixed-Cost Breakdown and Masked Image Skip"
 nav_exclude: true
 section: project
 subcategory: shallow-pi
-date: 2026-06-12
+date: 2026-06-17
 tags:
   - Korean
   - Python
   - Profiling
-  - Writing
 language: ko
-summary: "remaining dominant fixed cost from prefix and prefill 분석 및 해결"
+summary: "prefix fixed cost를 image embedding과 prefill 단계로 분해한 뒤, LIBERO에서 mask 처리된 right-wrist image branch가 여전히 vision tower를 통과하는 낭비를 찾아 제거하고 policy latency를 23.74ms에서 18.49ms로 줄인 과정"
 math: true
 comments: true
 comment_id: "project-shallow-pi-prefix-optim"
@@ -412,7 +411,36 @@ After image skip:                  15.89 ms
 | After `image_2 skip` |    **18.487 ms** | **18.526 ms** | 큰 폭 개선   |
 
 
+이 상태에서 scaling을 통해 linear regression을 수행한 결과는 아래와 같다:
 
+| 상태                  |     Intercept |              Slope |
+| ------------------- | ------------: | -----------------: |
+| original            |    14.1388 ms |     0.7950 ms/step |
+| after `while→for`   |    13.9442 ms |     0.6277 ms/step |
+| after `image2 skip` | **9.7422 ms** | **0.6125 ms/step** |
+
+
+```text
+while→for:
+  denoise step당 반복 overhead를 줄임
+
+image2 skip:
+  prefix fixed cost를 크게 줄임
+```
+
+다시 policy stage를 breakdown한 결과는 아래와 같다:
+
+| Stage                   |    Median | Full 대비 |
+| ----------------------- | --------: | ------: |
+| `sample_actions`        | 15.806 ms |  86.61% |
+| `observation_from_dict` |  1.941 ms |  10.64% |
+| `tensorize_h2d`         |  0.214 ms |   1.17% |
+| `input_transform`       |  0.120 ms |   0.66% |
+| `to_cpu_numpy`          |  0.098 ms |   0.54% |
+| `output_transform`      |  0.079 ms |   0.43% |
+
+
+즉 아직도 main bottleneck은 `sample_actions()`이다. 하지만 `observation_from_dict`도 이제 충분히 커졌다. `Observation.from_dict()`는 uint8 torch image를 float32로 변환하고 `NHWC → NCHW` permute 및 `[-1, 1]` scaling을 수행한다. 이 작업이 모든 image key에 대해 수행된다.
 
 
 

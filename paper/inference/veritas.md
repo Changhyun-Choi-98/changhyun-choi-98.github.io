@@ -13,7 +13,7 @@ tags:
   - fine-tuning
   - Writing
 language: ko
-summary: "pretrained generalist robot policy를 stochastic generator로 두고, VLM 기반 visual verifier로 여러 action chunk 중 가장 그럴듯한 후보를 inference-time에 선택한 뒤, 성공한 verifier-guided rollout을 다시 behavior cloning으로 fine-tuning하는 “test-time steering + autonomous data flywheel” method"
+summary: "pretrained generalist robot policy를 stochastic action generator로 사용하고, geometric verifier로 Best-of-N action chunk를 선택한 뒤, 성공한 verified rollout을 BC fine-tuning data로 재사용하는 inference-time steering + autonomous policy improvement framework"
 math: true
 comments: true
 comment_id: "paper-veritas"
@@ -41,7 +41,7 @@ permalink: /paper/inference/veritas/
 2. 이 논문은 **추가 human demonstration 없이, 배포 중인 robot policy가 자신의 경험에서 성공 trajectory를 만들고 이를 학습 데이터로 재사용하는 self-improvement 문제**를 다룬다.
 3. 핵심 아이디어는 **pretrained policy를 여러 action chunk를 샘플링하는 generator로 보고, VLM이 만든 pixel-space waypoint trace를 기준으로 candidate action을 평가하는 gradient-free visual verifier를 붙여 Best-of-N action selection을 수행**하는 것이다.
 4. **Inference 때는 policy parameter를 고정하고 `sample → verify → select → execute`를 반복**하며, 이후 **성공한 verified rollout만 모아 $\mathcal{D}\_{\text{auto}}$를 만들고 standard behavior cloning objective로 policy를 fine-tuning**한다.
-5. 실험에서는 simulation과 real-world DROID setup에서 inference-time steering이 base policy보다 성공률을 높이고, verified self-generated data로 fine-tuning한 policy가 human expert demonstration과 비슷한 data efficiency를 보인다.
+5. 실험에서는 SIMPLER simulation과 real-world DROID setup에서 inference-time steering이 base policy보다 성공률을 높이며, 제한된 4개 real-world task에서 verified self-generated data가 human expert demonstration과 유사하거나 일부 budget에서는 더 나은 data efficiency를 보인다.
 
 ### **Closed-loop control pipeline에서의 위치**
 
@@ -88,7 +88,34 @@ Robot behavior 변화:
   장기적으로는 verifier가 고른 행동 패턴이 policy weight에 distill된다.
 ```
 
+VERITAS의 핵심은 pretrained VLA policy를 deterministic controller가 아니라 **stochastic action generator**로 사용하는 것이다. 매 decision step마다 policy는 현재 observation $o_t$와 instruction $l$을 조건으로 $N$개의 action chunk를 샘플링한다.
 
+$$
+\mathbf{a}^{(i)}_{t:t+H} \sim \pi_\theta(\cdot \mid o_t, l), \quad i = 1,\dots,N
+$$
+
+각 candidate action chunk는 visual verifier $V$(e.g., VLMs, geometric constraints, or learned value models)에 의해 score된다.
+
+$$
+v_i = V(o_t, \mathbf{a}^{(i)}_{t:t+H}, l)
+$$
+
+그 후 가장 높은 score를 받은 action chunk만 실제 robot에서 실행한다.
+
+$$
+i^\star = \arg\max_i v_i, \quad
+\mathbf{a}^{\star}_{t:t+H} = \mathbf{a}^{(i^\star)}_{t:t+H}
+$$
+
+이 단계에서는 policy parameter $\theta$를 업데이트하지 않는다. 따라서 online success-rate gain은 학습이 아니라 **test-time compute**에서 나온다.
+
+실행이 성공하면 해당 trajectory는 $\mathcal{D}_{\text{auto}}$에 저장되고, 이후 standard behavior cloning objective로 base policy를 fine-tuning한다.
+
+$$
+\theta' \leftarrow \arg\min_\theta
+\mathbb{E}_{\mathcal{D}_{\text{auto}}}
+[-\log \pi_\theta(\mathbf{a}^{\star}_{t:t+H} \mid o_t, l)]
+$$
 
 
 ## **Experiments**

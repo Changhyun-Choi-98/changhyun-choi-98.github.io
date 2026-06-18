@@ -2,7 +2,7 @@
 layout: default
 title: Briefs
 parent: Paper
-nav_order: 4
+nav_order: 1
 has_toc: false
 permalink: /paper/briefs/
 ---

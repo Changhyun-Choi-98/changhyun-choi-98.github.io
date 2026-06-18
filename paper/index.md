@@ -14,7 +14,7 @@ Notes on papers I have read
 ## Topics
 {: .text-delta }
 
+- [Briefs](/paper/briefs/)
 - [Inference](/paper/inference/)
 - [Success Rate](/paper/success-rate/)
-- [Briefs](/paper/briefs/)
 - [Weekly Review](/paper/weekly-review/)

@@ -22,6 +22,11 @@
     height: auto;
   }
 
+  main:has(> .post-header) img {
+    box-sizing: border-box;
+    border: 1px solid #000000;
+  }
+
   .figure-caption {
     margin-top: -$sp-3;
     color: mix($body-text-color, $body-background-color, 70%);
@@ -308,6 +313,12 @@ html[data-theme="dark"] .sidebar-social-link-github img {
 }
 
 html[data-theme="dark"] {
+  .main-content {
+    main:has(> .post-header) img {
+      border-color: #ffffff;
+    }
+  }
+
   .side-bar {
     background-color: #000000;
   }

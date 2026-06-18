@@ -39,7 +39,7 @@ permalink: /project/inference-optimization/shallow-pi/prefix-optim/
 
 이 서버는 여러 사용자가 함께 쓰는 공용 GPU 서버이므로, 전체 시스템을 독점한 dedicated benchmark 환경은 아니다. 따라서 이번 profiling에서는 실행 GPU를 1개의 L40S로 고정하고, 해당 GPU는 실험 중 단독으로 사용하기로 합의했다. 다만 CPU, memory, storage I/O, OS background load는 다른 사용자의 작업 영향을 받을 수 있으므로, 이후 latency 수치는 절대적인 서버 최대 성능이라기보다 shared-server 환경에서의 병목 분석용 측정값으로 해석한다.
 
-
+---
 
 [지난 게시물](/project/inference-optimization/shallow-pi/nsight-systems/)에서 Nsight Systems 분석으로 발견한 첫 번째 bottleneck은 prefix/prefill 자체가 아니라, denoise loop 내부의 CUDA tensor while-condition이 만든 per-step synchronization pattern이었다. `while time >= -dt / 2`를 `for range(num_steps)`로 바꾸자 `num_steps + 1`개의 graph launch / sync / D2H 패턴이 사라졌고, `T(N)`의 slope가 0.795 ms/step에서 0.628 ms/step으로 줄었다.
 

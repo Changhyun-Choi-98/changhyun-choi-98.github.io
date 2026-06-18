@@ -37,12 +37,12 @@ permalink: /project/inference-optimization/shallow-pi/shallow-pi-implementation/
 
 </aside>
 
-[Shallow-π의 공식 구현체](https://github.com/icsl-Jeon/openpi){:target="_blank" rel="noopener noreferrer"}를 이용해서 [π0](https://arxiv.org/abs/2410.24164){:target="_blank" rel="noopener noreferrer"}를 distill한 버전인 Shallow-π를 구현했다. 
+[Shallow-$\pi$의 공식 구현체](https://github.com/icsl-Jeon/openpi){:target="_blank" rel="noopener noreferrer"}를 이용해서 [$\pi_{0}$](https://arxiv.org/abs/2410.24164){:target="_blank" rel="noopener noreferrer"}를 distill한 버전인 Shallow-π를 구현했다.
 
-이전의 distillation과 비교되는 Shallow-π의 대략적인 컨셉은 다음 사진과 같다:
+이전의 distillation과 비교되는 Shallow-$\pi$의 대략적인 컨셉은 다음 사진과 같다:
 
-![Shallow-π concept](/project/inference-optimization/shallow-pi/images/scope.png)
-*Figure source: [Shallow-π: Knowledge Distillation for Flow-based VLAs](https://arxiv.org/abs/2601.20262){:target="_blank" rel="noopener noreferrer"}.*
+![Shallow-$\pi$ concept](/project/inference-optimization/shallow-pi/images/scope.png)
+*Figure source: [Shallow-$\pi$: Knowledge Distillation for Flow-based VLAs](https://arxiv.org/abs/2601.20262){:target="_blank" rel="noopener noreferrer"}.*
 {: .figure-caption}
 
 GPU VRAM을 효율적으로 사용하기 위해서 BF16 데이터 타입을 사용했고, 하나의 GPU에 batch size가 64까지 올라가는 것을 확인하여 5개의 GPU로 batch size 320으로 distillation을 진행했다(총 30,000 step). Distillation 동안 수집한 metric 정보는 다음과 같다(다른 연구실 인원들과 같이 쓰는 서버이기 때문에, 학습 도중에 다른 workload들이 생겼다가 없어졌다가 했을 것이다):

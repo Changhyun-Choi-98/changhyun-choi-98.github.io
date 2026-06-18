@@ -61,50 +61,154 @@ image_1_embed ≈ 5.85 ms
 핵심은 [`embed_prefix()`](https://github.com/icsl-Jeon/openpi/blob/a5940ac510c7f5d94918f238cfc3722be1a2c5c8/src/openpi/models_pytorch/pi0_pytorch.py#L186){:target="_blank" rel="noopener noreferrer"}의 image processing block을 아래 구조로 수정하는 것이다:
 
 <details markdown="1">
-<summary><code>pi0_pytorch.py</code>의 <code>embed_prefix()</code>에서 img processing block 수정 부분</summary>
-```python
-# Process images
-image_items = []
-for image_idx, (img, img_mask) in enumerate(zip(images, img_masks, strict=True)):
-    # LIBERO pi0 uses a zero-filled, masked right wrist image.
-    if self.libero_skip_right_wrist_image and image_idx == 2:
-        continue
-    image_items.append((image_idx, img, img_mask))
+<summary><code>pi0_pytorch.py</code>의 <code>embed_prefix()</code>에서 img processing block 수정</summary>
+```shell
+uv run python - <<'PY'
+from pathlib import Path
 
-use_batched_image_embed = (
-    self.libero_batch_valid_images
-    and not self.training
-    and len(image_items) > 1
-)
+path = Path("src/openpi/models_pytorch/pi0_pytorch.py")
+text = path.read_text()
 
-def image_embed_func(img):
-    return self.paligemma_with_expert.embed_image(img)
+start = text.index("    def embed_prefix(")
+end = text.index("    def embed_suffix(", start)
 
-if use_batched_image_embed:
-    # Concatenate valid image slots along the batch dimension.
-    # For batch size B and K valid image slots:
-    #   each image: [B, C, H, W]
-    #   batched:    [K*B, C, H, W]
-    bsize = image_items[0][1].shape[0]
-    batched_imgs = torch.cat([item[1] for item in image_items], dim=0)
+new_function = '''    def embed_prefix(
+        self,
+        images,
+        img_masks,
+        lang_tokens,
+        lang_masks,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Embed image and language inputs for the PaliGemma prefix."""
 
-    batched_img_emb = self._apply_checkpoint(image_embed_func, batched_imgs)
-    img_embs = torch.split(batched_img_emb, bsize, dim=0)
+        embs = []
+        pad_masks = []
+        att_masks = []
 
-    for img_emb, (_, _, img_mask) in zip(img_embs, image_items, strict=True):
-        bsize, num_img_embs = img_emb.shape[:2]
-        embs.append(img_emb)
-        pad_masks.append(img_mask[:, None].expand(bsize, num_img_embs))
-        att_masks += [0] * num_img_embs
+        # Collect image slots to be processed.
+        image_items = []
+        for image_idx, (img, img_mask) in enumerate(
+            zip(images, img_masks, strict=True)
+        ):
+            # LIBERO pi0 uses a zero-filled, mask=False right-wrist slot.
+            if (
+                getattr(self, "libero_skip_right_wrist_image", False)
+                and image_idx == 2
+            ):
+                continue
 
-else:
-    for _, img, img_mask in image_items:
-        img_emb = self._apply_checkpoint(image_embed_func, img)
+            image_items.append((image_idx, img, img_mask))
 
-        bsize, num_img_embs = img_emb.shape[:2]
-        embs.append(img_emb)
-        pad_masks.append(img_mask[:, None].expand(bsize, num_img_embs))
-        att_masks += [0] * num_img_embs
+        def image_embed_func(img):
+            return self.paligemma_with_expert.embed_image(img)
+
+        use_batched_image_embed = (
+            getattr(self, "libero_batch_valid_images", False)
+            and not self.training
+            and len(image_items) > 1
+        )
+
+        if use_batched_image_embed:
+            batch_sizes = {int(img.shape[0]) for _, img, _ in image_items}
+            if len(batch_sizes) != 1:
+                raise ValueError(
+                    f"All image slots must have the same batch size, got {batch_sizes}"
+                )
+
+            batch_size = next(iter(batch_sizes))
+
+            # Preserve image-slot ordering:
+            # [all samples of image_0, all samples of image_1, ...].
+            batched_images = torch.cat(
+                [img for _, img, _ in image_items],
+                dim=0,
+            )
+
+            batched_image_embeddings = self._apply_checkpoint(
+                image_embed_func,
+                batched_images,
+            )
+
+            image_embeddings = torch.split(
+                batched_image_embeddings,
+                batch_size,
+                dim=0,
+            )
+
+            for image_embedding, (_, _, image_mask) in zip(
+                image_embeddings,
+                image_items,
+                strict=True,
+            ):
+                bsize, num_image_tokens = image_embedding.shape[:2]
+
+                embs.append(image_embedding)
+                pad_masks.append(
+                    image_mask[:, None].expand(bsize, num_image_tokens)
+                )
+                att_masks += [0] * num_image_tokens
+
+        else:
+            for _, image, image_mask in image_items:
+                image_embedding = self._apply_checkpoint(
+                    image_embed_func,
+                    image,
+                )
+
+                bsize, num_image_tokens = image_embedding.shape[:2]
+
+                embs.append(image_embedding)
+                pad_masks.append(
+                    image_mask[:, None].expand(bsize, num_image_tokens)
+                )
+                att_masks += [0] * num_image_tokens
+
+        # Language processing must remain unconditional and outside
+        # both image-embedding branches.
+        def language_embed_func(tokens):
+            language_embedding = (
+                self.paligemma_with_expert.embed_language_tokens(tokens)
+            )
+            embedding_dim = language_embedding.shape[-1]
+            return language_embedding * math.sqrt(embedding_dim)
+
+        language_embedding = self._apply_checkpoint(
+            language_embed_func,
+            lang_tokens,
+        )
+
+        embs.append(language_embedding)
+        pad_masks.append(lang_masks)
+
+        num_language_tokens = language_embedding.shape[1]
+        att_masks += [0] * num_language_tokens
+
+        prefix_embeddings = torch.cat(embs, dim=1)
+        prefix_pad_masks = torch.cat(pad_masks, dim=1)
+
+        prefix_attention_masks = torch.tensor(
+            att_masks,
+            dtype=torch.bool,
+            device=prefix_pad_masks.device,
+        )
+
+        bsize = prefix_pad_masks.shape[0]
+        prefix_attention_masks = prefix_attention_masks[None, :].expand(
+            bsize,
+            len(att_masks),
+        )
+
+        return (
+            prefix_embeddings,
+            prefix_pad_masks,
+            prefix_attention_masks,
+        )
+
+'''
+
+path.write_text(text[:start] + new_function + text[end:])
+print("Replaced embed_prefix() in:", path)
+PY
 ```
 {: style="margin-left: 1rem;" }
 

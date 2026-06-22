@@ -20,6 +20,29 @@ Building robust real-time AI for real-world robots
 A research notes archive on <strong>robot intelligence</strong> and <strong>real-time inference systems</strong>
 </p>
 
+<style>
+.status-note {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0.75rem auto 0;
+  max-width: 720px;
+  font-weight: 600;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  display: inline-block;
+  color: #a94442;
+  background: #fff5f5;
+}
+@media (prefers-color-scheme: dark) {
+  .status-note { color: #e07878; background: rgba(169, 68, 66, 0.18); }
+}
+[data-theme="dark"] .status-note { color: #e07878; background: rgba(169, 68, 66, 0.18); }
+</style>
+
+<p class="status-note">
+Currently on a short break between finishing my master's and my next role &mdash; traveling and recharging.
+</p>
+
 </div>
 
 <div class="home-brand">

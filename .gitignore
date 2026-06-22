@@ -14,6 +14,9 @@ _site/
 .bundle/
 vendor/
 
+# Claude Code
+.claude/
+
 # Temporary files
 tmp.md
 paper/briefs/template.md

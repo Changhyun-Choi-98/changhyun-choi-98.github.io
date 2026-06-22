@@ -4,12 +4,11 @@ title: "5. Valid Image Embedding Batching"
 nav_exclude: true
 section: project
 subcategory: shallow-pi
-date: 2026-06-18
+date: 2026-06-22
 tags:
   - Korean
   - Python
   - Profiling
-  - Writing
 language: ko
 summary: "observation image를 각각 embed하지 말고 한번에 embedding을 구해서 나중에 split"
 math: true
@@ -213,6 +212,25 @@ PY
 {: style="margin-left: 1rem;" }
 
 </details>
+
+실행 결과는 아래와 같다:
+
+| 상태                        |  Model-only median |      Policy median |
+| ------------------------- | -----------------: | -----------------: |
+| `while→for` + image2 skip |          15.886 ms |          18.487 ms |
+| + valid-image batching    |      **14.425 ms** |      **16.992 ms** |
+| 추가 감소                     | **1.461 ms, 9.2%** | **1.496 ms, 8.1%** |
+
+
+최초 baseline과 비교하면 아래과 같다:
+
+```text
+Model-only: 22.270 ms → 14.425 ms
+            35.2% latency reduction, 1.54× speedup
+
+Policy:     23.741 ms → 16.992 ms
+            28.4% latency reduction, 1.40× speedup
+```
 
 
 {% comment %}{% include comments.html %}{% endcomment %}

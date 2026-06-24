@@ -36,7 +36,7 @@ permalink: /paper/briefs/univiewvla/
 
 1. 기존 multiview manipulation은 추가 physical camera를 배치해 training–inference camera configuration을 맞추거나 explicit 3D reconstruction을 수행해야 하며, 두 방식 모두 **deployment cost**와 **scalability** 문제가 있다.
 2. 이 논문은 **standard agent-view와 wrist-view만 사용하면서도 occluded action-critical cue와 미래 scene evolution을 policy에 제공**하는 것을 목표로 한다.
-3. 핵심 아이디어는 **pretrained autoregressive UniVLA를 auxiliary workspace view의 next-frame VQ token을 예측하도록 post-train하고, 이후 future auxiliary view token과 [FAST action token](https://arxiv.org/abs/2501.09747){:target="_blank" rel="noopener noreferrer"}을 한 sequence로 생성하게 만드는 것**이다.
+3. 핵심 아이디어는 **pretrained autoregressive [UniVLA](https://arxiv.org/abs/2506.19850){:target="_blank" rel="noopener noreferrer"}를 auxiliary workspace view의 next-frame VQ token을 예측하도록 post-train하고, 이후 future auxiliary view token과 [FAST action token](https://arxiv.org/abs/2501.09747){:target="_blank" rel="noopener noreferrer"}을 한 sequence로 생성하게 만드는 것**이다.
 4. **Dense auxiliary view의 625개 token 중 consecutive-frame VQ embedding 변화가 큰 16개만 학습 대상으로 사용**하고, **inference에서는 각 후보 시점으로부터 얻은 action-token entropy를 비교해 가장 낮은 시점을 30 timestep마다 선택**한다.
 5. LIBERO 95.8%, CALVIN ABCD→D 4.60을 기록했으며, 별도 occlusion simulation task에서는 40.0%에서 73.3%, 두 real-robot task 평균에서는 33.4 percentage point 향상을 보였다.
 

@@ -40,7 +40,7 @@ permalink: /paper/briefs/flowdpg/
 
 1. 기존 flow matching robot policy에 DDPG-style actor update를 적용하려면 final action에 대한 critic gradient를 multi-step ODE 전체로 backpropagation해야 하므로, **training memory와 연산량이 solver step 수에 따라 증가**하고 Jacobian product 때문에 **gradient explosion/vanishing**이 발생할 수 있다.
 2. 이 논문은 **flow policy의 multi-modal action-generation 능력을 유지하면서도, ODE BPTT 없이 critic의 action gradient를 actor에 전달하는 offline-to-online RL**을 목표로 한다.
-3. 핵심 아이디어는 **임의의 flow timestep t에서 velocity predictor 한 번으로 clean action $\hat{a}$를 추정하고, $\nabla\_{a}Q(s,\hat{a})$ 방향으로 이를 이동시켜 value-improved action target $a^*$를 만든 뒤 해당 target velocity를 flow field에 L2 regression**하는 것이다.
+3. 핵심 아이디어는 **임의의 flow timestep $t$에서 velocity predictor 한 번으로 clean action $\hat{a}$를 추정하고, $\nabla\_{a}Q(s,\hat{a})$ 방향으로 이를 이동시켜 value-improved action target $a^*$를 만든 뒤 해당 target velocity를 flow field에 L2 regression**하는 것이다.
 4. 모델은 **[DINOv2](https://arxiv.org/abs/2304.07193){:target="_blank" rel="noopener noreferrer"} 기반 multi-view visual backbone, DiT flow actor, [SARM](https://arxiv.org/abs/2509.25358){:target="_blank" rel="noopener noreferrer"} stage-aware reward model, [IQL](https://arxiv.org/abs/2110.06169){:target="_blank" rel="noopener noreferrer"} value network 및 [twin critics](https://arxiv.org/abs/1802.09477){:target="_blank" rel="noopener noreferrer"}로 구성**되며, **offline demonstration 학습 후 real-world rollout을 수집하여 actor와 critic을 asynchronous하게 계속 업데이트**한다.
 5. dual-Franka AirPods assembly에서 BC의 64%보다 28 percentage points 높은 92% end-to-end success를 얻었고, strongest reported RL baselines의 80%보다 12 points 높았지만, 평가는 하나의 robot platform과 하나의 task family에 국한된다. 
 

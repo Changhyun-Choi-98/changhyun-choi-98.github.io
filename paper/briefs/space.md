@@ -53,7 +53,7 @@ permalink: /paper/briefs/space/
     \quad+\quad
     \text{robot realization: }\Delta p_t^{\text{target}}\rightarrow u_t$$
 
-    * 기존 policy가 이 두 문제를 하나의 o_t\rightarrow u_t mapping으로 학습했다면, SPACE는 semantic/task-level motion과 robot-specific actuation을 분리한다.
+    * 기존 policy가 이 두 문제를 하나의 $o_t \rightarrow u_t$ mapping으로 학습했다면, SPACE는 semantic/task-level motion과 robot-specific actuation을 분리한다.
 * **Cartesian state delta만으로는 충분하지 않다** 
     * 논문에서 state delta를 controller에 직접 전달한 경우 모든 cross-embodiment task에서 성공률이 0%였다. 실제 controller가 delta command를 완벽하게 추종하지 않기 때문에 Action Adapter가 필수적이다.  
 * **Action Adapter는 full dynamics model보다 adaptive inverse actuation model에 가깝다** 

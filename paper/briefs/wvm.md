@@ -49,7 +49,7 @@ permalink: /paper/briefs/wvm/
 * World model의 역할
     * inference-time rollout이나 MPC를 수행하는 것이 아니라, future-video prediction으로 학습된 latent representation을 value head가 읽는다.
 * Action-free scaling
-    * action label 없이 video와 task description만으로 학습할 수 있어 EgoDex 같은 human egocentric video까지 활용할 수 있다.
+    * action label 없이 video와 task description만으로 학습할 수 있어 [EgoDex](https://arxiv.org/abs/2505.11709){:target="_blank" rel="noopener noreferrer"} 같은 human egocentric video까지 활용할 수 있다.
 * Downstream 역할 
     * WVM은 recorded action chunk가 실행된 뒤 관찰된 progress 증가량을 계산해 imitation-learning sample을 weighting한다. 따라서 본 실험에서는 post-hoc offline critic이다.
 * 핵심 비판 

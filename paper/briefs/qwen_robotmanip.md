@@ -11,6 +11,7 @@ tags:
   - foundation-model
   - VLA
   - training-data
+  - cross-embodiment
 language: ko
 summary: "Qwen-VL 기반 VLA에 canonical state/action alignment, camera-frame EEF action, in-context policy adaptation, Human-to-Robot synthesis를 결합해 heterogeneous robot manipulation data를 coherent하게 scale하고 OOD task/scene·instruction·cross-embodiment generalization을 끌어올린 robot manipulation foundation model"
 math: true

@@ -10,6 +10,7 @@ tags:
   - success-rate
   - training-data
   - auxiliary-module-training
+  - cross-embodiment
 language: ko
 summary: "egocentric human manipulation video를 digital twin 기반으로 변환해, robot observation video와 실행 가능한 로봇 action trajectory를 함께 생성하고, 이를 이용해 real-robot dexterous visuomotor policy를 학습하는 human-video-to-robot-demo data engine"
 math: true

@@ -13,6 +13,7 @@ tags:
   - WAM
   - fine-tuning
   - training-free
+  - cross-embodiment
 language: ko
 summary: "VLA/WAM policy를 새 task마다 다시 fine-tuning하지 않고, 저비용 pool embodiment demonstration을 retrieval pool에 추가한 뒤 frozen policy가 매 control step마다 retrieved trajectory를 조건으로 action chunk를 생성하게 만든 test-time task adaptation method"
 math: true

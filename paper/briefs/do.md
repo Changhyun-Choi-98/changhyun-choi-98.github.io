@@ -10,6 +10,7 @@ tags:
   - success-rate
   - training-data
   - training-free
+  - cross-embodiment
 language: ko
 summary: "monocular RGB human manipulation video를 4D hand–object trajectory로 복원하고, pretrained SAM 3D를 training-free guided flow sampling으로 object tracker처럼 재활용한 뒤, MuJoCo Warp의 dynamics-aware sampling optimization으로 22-DoF Sharpa Wave hand가 실행할 수 있는 robot trajectory로 변환하는 offline robot-data engine"
 math: true

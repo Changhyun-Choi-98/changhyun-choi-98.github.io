@@ -11,6 +11,7 @@ tags:
   - VLA
   - fine-tuning
   - auxiliary-module-training
+  - cross-embodiment
 language: ko
 summary: "VLA가 robot-specific control command 대신 실제로 달성해야 할 6-DoF Cartesian end-effector displacement를 예측하게 하고, target robot마다 선형 Action Adapter를 offline calibration과 online LMS로 적응시켜 cross-embodiment·cross-hardware·deployment dynamics shift에 강한 execution interface를 만든다"
 math: true

@@ -10,6 +10,7 @@ tags:
   - inference-time
   - training-free
   - diffusion-policy
+  - cross-embodiment
 language: ko
 summary: "Frozen task-space diffusion policy의 DDIM sampling noise를 무작위로 뽑는 대신, robot reachability·collision·controller trackability를 만족하도록 최적화하여 cross-embodiment deployment를 수행하는 inference-time constrained diffusion method"
 math: true

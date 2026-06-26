@@ -11,6 +11,7 @@ tags:
   - VLA
   - fine-tuning
   - training-data
+  - cross-embodiment
 language: ko
 summary: "대규모 egocentric human video를 robot-compatible pseudo-action으로 변환하고, camera-space action / morphology conditioning / time-aligned chunking / reliability-aware auxiliary loss를 결합해 human + robot + simulation 데이터를 함께 VLA pretraining에 쓰는 unified VLA pretraining framework"
 math: true

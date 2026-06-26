@@ -12,6 +12,7 @@ tags:
   - fine-tuning
   - auxiliary-module-training
   - component-scratch-training
+  - cross-embodiment
 language: ko
 summary: "Qwen2.5-VL 기반 VLA에 latent action token K/V cache-conditioned stop-gradient DiT flow action expert, VGGT 기반 3D spatial encoder, relative end-effector action 기반 embodiment canonicalization을 결합해 unseen object / background shift / pretraining-unseen robot embodiment transfer를 개선하는 geometry-aware manipulation policy"
 math: true

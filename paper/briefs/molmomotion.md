@@ -10,6 +10,7 @@ tags:
   - success-rate
   - foundation-model
   - training-data
+  - cross-embodiment
 language: ko
 summary: "RGB history, object 위의 2D query points와 corresponding initial 3D coordinates, language instruction을 입력받아 object-attached point들의 미래 3D world-frame trajectory를 예측하도록 Molmo2를 대규모 human/robot/in-the-wild video로 pretrain하고, 이 motion prior가 robot policy initialization과 video generation guidance로 전이됨을 보임"
 math: true

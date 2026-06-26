@@ -10,6 +10,7 @@ tags:
   - WAM
   - success-rate
   - fine-tuning
+  - cross-embodiment
 language: ko
 summary: "pretrained Cosmos-Predict2.5-2B video DiT를 2D kinematic skeleton condition으로 fine-tuning하여, 여러 robot embodiment와 human hand에 걸쳐 action-conditioned future video를 생성하고 이를 RoboArena policy evaluation proxy로 쓴다"
 math: true

@@ -12,6 +12,7 @@ tags:
   - fine-tuning
   - auxiliary-module-training
   - sim2real
+  - cross-embodiment
 language: ko
 summary: "3D asset과 video foundation model prior를 이용해 humanoid loco-manipulation용 4D human-object interaction 데이터를 완전 디지털로 생성하고, 이를 Unitree G1용 tracking policy와 egocentric visual policy로 변환해 실제 로봇에 배포하는 data-generation / sim-to-real framework"
 math: true

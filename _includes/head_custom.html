@@ -77,6 +77,48 @@
   })();
 </script>
 
+<script>
+  (function () {
+    var storageKey = "jtd-sidebar-collapsed";
+
+    /* Apply the stored state before first paint so the sidebar does not flash open. */
+    try {
+      if (window.localStorage.getItem(storageKey) === "true") {
+        document.documentElement.setAttribute("data-sidebar", "collapsed");
+      }
+    } catch (error) {}
+
+    function isCollapsed() {
+      return document.documentElement.getAttribute("data-sidebar") === "collapsed";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var toggle = document.getElementById("sidebar-toggle");
+      if (!toggle) {
+        return;
+      }
+
+      function syncButton() {
+        toggle.setAttribute("aria-expanded", String(!isCollapsed()));
+      }
+      syncButton();
+
+      toggle.addEventListener("click", function () {
+        var collapsed = !isCollapsed();
+        if (collapsed) {
+          document.documentElement.setAttribute("data-sidebar", "collapsed");
+        } else {
+          document.documentElement.removeAttribute("data-sidebar");
+        }
+        try {
+          window.localStorage.setItem(storageKey, String(collapsed));
+        } catch (error) {}
+        syncButton();
+      });
+    });
+  })();
+</script>
+
 {% if page.math %}
 <script>
   window.MathJax = {

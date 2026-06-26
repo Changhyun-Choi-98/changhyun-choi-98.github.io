@@ -100,6 +100,88 @@
   }
 }
 
+// Sidebar collapse / expand toggle (wide screens only).
+// On md+ the sidebar is fixed-width and `.main` is offset by margin-left;
+// collapsing slides the sidebar off-screen and recenters the content column.
+// The handle is hidden on small screens, where the built-in menu button is used.
+.sidebar-toggle {
+  display: none;
+}
+
+@include mq(md) {
+  .side-bar {
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar-toggle {
+    position: fixed;
+    top: 50%;
+    left: $nav-width-md;
+    z-index: 1000;
+    display: flex;
+    width: 1.15rem;
+    height: 3.25rem;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    color: $link-color;
+    background-color: $sidebar-color;
+    border: $border $border-color;
+    border-left: 0;
+    border-radius: 0 $border-radius $border-radius 0;
+    box-shadow: 1px 0 3px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    transform: translateY(-50%);
+    transition: left 0.25s ease;
+    appearance: none;
+
+    svg {
+      width: 0.85rem;
+      height: 0.85rem;
+      transition: transform 0.25s ease;
+    }
+
+    &:hover {
+      color: $white;
+      background-color: $link-color;
+      border-color: $link-color;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $link-color;
+      outline-offset: 2px;
+    }
+  }
+}
+
+@include mq(lg) {
+  .sidebar-toggle {
+    left: $nav-width;
+  }
+}
+
+html[data-sidebar="collapsed"] {
+  @include mq(md) {
+    .side-bar {
+      transform: translateX(-100%);
+    }
+
+    .side-bar + .main {
+      max-width: none;
+      margin-right: 0;
+      margin-left: 0;
+    }
+
+    .sidebar-toggle {
+      left: 0;
+
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
 @media (min-width: 75rem) {
   body:has(.post-scroll-nav) .main-content-wrap {
     padding-right: calc(11rem + #{$sp-6});

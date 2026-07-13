@@ -40,7 +40,7 @@ A research notes archive on <strong>robot intelligence</strong> and <strong>real
 </style>
 
 <p class="status-note">
-Currently on a short break between finishing my master's and my next role &mdash; traveling and recharging.
+After finishing my master's, I'm now going through SVP (Samsung Value Program) and subsequent new-hire training &mdash; blog activity will resume around late September 2026.
 </p>
 
 </div>

@@ -1,0 +1,137 @@
+name: 이미지 공개 퀴즈 CI
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "reveal-game/**"
+      - ".github/reveal-game-tests/**"
+      - ".github/workflows/reveal-game-ci.yml"
+  push:
+    branches: ["feature/image-reveal-game"]
+    paths:
+      - "reveal-game/**"
+      - ".github/reveal-game-tests/**"
+      - ".github/workflows/reveal-game-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows · Chromium 및 Edge
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: .github/reveal-game-tests/package-lock.json
+      - name: 테스트 dependency 설치
+        working-directory: .github/reveal-game-tests
+        run: npm ci
+      - name: Unit test
+        working-directory: .github/reveal-game-tests
+        run: npm test
+      - name: Offline 및 production 정적 검증
+        working-directory: .github/reveal-game-tests
+        run: |
+          npm run build:offline
+          npm run check:offline
+          npm run validate
+          git diff --exit-code -- ../../reveal-game/offline.html
+      - name: Playwright Chromium 설치
+        working-directory: .github/reveal-game-tests
+        run: npx playwright install chromium
+      - name: Playwright Chromium
+        working-directory: .github/reveal-game-tests
+        run: npx playwright test --project=chromium
+      - name: 설치된 Microsoft Edge
+        working-directory: .github/reveal-game-tests
+        run: npx playwright test --project=msedge
+      - uses: actions/upload-artifact@v5
+        if: ${{ !cancelled() }}
+        with:
+          name: reveal-game-windows-results
+          path: |
+            .github/reveal-game-tests/playwright-report/
+            .github/reveal-game-tests/test-results/
+          retention-days: 14
+
+  macos:
+    name: macOS · Chromium 및 WebKit
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: .github/reveal-game-tests/package-lock.json
+      - name: 테스트 dependency 설치
+        working-directory: .github/reveal-game-tests
+        run: npm ci
+      - name: Unit test
+        working-directory: .github/reveal-game-tests
+        run: npm test
+      - name: Offline artifact 재현성
+        working-directory: .github/reveal-game-tests
+        run: |
+          npm run build:offline
+          npm run check:offline
+          npm run validate
+          git diff --exit-code -- ../../reveal-game/offline.html
+      - name: Playwright browser 설치
+        working-directory: .github/reveal-game-tests
+        run: npx playwright install chromium webkit
+      - name: Playwright Chromium
+        working-directory: .github/reveal-game-tests
+        run: npx playwright test --project=chromium
+      - name: Playwright WebKit
+        working-directory: .github/reveal-game-tests
+        run: npx playwright test --project=webkit
+      - uses: actions/upload-artifact@v5
+        if: ${{ !cancelled() }}
+        with:
+          name: reveal-game-macos-results
+          path: |
+            .github/reveal-game-tests/playwright-report/
+            .github/reveal-game-tests/test-results/
+          retention-days: 14
+
+  linux-integration:
+    name: Linux · Jekyll 및 격리 검증
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: .github/reveal-game-tests/package-lock.json
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+          cache-version: 0
+      - name: 테스트 dependency 설치
+        working-directory: .github/reveal-game-tests
+        run: npm ci
+      - name: Unit, offline, 상대 링크 및 scope 검증
+        working-directory: .github/reveal-game-tests
+        run: |
+          npm test
+          npm run build:offline
+          npm run check:offline
+          npm run validate
+          git diff --exit-code -- ../../reveal-game/offline.html
+      - name: Jekyll build
+        run: bundle exec jekyll build
+      - name: Jekyll 산출물과 기존 blog 보호 검증
+        working-directory: .github/reveal-game-tests
+        run: npm run validate:jekyll

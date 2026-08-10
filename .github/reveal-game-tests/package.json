@@ -1,0 +1,25 @@
+{
+  "name": "image-reveal-game-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "이미지 공개 퀴즈의 로컬 및 CI 검증 도구",
+  "scripts": {
+    "test": "node --test tests/unit/*.test.cjs",
+    "build:offline": "node scripts/build-offline.mjs",
+    "check:offline": "node scripts/check-offline.mjs",
+    "generate:fixtures": "node scripts/generate-fixtures.mjs",
+    "generate:icons": "node scripts/generate-icons.mjs",
+    "validate": "node scripts/validate-production.mjs",
+    "validate:jekyll": "node scripts/validate-jekyll.mjs",
+    "serve": "node scripts/static-server.mjs",
+    "test:e2e": "playwright test --project=chromium",
+    "test:webkit": "playwright test --project=webkit",
+    "test:viewports": "playwright test tests/e2e/viewports.spec.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

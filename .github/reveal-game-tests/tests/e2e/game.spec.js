@@ -123,18 +123,31 @@ test("이미지 해석이 끝나기 전에는 라운드를 시작하지 않는�
   const assertClean = monitorPage(page);
   await page.goto("/reveal-game/");
   await page.evaluate(() => {
-    const descriptor = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, "src");
+    const prototype = window.RevealGame.ImageLoader.ImagePool.prototype;
+    const originalDecode = prototype.decode;
+    const gates = new Map();
+    for (const index of [0, 1]) {
+      let release;
+      const promise = new Promise((resolve) => { release = resolve; });
+      gates.set(index, { promise, release });
+    }
+    window.__releaseDecodeGate = (index) => {
+      const gate = gates.get(index);
+      if (!gate) return;
+      gates.delete(index);
+      gate.release();
+    };
+    prototype.decode = async function delayedDecode(index) {
+      const gate = gates.get(index);
+      if (gate) await gate.promise;
+      return originalDecode.call(this, index);
+    };
     const createObjectURL = URL.createObjectURL.bind(URL);
     window.__objectUrlCount = 0;
     URL.createObjectURL = (blob) => {
       window.__objectUrlCount += 1;
       return createObjectURL(blob);
     };
-    Object.defineProperty(HTMLImageElement.prototype, "src", {
-      configurable: true,
-      get: descriptor.get,
-      set(value) { setTimeout(() => descriptor.set.call(this, value), 600); },
-    });
   });
   await page.locator("#folderInput").setInputFiles(fixtureDirectory);
   await expect(page.locator("#gameState")).toHaveText("이미지 준비 중");
@@ -142,6 +155,7 @@ test("이미지 해석이 끝나기 전에는 라운드를 시작하지 않는�
   await page.keyboard.press("Space");
   await expect(page.locator("#roundTimer")).toHaveText("00:00.0");
   await expect(page.locator("#gameCanvas")).toHaveAttribute("data-grid", "empty");
+  await page.evaluate(() => window.__releaseDecodeGate(0));
   await expect(page.locator("#gameState")).toHaveText("시작 준비", { timeout: 3000 });
   await expect(page.locator("#startButton")).toBeEnabled();
   await expect(page.locator("#gameCanvas")).toHaveAttribute("data-grid", "1x1");
@@ -152,6 +166,7 @@ test("이미지 해석이 끝나기 전에는 라운드를 시작하지 않는�
   await expect(page.locator("#gameState")).toHaveText("이미지 준비 중");
   await expect(page.locator("#gameCanvas")).toHaveAttribute("data-grid", "empty");
   await expect(page.locator("#startButton")).toBeDisabled();
+  await page.evaluate(() => window.__releaseDecodeGate(1));
   await expect(page.locator("#gameState")).toHaveText("시작 준비", { timeout: 3000 });
   await expect.poll(() => page.evaluate(() => window.__objectUrlCount)).toBe(3);
   assertClean();

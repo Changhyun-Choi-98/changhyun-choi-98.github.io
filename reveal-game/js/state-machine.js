@@ -153,7 +153,7 @@
         });
 
       case "SUCCESS":
-      case "FAILURE": { 
+      case "FAILURE": {
         if (![STATES.RUNNING, STATES.PAUSED, STATES.REVEALED_PENDING_RESULT].includes(model.status)) {
           return rejected(model, "현재 라운드는 이미 판정되었거나 판정할 수 없습니다.");
         }

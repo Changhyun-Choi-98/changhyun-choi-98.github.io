@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#0b1220">
+  <title>사용법 · 이미지 공개 퀴즈</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <main class="content-panel help-document">
+    <div class="content-heading">
+      <div><p class="eyebrow">진행자 안내서</p><h1>이미지 공개 퀴즈 사용법</h1></div>
+      <a class="secondary-button link-button" href="index.html">게임으로 돌아가기</a>
+    </div>
+
+    <section>
+      <h2>행사 전에 준비하기</h2>
+      <ol class="quick-guide">
+        <li><strong>최초 온라인 접속:</strong> Chrome, Edge 또는 Safari에서 게임 주소를 엽니다.</li>
+        <li><strong>오프라인 준비 확인:</strong> 상단에 “오프라인 사용 준비 완료”가 보일 때까지 기다립니다. 이 문구는 앱 파일이 모두 캐시된 뒤에만 표시됩니다.</li>
+        <li><strong>PWA 설치(선택):</strong> Edge/Chrome의 주소창 설치 아이콘이나 브라우저 메뉴를 사용합니다. 지원되는 macOS Safari에서는 공유 또는 파일 메뉴의 “Dock에 추가”를 사용할 수 있습니다.</li>
+        <li><strong>비상 파일 저장:</strong> <a href="offline.html" download="이미지-공개-퀴즈-offline.html">비상용 단일 HTML</a>을 미리 내려받습니다. 인터넷 없이 파일을 두 번 클릭해 사용할 수 있습니다.</li>
+        <li><strong>이미지 폴더 준비:</strong> JPG, JPEG, PNG, WebP, BMP 파일을 한 폴더와 필요한 하위 폴더에 넣습니다.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>게임 시작하기</h2>
+      <ol class="quick-guide" start="6">
+        <li><strong>이미지 폴더 선택:</strong> “이미지 폴더 선택”을 누르거나 폴더를 점선 영역에 끌어다 놓습니다. Safari에서는 브라우저가 제공하는 폴더 파일 선택 화면을 사용합니다.</li>
+        <li><strong>순서:</strong> 순차는 하위 경로 기준 자연 정렬이며 image2가 image10보다 먼저 나옵니다. 무작위는 새 게임을 시작할 때 한 번 섞이고 진행 중에는 바뀌지 않습니다.</li>
+        <li><strong>공개 모드:</strong> 모자이크는 1×1 대표 색상에서 원본으로 점진적으로 선명해집니다. 검은색 원은 바깥쪽부터 중앙 방향으로 이미지가 공개됩니다.</li>
+        <li><strong>시간과 속도:</strong> 전체 공개 시간은 5~300초입니다. 천천히 공개, 균형, 빠르게 공개는 전체 시간은 유지하면서 공개 정보의 분포만 바꿉니다.</li>
+        <li><strong>참가자 화면 열기:</strong> 버튼을 직접 눌러 새 창을 연 뒤 두 번째 모니터로 옮깁니다. 팝업이 막히면 주소창 옆 차단 아이콘에서 이 사이트의 팝업을 허용하고 다시 누릅니다.</li>
+        <li><strong>전체화면:</strong> 참가자 창의 전체화면 버튼 또는 브라우저 F11을 사용합니다. 운영체제가 창 위치를 자동으로 정하게 하지는 않으므로 직접 두 번째 모니터로 옮겨야 합니다.</li>
+        <li><strong>진행:</strong> 시작, 일시정지, 재개를 사용합니다. 정답이면 “정답 성공”, 답을 맞히지 못했거나 넘어가려면 “실패 / 패스”를 누릅니다.</li>
+        <li><strong>정답 공개:</strong> 확인 창에서 승인하면 원본이 보이고 타이머가 멈춥니다. 성공/실패는 자동 집계되지 않으므로 반드시 별도로 판정합니다.</li>
+        <li><strong>초기화와 다음 이미지:</strong> 초기화는 현재 라운드만 처음으로 돌립니다. 이미 판정한 현재 라운드라면 그 판정과 시간만 취소합니다. 다음 이미지는 판정 완료 후에만 활성화됩니다.</li>
+        <li><strong>세션 결과:</strong> 마지막 이미지 뒤에 전체 이미지, 성공, 실패/패스, 실제 진행 시간 합계가 표시됩니다. 일시정지와 확인 창을 본 시간은 합계에 들어가지 않습니다.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>랭킹과 백업</h2>
+      <ol class="quick-guide" start="16">
+        <li><strong>랭킹 입력:</strong> 게임 결과와 자동 연결되지 않습니다. 팀명, 맞힌 이미지 개수, 소요 시간을 진행자가 직접 입력합니다.</li>
+        <li><strong>순위:</strong> 정답 수가 많을수록, 같은 정답 수에서는 시간이 짧을수록 높습니다. 점수와 시간이 같으면 1위, 1위, 3위 방식의 공동 순위가 적용됩니다.</li>
+        <li><strong>JSON 백업:</strong> 전체 랭킹과 설정을 옮기거나 복구할 때 사용합니다. 가져오기 전에 미리보기가 나타나며 교체 또는 병합을 선택합니다.</li>
+        <li><strong>CSV:</strong> UTF-8 BOM이 포함되어 Windows Excel에서 한국어를 읽기 쉽습니다. CSV의 순위 열은 가져올 때 무시하고 점수와 시간으로 다시 계산합니다.</li>
+        <li><strong>다른 PC로 이동:</strong> 원래 PC에서 JSON을 내보내고 새 PC에서 JSON을 가져옵니다. IndexedDB는 브라우저 프로필이나 기기 사이에서 자동 클라우드 동기화되지 않습니다.</li>
+        <li><strong>삭제 주의:</strong> 브라우저의 해당 사이트 데이터와 저장소를 지우면 랭킹이 삭제될 수 있습니다. 행사 전후에 JSON 백업을 권장합니다.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>개인정보와 오프라인 동작</h2>
+      <p>선택한 이미지는 이 기기의 브라우저 메모리에서만 처리되며 서버로 업로드되지 않습니다. 앱은 파일 이름이나 경로를 참가자 화면에 표시하지 않고, 실제 이미지 Blob을 IndexedDB 또는 서비스 워커 캐시에 저장하지 않습니다.</p>
+      <p>비상용 <code>offline.html</code>은 CSS와 JavaScript가 포함된 하나의 파일입니다. 브라우저의 <code>file://</code> 보안 정책 때문에 저장 지속성이나 팝업 동작이 브라우저별로 제한될 수 있습니다. 중요한 랭킹은 JSON으로 자주 백업하세요.</p>
+    </section>
+
+    <section>
+      <h2>단축키</h2>
+      <div class="shortcut-grid">
+        <kbd>Space</kbd><span>시작 / 일시정지 / 재개</span><kbd>Enter</kbd><span>정답 성공</span>
+        <kbd>P</kbd><span>실패 / 패스</span><kbd>R</kbd><span>정답 공개 확인</span>
+        <kbd>N</kbd><span>다음 이미지 확인</span><kbd>Backspace</kbd><span>현재 라운드 초기화 확인</span>
+        <kbd>L</kbd><span>랭킹 탭 열기</span><kbd>?</kbd><span>도움말 탭 열기</span>
+        <kbd>F</kbd><span>앱 전체화면</span><kbd>Esc</kbd><span>확인 창 또는 참가자 모드 닫기</span>
+        <kbd>F11</kbd><span>브라우저 자체 전체화면</span>
+      </div>
+      <p>입력창, 선택 상자, 버튼, 링크, 편집 가능한 영역에 초점이 있거나 한국어 IME 조합 중일 때는 게임 단축키가 실행되지 않습니다. Ctrl+L과 Cmd+L은 브라우저 주소창 단축키로 그대로 둡니다.</p>
+    </section>
+
+    <section>
+      <h2>브라우저별 참고</h2>
+      <ul class="quick-guide">
+        <li><strong>Windows Edge/Chrome:</strong> 폴더 선택, PWA 설치, 팝업, F11을 지원합니다. Windows DPI 125%·150%에서는 행사 전에 버튼과 두 화면 배치를 확인하세요.</li>
+        <li><strong>macOS Chrome:</strong> Edge와 비슷하게 사용할 수 있으며 전체화면 권한 요청이 보일 수 있습니다.</li>
+        <li><strong>macOS Safari:</strong> 폴더 선택 대체 방식이 사용될 수 있습니다. macOS Sonoma 14 이상 지원 환경에서는 “Dock에 추가”를 사용할 수 있으며, Safari 버전과 설정에 따라 전체화면 방식이 다르므로 화면 채우기와 브라우저 전체화면 안내를 함께 제공합니다.</li>
+        <li><strong>Firefox:</strong> 가능한 범위에서 지원합니다. 폴더와 설치 기능은 버전에 따라 제한될 수 있으므로 비상용 단일 HTML과 파일 선택 대체 방식을 준비하세요.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>문제가 생겼을 때</h2>
+      <ul class="quick-guide">
+        <li>이미지가 없다는 메시지가 나오면 지원 확장자와 실제 파일 존재 여부를 확인합니다.</li>
+        <li>손상되거나 지나치게 큰 이미지는 해당 파일만 건너뛰며 게임 전체는 계속됩니다.</li>
+        <li>참가자 연결이 끊기면 진행자 창을 유지한 채 참가자 창을 닫고 “참가자 화면 열기”를 다시 누릅니다.</li>
+        <li>대체 저장소 사용 또는 메모리에만 저장 문구가 보이면 즉시 JSON 백업을 내보냅니다.</li>
+        <li>오프라인 준비 실패 시 온라인에서 새로고침하거나 미리 내려받은 단일 HTML을 사용합니다.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

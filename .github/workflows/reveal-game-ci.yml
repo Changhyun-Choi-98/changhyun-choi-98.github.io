@@ -52,7 +52,7 @@ jobs:
       - name: 설치된 Microsoft Edge
         working-directory: .github/reveal-game-tests
         run: npx playwright test --project=msedge
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
           name: reveal-game-windows-results
@@ -94,7 +94,7 @@ jobs:
       - name: Playwright WebKit
         working-directory: .github/reveal-game-tests
         run: npx playwright test --project=webkit
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
           name: reveal-game-macos-results

@@ -40,7 +40,7 @@ A research notes archive on <strong>robot intelligence</strong> and <strong>real
 </style>
 
 <p class="status-note">
-After finishing my master's, I'm now going through SVP (Samsung Value Program) and subsequent new-hire training &mdash; blog activity will resume around January 2027.
+After finishing my master's, I'm now going through SVP (Samsung Value Program) and the onboarding process &mdash; blog activity will resume around January 2027.
 </p>
 
 </div>

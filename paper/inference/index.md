@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Inference
-parent: Paper
+parent: Papers
+grand_parent: Archive
 nav_order: 2
 has_toc: false
 permalink: /paper/inference/

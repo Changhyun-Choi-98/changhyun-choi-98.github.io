@@ -2,6 +2,7 @@
 layout: default
 title: Inference Optimization
 parent: Project
+grand_parent: Archive
 nav_order: 1
 has_children: true
 has_toc: false

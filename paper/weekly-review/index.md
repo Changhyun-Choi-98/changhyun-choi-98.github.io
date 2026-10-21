@@ -1,8 +1,9 @@
 ---
 layout: default
 title: Weekly Review
-parent: Paper
-nav_order: 5
+parent: Papers
+grand_parent: Archive
+nav_order: 4
 has_toc: false
 permalink: /paper/weekly-review/
 ---

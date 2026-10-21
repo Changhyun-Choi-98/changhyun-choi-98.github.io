@@ -2,6 +2,7 @@
 layout: default
 title: Diffusion Tutorial
 parent: Study
+grand_parent: Archive
 nav_order: 1
 has_toc: false
 permalink: /study/diffusion-tutorial/

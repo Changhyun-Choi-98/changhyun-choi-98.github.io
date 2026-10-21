@@ -9,6 +9,6 @@ permalink: /all-posts/
 
 # All Posts
 
-All notes and posts, grouped only by date order
+All notes and posts, newest first. Posts with the same date follow the sidebar category order.
 
 {% include content-list.html all=true show_category=true %}

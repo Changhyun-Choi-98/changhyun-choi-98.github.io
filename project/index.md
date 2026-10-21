@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Project
-nav_order: 4.5
+parent: Archive
+nav_order: 5
 has_children: true
 has_toc: false
 permalink: /project/

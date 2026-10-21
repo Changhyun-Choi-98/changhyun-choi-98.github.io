@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Briefs
-parent: Paper
+parent: Papers
+grand_parent: Archive
 nav_order: 1
 has_toc: false
 permalink: /paper/briefs/

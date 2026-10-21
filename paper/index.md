@@ -1,20 +1,19 @@
 ---
 layout: default
-title: Paper
+title: Papers
 nav_order: 4
 has_children: true
 has_toc: false
 permalink: /paper/
 ---
 
-# Paper
+# Papers
 
-Notes on papers I have read
+Notes on tactile sensing and robotic manipulation papers
 
 ## Topics
 {: .text-delta }
 
-- [Briefs](/paper/briefs/)
-- [Inference](/paper/inference/)
-- [Success Rate](/paper/success-rate/)
-- [Weekly Review](/paper/weekly-review/)
+- [Tactile](/paper/tactile/)
+
+Earlier paper categories are preserved in [Archive / Papers](/archive/papers/).

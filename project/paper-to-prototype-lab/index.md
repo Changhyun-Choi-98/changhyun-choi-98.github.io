@@ -2,6 +2,7 @@
 layout: default
 title: Paper-to-Prototype Lab
 parent: Project
+grand_parent: Archive
 nav_order: 0.5
 has_children: true
 has_toc: false

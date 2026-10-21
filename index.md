@@ -13,34 +13,11 @@ image:
 <div style="text-align: center; margin: 2.5rem 0 2rem 0;">
 
 <h1 style="font-size: 1.75rem !important; font-weight: 700; margin-bottom: 0.75rem;">
-Building robust real-time AI for real-world robots
+Robot learning for dexterous manipulation
 </h1>
 
 <p style="font-size: 1.05rem; line-height: 1.6; margin: 0 auto; max-width: 720px;">
-A research notes archive on <strong>robot intelligence</strong> and <strong>real-time inference systems</strong>
-</p>
-
-<style>
-.status-note {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin: 0.75rem auto 0;
-  max-width: 720px;
-  font-weight: 600;
-  padding: 0.4rem 0.9rem;
-  border-radius: 6px;
-  display: inline-block;
-  color: #a94442;
-  background: #fff5f5;
-}
-@media (prefers-color-scheme: dark) {
-  .status-note { color: #e07878; background: rgba(169, 68, 66, 0.18); }
-}
-[data-theme="dark"] .status-note { color: #e07878; background: rgba(169, 68, 66, 0.18); }
-</style>
-
-<p class="status-note">
-After finishing my master's, I'm now going through SVP (Samsung Value Program) and the onboarding process &mdash; blog activity will resume around January 2027.
+Research notes on <strong>dexterous manipulation</strong>, <strong>tactile sensing</strong>, and <strong>multimodal robot learning</strong>.
 </p>
 
 </div>

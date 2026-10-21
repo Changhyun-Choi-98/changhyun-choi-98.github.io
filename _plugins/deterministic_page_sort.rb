@@ -10,7 +10,35 @@ module DeterministicPageSort
     sort_pages(input, include_leaf_order: true)
   end
 
+  def post_category_path(input)
+    category_paths.fetch(leaf_key(input), []).map { |page| page_value(page, "title") }.join(" / ")
+  end
+
+  def nav_post_count(input)
+    site = liquid_site
+    return 0 unless site
+
+    posts = site.pages.select { |page| page_value(page, "date") }
+    return posts.size if page_value(input, "count_all_posts") == true
+
+    paths = category_paths
+    posts.count do |post|
+      paths.fetch(leaf_key(post), []).any? do |ancestor|
+        page_value(ancestor, "url") == page_value(input, "url")
+      end
+    end
+  end
+
   private
+
+  def category_paths
+    site = liquid_site
+    return {} unless site
+
+    nav_pages = site.pages.select { |page| nav_page?(page) }
+    pages_by_title = nav_pages.group_by { |page| page_value(page, "title") }
+    nav_pages.to_h { |page| [leaf_key_for_nav_page(page), ancestor_chain(page, pages_by_title)] }
+  end
 
   def sort_pages(input, include_leaf_order:)
     leaf_order = include_leaf_order ? sidebar_leaf_order : {}
@@ -35,9 +63,7 @@ module DeterministicPageSort
     end
 
     nav_pages = site.pages.select { |page| nav_page?(page) }
-    pages_by_title = nav_pages.each_with_object({}) do |page, pages|
-      pages[page_value(page, "title")] ||= page
-    end
+    pages_by_title = nav_pages.group_by { |page| page_value(page, "title") }
 
     nav_pages
       .select { |page| content_keys[leaf_key_for_nav_page(page)] }
@@ -76,11 +102,13 @@ module DeterministicPageSort
   end
 
   def ancestor_chain(page, pages_by_title)
-    [
-      pages_by_title[page_value(page, "grand_parent")],
-      pages_by_title[page_value(page, "parent")],
-      page,
-    ].compact.uniq
+    chain = []
+    while page && !chain.include?(page)
+      chain.unshift(page)
+      parents = pages_by_title.fetch(page_value(page, "parent"), [])
+      page = parents.find { |parent| page_value(parent, "parent") == page_value(page, "grand_parent") } || parents.first
+    end
+    chain
   end
 
   def leaf_key(item)

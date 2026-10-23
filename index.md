@@ -20,6 +20,29 @@ Robot learning for dexterous manipulation
 Research notes on <strong>dexterous manipulation</strong>, <strong>tactile sensing</strong>, and <strong>multimodal robot learning</strong>.
 </p>
 
+<style>
+.status-note {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0.75rem auto 0;
+  max-width: 720px;
+  font-weight: 600;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  display: inline-block;
+  color: #a94442;
+  background: #fff5f5;
+}
+@media (prefers-color-scheme: dark) {
+  .status-note { color: #e07878; background: rgba(169, 68, 66, 0.18); }
+}
+[data-theme="dark"] .status-note { color: #e07878; background: rgba(169, 68, 66, 0.18); }
+</style>
+
+<p class="status-note">
+I'm settling into my first job in the Dexterous Manipulation Part at Samsung Electronics. I plan to resume blogging around March 2027.
+</p>
+
 </div>
 
 <div class="home-brand">

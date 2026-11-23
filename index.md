@@ -40,7 +40,7 @@ Notes on <strong>dexterous manipulation</strong>, <strong>tactile sensing</stron
 </style>
 
 <p class="status-note">
-I'm settling into my first job in the Dexterous Manipulation Part at Samsung Electronics. I plan to resume blogging around late March 2027.
+I'm settling into my first job in the Dexterous Manipulation Part at Samsung Electronics. I plan to resume blogging in the second half of 2027.
 </p>
 
 </div>

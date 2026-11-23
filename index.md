@@ -17,7 +17,7 @@ Robot learning for dexterous manipulation
 </h1>
 
 <p style="font-size: 1.05rem; line-height: 1.6; margin: 0 auto; max-width: 720px;">
-Research notes on <strong>dexterous manipulation</strong>, <strong>tactile sensing</strong>, and <strong>multimodal robot learning</strong>.
+Notes on <strong>dexterous manipulation</strong>, <strong>tactile sensing</strong>, and <strong>multimodal robot learning</strong>.
 </p>
 
 <style>
